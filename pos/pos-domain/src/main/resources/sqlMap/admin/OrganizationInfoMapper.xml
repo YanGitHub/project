@@ -23,59 +23,62 @@
 	</resultMap>
 
 	<select id="getList" resultMap="ResultMap" parameterType="OrganizationInfo" >
-		select 
-			id,
-			create_date,
-			modify_date,
-			code,
-			name,
-			status,
-			person,
-			phone,
-			mobile,
-			email,
-			website,
-			address,
-			star_level,
-			property,
-			province_code,
-			city_code,
-			district_code,
-			note
-		from organization_info
-		where 1=1 
-		<if test="id!=null">
-				and id=#{id}
+        select
+            oi.id,
+            oi.create_date,
+            oi.modify_date,
+            oi.code,
+            oi.name,
+            oi.status,
+            oi.person,
+            oi.phone,
+            oi.mobile,
+            oi.email,
+            oi.website,
+            oi.address,
+            oi.star_level,
+            oi.property,
+            rp.region_name as province_code,
+            rc.region_name as city_code,
+            rd.region_name as district_code,
+            oi.note
+        from organization_info oi
+        LEFT JOIN region rp on rp.region_id = oi.province_code
+        LEFT JOIN region rc on rc.region_id = oi.city_code
+        LEFT JOIN region rd on rd.region_id = oi.district_code
+        where 1=1
+        <if test="id!=null">
+				and oi.id=#{id}
 		</if>
 		<if test="createDate!=null">
-				and create_date=#{createDate}
+				and oi.create_date=#{createDate}
 		</if>
 		<if test="modifyDate!=null">
-				and modify_date=#{modifyDate}
+				and oi.modify_date=#{modifyDate}
 		</if>
 		<if test="code!=null">
-				and code=#{code}
+				and oi.code=#{code}
 		</if>
 		<if test="name!=null">
-				and name=#{name}
+				and oi.name=#{name}
 		</if>
 		<if test="status!=null">
-				and status=#{status}
+				and oi.status=#{status}
 		</if>
 		<if test="person!=null">
-				and person=#{person}
+				and oi.person=#{person}
 		</if>
 		<if test="phone!=null">
-				and phone=#{phone}
+				and oi.phone=#{phone}
 		</if>
 		<if test="mobile!=null">
-				and mobile=#{mobile}
+				and oi.mobile=#{mobile}
 		</if>
 		<if test="starLevel!=null">
-				and star_level=#{starLevel}
+				and oi.star_level=#{starLevel}
 		</if>
 		<if test="property!=null">
-				and property=#{property}
+				and oi.property=#{property}
 		</if>
         <if test="pageUtil != null">
             limit #{pageUtil.startRow},#{pageUtil.endRow}
@@ -122,6 +125,10 @@
         </if>
     </select>
 
+    <select id="getCountByCodyAndId" resultType="java.lang.Integer">
+        select count(*) from organization_info where code = #{code} and id &lt;&gt; #{id}
+    </select>
+
     <insert id="create" parameterType="OrganizationInfo">
 		insert into organization_info(
 			create_date,
@@ -144,7 +151,7 @@
 			now(),
 			#{code},
 			#{name},
-			#{status},
+			1,
 			#{person},
 			#{phone},
 			#{mobile},

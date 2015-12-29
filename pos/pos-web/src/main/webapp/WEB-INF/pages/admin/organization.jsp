@@ -15,10 +15,19 @@
     <![endif]-->
 
     <style>
-        body{
-            padding: 10 15px 10px 15px;
+        body {
+            padding: 10px 15px 0px 15px;
         }
-        .breadcrumb{
+
+        .input-group-addon {
+            width: 90px;
+        }
+
+        .form-control {
+            width: 166px;
+        }
+
+        .breadcrumb {
             margin-bottom: 10px;
         }
     </style>
@@ -32,7 +41,7 @@
 </ol>
 
 <div class="btn-group btn-group-sm">
-    <button class="btn btn-primary" onclick="openDialog()">创建</button>
+    <button class="btn btn-primary" onclick="openDialog()">新增</button>
 </div>
 
 <div class="row" style="margin-top: 10px">
@@ -42,8 +51,8 @@
 </div>
 
 <!--dialog-->
-<div class="modal fade" id="myModal">
-    <div class="modal-dialog">
+<div class="modal fade bs-example-modal-lg" id="myModal">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close"
@@ -58,41 +67,122 @@
             <div class="modal-body">
                 <form id="editForm">
                     <input id="id" name="id" hidden="hidden"/>
-                    <div class="row" style="padding-top: 15px">
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">店铺代码<font style="color: red">*</font></span>
+                                <input type="text" id="code" name="code" class="form-control" placeholder=""
+                                       aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">店铺名称<font style="color: red">*</font></span>
+                                <input type="text" id="name" name="name" class="form-control" placeholder=""
+                                       aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">类型<font style="color: red">*</font></span>
+                                <select id="property" name="property" style="width: 168px"
+                                        class="form-control selectpicker">
+                                    <option value="1">店铺</option>
+                                    <option value="2">服务商</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-top: 10px">
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">省<font style="color: red">*</font></span>
+                                <select id="provinceCode" name="provinceCode" style="width: 168px"
+                                        onchange="getvalue(this,'cityCode',true)" class="form-control selectpicker">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">市<font style="color: red">*</font></span>
+                                <select id="cityCode" name="cityCode" style="width: 168px"
+                                        onchange="getvalue(this,'districtCode',false)"
+                                        class="form-control selectpicker">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">区<font style="color: red">*</font></span>
+                                <select id="districtCode" name="districtCode" style="width: 168px"
+                                        class="form-control selectpicker">
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top: 10px">
                         <div class="col-sm-12">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-addon">参数名</span>
-                                <input type="text" id="sysKey" name="sysKey" class="form-control"
+                                <span class="input-group-addon">地址<font style="color: red">*</font></span>
+                                <input type="text" id="address" name="address" class="form-control" placeholder="" style="width: 466px"
+                                       aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row" style="padding-top: 10px">
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">联系人</span>
+                                <input type="text" id="person" name="person" class="form-control"
+                                       placeholder=""
+                                       aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">手机</span>
+                                <input type="text" id="phone" name="phone" class="form-control"
+                                       placeholder=""
+                                       aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">电话</span>
+                                <input type="text" id="mobile" name="mobile" class="form-control"
                                        placeholder=""
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
                     </div>
 
-                    <div class="row" style="padding-top: 15px">
-                        <div class="col-sm-12">
+                    <div class="row" style="padding-top: 10px">
+                        <div class="col-sm-4">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-addon">参数值</span>
-                                <input type="text" id="sysValue" name="sysValue"
-                                       class="form-control"
-                                       placeholder="" aria-describedby="basic-addon1">
+                                <span class="input-group-addon">邮箱</span>
+                                <input type="text" id="email" name="email" class="form-control" placeholder=""
+                                       aria-describedby="basic-addon1">
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row" style="padding-top: 15px">
-                        <div class="col-sm-12">
+                        <div class="col-sm-4">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-addon">备注&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <input type="text" id="note" name="note" class="form-control" placeholder=""
+                                <span class="input-group-addon">网址</span>
+                                <input type="text" id="website" name="website" class="form-control" placeholder=""
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
                     </div>
+
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="create()" data-dismiss="modal">保存</button>
+                <button type="button" class="btn btn-primary" onclick="create()">保存</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
@@ -109,11 +199,11 @@
 <script type="text/javascript" src="${ctx}/static/pos/js/common.js"></script>
 <script type="text/javascript">
 
-    $(function(){
+    $(function () {
         $('#grid').datagrid({
             nowrap: false,
             striped: true,
-            url : '${ctx}/organization/getList',
+            url: '${ctx}/organization/getList',
             title: '门店列表',
             height: 430,
             singleSelect: true,
@@ -121,45 +211,105 @@
             columns: [
                 [
                     {field: 'id', title: '', hidden: true},
-                    {field: 'code', title: '店铺代码', fitColumns: true},
-                    {field: 'name', title: '店铺名称', align: 'center', fitColumns: true},
-                    {field: 'status', title: '状态', fitColumns: true,align: 'center',formatter:statusString},
-                    {field: 'property', title: '类型',  fitColumns: true},
-                    {field: 'person', title: '联系人',  fitColumns: true},
-                    {field: 'phone', title: '手机',  fitColumns: true},
-                    {field: 'mobile', title: '电话',  fitColumns: true},
-                    {field: 'email', title: '邮箱',  fitColumns: true},
-                    {field: 'website', title: '网址',  fitColumns: true},
-                    {field: 'address', title: '地址',  fitColumns: true}
+                    {field: 'code', title: '店铺代码', width:100},
+                    {field: 'name', title: '店铺名称', width:100},
+                    {field: 'property', title: '类型', width:100,align:'center', formatter: propertyString},
+                    {field: 'status', title: '状态', width:100, align: 'center', formatter: statusString},
+                    {field: 'person', title: '联系人', width:100},
+                    {field: 'phone', title: '手机', fitColumns: true},
+                    {field: 'mobile', title: '电话', fitColumns: true},
+                    {field: 'email', title: '邮箱', fitColumns: true},
+                    {field: 'website', title: '网址', fitColumns: true},
+                    { field: 'provinceCode', title: '省', fitColumns: true},
+                    { field: 'cityCode', title: '市', fitColumns: true},
+                    { field: 'districtCode', title: '区', fitColumns: true},
+                    {field: 'address', title: '地址', fitColumns: true}
                 ]
             ]
         });
     });
+    function getvalue(obj, se, d) {
+        var parentId = obj.options[obj.selectedIndex].value;
+        getCity(parentId, se, d);
+    }
+    //获取省市区 根据上级id
+    function getCity(parentId, select, d) {
+        var param = {parentId: parentId};
+        $.ajax({
+            url: '${ctx}/common/getRegions',
+            type: 'post',
+            dataType: "json",
+            async: false,
+            data: JSON.stringify(param),
+            processData: false,
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.length > 0) {
+                    var op = "";
+                    for (var i = 0; i < data.length; i++) {
+                        op += "<option value=" + data[i].regionId + ">" + data[i].regionName + "</option>";
+                    }
+                }
+                if (d) {
+                    getCity(data[0].regionId, 'districtCode');
+                }
+                $('#' + select).html(op);
+            }
+        });
+    }
     //状态
-    function statusString(v,r,i){
-        if(v == 1){
+    function statusString(v, r, i) {
+        if (v == 1) {
             return "可用";
-        }else{
+        } else {
             return "禁用";
+        }
+    }
+    //
+    function propertyString(v, r, i) {
+        if (v == 1) {
+            return "店铺";
+        } else if (v == 2) {
+            return "服务商";
         }
     }
     //打开新增窗口
     function openDialog() {
-
+        $('#id').val("");
+        $('#code').val("");
+        $('#name').val("");
+        $('#address').val("");
+        $('#person').val("");
+        $('#mobile').val("");
+        $('#phone').val("");
+        $('#email').val("");
+        $('#website').val("");
+        getCity('root_china', 'provinceCode', false);
+        getCity($('#provinceCode').val(), 'cityCode', false);
+        getCity($('#cityCode').val(), 'districtCode', false);
         $('#myModal').modal('show');
     }
     //新增系统参数
     function create() {
         var data = $('#editForm').serializeObject();
+        if(data.code == null || data.code == ""){
+            alert('提示','请输入店铺代码',3000);
+            return;
+        }
+        if(data.name == null || data.name == ""){
+            alert('提示','请输入店铺名称',3000);
+            return;
+        }
         $.ajax({
             type: 'POST',
-            url: '${ctx}/sysParameters/save',
-            contentType:"application/json",
+            url: '${ctx}/organization/save',
+            contentType: "application/json",
             data: JSON.stringify(data),
-            success: function(map){
-                if(map.status){
-                    alert("提示",map.msg,3000);
+            success: function (map) {
+                if (map.status) {
+                    alert("提示", map.msg, 3000);
                     $('#grid').datagrid('reload');
+                    $('#myModal').modal('hide');
                 }
             }
         });

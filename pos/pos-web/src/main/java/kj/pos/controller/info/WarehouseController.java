@@ -1,9 +1,7 @@
 package kj.pos.controller.info;
 
 import kj.pos.entity.PageUtil;
-import kj.pos.entity.info.Region;
 import kj.pos.entity.info.Warehouse;
-import kj.pos.service.info.RegionService;
 import kj.pos.service.info.WarehouseService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

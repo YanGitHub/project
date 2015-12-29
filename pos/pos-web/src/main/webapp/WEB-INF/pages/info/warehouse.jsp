@@ -101,8 +101,10 @@
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">上级组织<font style="color: red">*</font></span>
-                                <input type="text" id="pcode" name="pcode" class="form-control" placeholder=""
-                                       aria-describedby="basic-addon1">
+                                <select id="pcode" name="pcode" style="width: 168px"
+                                    class="form-control selectpicker">
+
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -260,15 +262,21 @@
                     { field: 'cityCode', title: '市', fitColumns: true},
                     { field: 'districtCode', title: '区', fitColumns: true},
                     { field: 'address', title: '仓库地址', fitColumns: true},
-                    { field: 'isDefaultDeliver', title: '是否是默认发货仓', fitColumns: true},
-                    { field: 'isDefaultReceive', title: '是否是默认收货仓', fitColumns: true},
-                    { field: 'isNegativeStock', title: '控制负库存', fitColumns: true },
+                    { field: 'isDefaultDeliver', title: '是否是默认发货仓',align:'center', fitColumns: true,formatter:statusString},
+                    { field: 'isDefaultReceive', title: '是否是默认收货仓',align:'center', fitColumns: true,formatter:statusString},
+                    { field: 'isNegativeStock', title: '控制负库存',align:'center', fitColumns: true ,formatter:statusString},
                     { field: 'note', title: '备注', fitColumns: true}
                 ]
             ]
         });
     });
-
+    function statusString(v,r,i){
+        if(v == 1){
+            return '是';
+        }else{
+            return '否';
+        }
+    }
     function getvalue(obj, se, d) {
         var parentId = obj.options[obj.selectedIndex].value;
         getCity(parentId, se, d);
@@ -319,14 +327,27 @@
                 if(map.status){
                     alert("提示",map.msg,3000);
                     $('#grid').datagrid('reload');
+                    $('#modifyDialog').modal('hide');
                 }
             }
         });
     }
-
+    //加载 店铺
+    function loadShop(){
+        $.post('${ctx}/common/getShops',null,function(data){
+            if (data.length > 0) {
+                var op = "";
+                for (var i = 0; i < data.length; i++) {
+                    op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+                }
+            }
+            $('#pcode').html(op);
+        });
+    }
     //新增
     function createOpen() {
         $('#modifyDialog').modal('show');
+        loadShop();//加载店铺
         getCity('root_china', 'provinceCode', false);
         getCity($('#provinceCode').val(), 'cityCode', false);
         getCity($('#cityCode').val(), 'districtCode', false);

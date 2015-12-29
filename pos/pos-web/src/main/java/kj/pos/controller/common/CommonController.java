@@ -1,6 +1,8 @@
 package kj.pos.controller.common;
 
+import kj.pos.entity.admin.OrganizationInfo;
 import kj.pos.entity.info.Region;
+import kj.pos.service.admin.OrganizationService;
 import kj.pos.service.info.RegionService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Yan on 15-12-25.
@@ -26,6 +30,8 @@ public class CommonController {
 
     @Autowired
     private RegionService regionService;
+    @Autowired
+    private OrganizationService organizationService;
 
     @RequestMapping(value = "/getRegions",method = RequestMethod.POST)
     @ResponseBody
@@ -43,4 +49,23 @@ public class CommonController {
         }
         return list;
     }
+
+    @RequestMapping(value = "/getShops",method = RequestMethod.POST)
+    @ResponseBody
+    public List<OrganizationInfo> getShops(OrganizationInfo organizationInfo)throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        List<OrganizationInfo> list = new ArrayList<OrganizationInfo>();
+        try {
+            //取所有可用的店铺
+            organizationInfo.setStatus(1);
+            organizationInfo.setProperty(1);
+            list = organizationService.getList(organizationInfo);
+            map.put("organizationInfos",list);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+        }
+        return list;
+    }
+
 }

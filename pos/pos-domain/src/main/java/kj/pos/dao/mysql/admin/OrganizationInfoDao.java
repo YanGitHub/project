@@ -11,4 +11,5 @@ public interface OrganizationInfoDao{
 	public List<OrganizationInfo> getList(OrganizationInfo organizationInfo);
 	public void create(OrganizationInfo organizationInfo);
 	public void update(OrganizationInfo organizationInfo);
+    public Integer getCountByCodyAndId(OrganizationInfo organizationInfo);
 }

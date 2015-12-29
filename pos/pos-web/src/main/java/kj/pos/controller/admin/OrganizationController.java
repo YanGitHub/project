@@ -7,10 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -54,4 +51,20 @@ public class OrganizationController {
         }
         return map;
     }
+
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> save(@RequestBody OrganizationInfo organizationInfo)throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        try {
+            map = organizationService.save(organizationInfo);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            map.put("status",Boolean.FALSE);
+            map.put("msg","操作失败");
+        }
+        return map;
+    }
+
 }

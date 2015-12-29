@@ -19,7 +19,7 @@ public class OrganizationInfo extends BaseEntity{
 	private String email;//邮箱
 	private String website;//网址
 	private String address;//地址
-	private Integer starLevel;//组织联系人
+	private Integer starLevel;//星级
 	private Integer property;//1组织(店铺) 2服务商
 	private String provinceCode;//省
 	private String cityCode;//市
