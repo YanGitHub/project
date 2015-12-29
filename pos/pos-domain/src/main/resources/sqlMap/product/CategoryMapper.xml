@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.product.CategoryDao">
+    <resultMap id="ResultMap" type="Category">
+        <result property="id" column="id"/>
+        <result property="createDate" column="create_date"/>
+        <result property="modifyDate" column="modify_date"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="sortNo" column="sort_no"/>
+        <result property="parent" column="parent"/>
+        <result property="isParent" column="is_parent"/>
+        <result property="del" column="del"/>
+        <result property="note" column="note"/>
+    </resultMap>
+
+    <select id="getList" resultMap="ResultMap" parameterType="Category">
+        select
+        id,
+        create_date,
+        modify_date,
+        code,
+        name,
+        sort_no,
+        parent,
+        is_parent,
+        del,
+        note
+        from category
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="createDate!=null">
+            and create_date=#{createDate}
+        </if>
+        <if test="modifyDate!=null">
+            and modify_date=#{modifyDate}
+        </if>
+        <if test="code!=null">
+            and code=#{code}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="sortNo!=null">
+            and sort_no=#{sortNo}
+        </if>
+        <if test="parent!=null">
+            and parent=#{parent}
+        </if>
+        <if test="isParent!=null">
+            and is_parent=#{isParent}
+        </if>
+        <if test="del!=null">
+            and del=#{del}
+        </if>
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+    </select>
+    <insert id="create" parameterType="Category">
+		insert into category(
+			create_date,
+			modify_date,
+			code,
+			name,
+			sort_no,
+			parent,
+			is_parent,
+			del,
+			note
+		) values (
+			now(),
+			now(),
+			#{code},
+			#{name},
+			#{sortNo},
+			#{parent},
+			#{isParent},
+			#{del},
+			#{note}
+		)
+	</insert>
+
+    <update id="update" parameterType="Category">
+        update category
+        <set>
+            <if test="createDate!=null">
+                create_date=#{createDate},
+            </if>
+            <if test="modifyDate!=null">
+                modify_date=#{modifyDate},
+            </if>
+            <if test="code!=null">
+                code=#{code},
+            </if>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="sortNo!=null">
+                sort_no=#{sortNo},
+            </if>
+            <if test="parent!=null">
+                parent=#{parent},
+            </if>
+            <if test="isParent!=null">
+                is_parent=#{isParent},
+            </if>
+            <if test="del!=null">
+                del=#{del},
+            </if>
+            <if test="note!=null">
+                note=#{note}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getCode" resultType="java.lang.Integer">
+        select count(*) from category where code = #{code}
+        <if test="id != null">
+            and id &lt;&gt; #{id}
+        </if>
+    </select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+        count(*)
+        from category
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="createDate!=null">
+            and create_date=#{createDate}
+        </if>
+        <if test="modifyDate!=null">
+            and modify_date=#{modifyDate}
+        </if>
+        <if test="code!=null">
+            and code=#{code}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="sortNo!=null">
+            and sort_no=#{sortNo}
+        </if>
+        <if test="parent!=null">
+            and parent=#{parent}
+        </if>
+        <if test="isParent!=null">
+            and is_parent=#{isParent}
+        </if>
+        <if test="del!=null">
+            and del=#{del}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.pos.ShopPaymentDao">
+	<resultMap id="ResultMap" type="ShopPayment">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="del" column="del"/>
+        <result property="delName" column="del_name"/>
+		<result property="isDefault" column="is_default"/>
+        <result property="isDefaultName" column="is_default_name"/>
+		<result property="sortNo" column="sort_no"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="ShopPayment" >
+        select
+            id,
+            create_date,
+            modify_date,
+            code,
+            name,
+            del,
+            case del
+            when 0 then '启用'
+            when 1 then '禁用'
+            end as del_name,
+            is_default,
+            case is_default
+            when 0 then '否'
+            when 1 then '是'
+            end as is_default_name,
+            note
+        from shop_payment
+        where 1=1
+        <if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="code!=null">
+				and code=#{code}
+		</if>
+		<if test="name!=null">
+				and name=#{name}
+		</if>
+		<if test="del!=null">
+				and del=#{del}
+		</if>
+		<if test="isDefault!=null">
+				and is_default=#{isDefault}
+		</if>
+	</select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+        count(*)
+        from shop_payment
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="code!=null">
+            and code=#{code}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="del!=null">
+            and del=#{del}
+        </if>
+        <if test="isDefault!=null">
+            and is_default=#{isDefault}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="ShopPayment">
+		insert into shop_payment(
+			create_date,
+			modify_date,
+			code,
+			name,
+			del,
+			is_default,
+			sort_no,
+			note
+		) values (
+			now(),
+			now(),
+			#{code},
+			#{name},
+			#{del},
+			#{isDefault},
+			#{sortNo},
+			#{note}
+		)
+	</insert>
+
+	<update id="update" parameterType="ShopPayment">
+		update shop_payment
+		<set>
+            modify_date=now(),
+
+            <if test="code!=null and code != ''">
+                code=#{code},
+            </if>
+            <if test="name!=null and name != ''">
+                name=#{name},
+            </if>
+            <if test="del!=null">
+                del=#{del},
+            </if>
+            <if test="isDefault!=null">
+                is_default=#{isDefault},
+            </if>
+            <if test="sortNo!=null">
+                sort_no=#{sortNo},
+            </if>
+            <if test="note!=null and note != ''">
+                note=#{note}
+            </if>
+		</set>
+        where id = #{id}
+	</update>
+</mapper>

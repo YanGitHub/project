@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.product.BrandDao">
+	<resultMap id="ResultMap" type="Brand">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="attachHttp" column="attach_http"/>
+		<result property="attachName" column="attach_name"/>
+		<result property="attachDate" column="attach_date"/>
+		<result property="del" column="del"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="Brand" >
+		select 
+			id,
+			create_date,
+			modify_date,
+			code,
+			name,
+			attach_http,
+			attach_name,
+			attach_date,
+			del,
+			note
+		from brand
+		where 1=1 
+		<if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="createDate!=null">
+				and create_date=#{createDate}
+		</if>
+		<if test="modifyDate!=null">
+				and modify_date=#{modifyDate}
+		</if>
+		<if test="code!=null">
+				and code=#{code}
+		</if>
+		<if test="name!=null">
+				and name=#{name}
+		</if>
+		<if test="attachHttp!=null">
+				and attach_http=#{attachHttp}
+		</if>
+		<if test="attachName!=null">
+				and attach_name=#{attachName}
+		</if>
+		<if test="attachDate!=null">
+				and attach_date=#{attachDate}
+		</if>
+		<if test="del!=null">
+				and del=#{del}
+		</if>
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+	</select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+        count(*)
+        from brand
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="createDate!=null">
+            and create_date=#{createDate}
+        </if>
+        <if test="modifyDate!=null">
+            and modify_date=#{modifyDate}
+        </if>
+        <if test="code!=null">
+            and code=#{code}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="attachHttp!=null">
+            and attach_http=#{attachHttp}
+        </if>
+        <if test="attachName!=null">
+            and attach_name=#{attachName}
+        </if>
+        <if test="attachDate!=null">
+            and attach_date=#{attachDate}
+        </if>
+        <if test="del!=null">
+            and del=#{del}
+        </if>
+    </select>
+
+    <select id="getCode" resultType="java.lang.Integer">
+        select count(*) from brand where code = #{code}
+        <if test="id != null">
+            and id &lt;&gt; #{id}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="Brand">
+		insert into brand(
+			create_date,
+			modify_date,
+			code,
+			name,
+			attach_http,
+			attach_name,
+			attach_date,
+			del,
+			note
+		) values (
+			now(),
+			now(),
+			#{code},
+			#{name},
+			#{attachHttp},
+			#{attachName},
+			#{attachDate},
+			#{del},
+			#{note}
+		)
+	</insert>
+
+	<update id="update" parameterType="Brand">
+		update brand set
+		<if test="createDate!=null">
+			create_date=#{createDate},
+		</if>
+		<if test="modifyDate!=null">
+			modify_date=#{modifyDate},
+		</if>
+		<if test="code!=null">
+			code=#{code},
+		</if>
+		<if test="name!=null">
+			name=#{name},
+		</if>
+		<if test="attachHttp!=null">
+			attach_http=#{attachHttp},
+		</if>
+		<if test="attachName!=null">
+			attach_name=#{attachName},
+		</if>
+		<if test="attachDate!=null">
+			attach_date=#{attachDate},
+		</if>
+		<if test="del!=null">
+			del=#{del},
+		</if>
+		<if test="note!=null">
+			note=#{note}
+		</if>
+        where id = #{id}
+	</update>
+</mapper>

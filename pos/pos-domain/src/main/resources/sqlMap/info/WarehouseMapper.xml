@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.info.WarehouseDao">
+	<resultMap id="ResultMap" type="Warehouse">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="pcode" column="pcode"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="contactName" column="contact_name"/>
+		<result property="contactPhone" column="contact_phone"/>
+		<result property="contactMobile" column="contact_mobile"/>
+		<result property="address" column="address"/>
+		<result property="fax" column="fax"/>
+		<result property="post" column="post"/>
+		<result property="del" column="del"/>
+		<result property="isDefaultDeliver" column="is_default_deliver"/>
+		<result property="isDefaultReceive" column="is_default_receive"/>
+		<result property="provinceCode" column="province_code"/>
+		<result property="cityCode" column="city_code"/>
+		<result property="districtCode" column="district_code"/>
+		<result property="isNegativeStock" column="is_negative_stock"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="Warehouse" >
+        select
+            wh.id,
+            wh.create_date,
+            wh.modify_date,
+            wh.pcode,
+            wh.code,
+            wh.name,
+            wh.contact_name,
+            wh.contact_phone,
+            wh.contact_mobile,
+            wh.address,
+            wh.fax,
+            wh.post,
+            wh.del,
+            wh.is_default_deliver,
+            wh.is_default_receive,
+            rp.region_name as province_code,
+            rc.region_name as city_code,
+            rd.region_name as district_code,
+            wh.is_negative_stock,
+            wh.note
+        from warehouse wh
+        LEFT JOIN region rp on rp.region_id = wh.province_code
+        LEFT JOIN region rc on rc.region_id = wh.city_code
+        LEFT JOIN region rd on rd.region_id = wh.district_code
+		where 1=1 
+		<if test="id!=null">
+				and wh.id=#{id}
+		</if>
+		<if test="createDate!=null">
+				and wh.create_date=#{createDate}
+		</if>
+		<if test="pcode!=null">
+				and wh.pcode=#{pcode}
+		</if>
+		<if test="code!=null">
+				and wh.code=#{code}
+		</if>
+		<if test="name!=null">
+				and wh.name=#{name}
+		</if>
+		<if test="del!=null">
+				and wh.del=#{del}
+		</if>
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+	</select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+        count(*)
+        from warehouse
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="createDate!=null">
+            and create_date=#{createDate}
+        </if>
+        <if test="pcode!=null">
+            and pcode=#{pcode}
+        </if>
+        <if test="code!=null">
+            and code=#{code}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="del!=null">
+            and del=#{del}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="Warehouse">
+		insert into warehouse(
+			create_date,
+			pcode,
+			code,
+			name,
+			contact_name,
+			contact_phone,
+			contact_mobile,
+			address,
+			fax,
+			post,
+			del,
+			is_default_deliver,
+			is_default_receive,
+			province_code,
+			city_code,
+			district_code,
+			is_negative_stock,
+			note
+		) values (
+			now(),
+			#{pcode},
+			#{code},
+			#{name},
+			#{contactName},
+			#{contactPhone},
+			#{contactMobile},
+			#{address},
+			#{fax},
+			#{post},
+			#{del},
+			#{isDefaultDeliver},
+			#{isDefaultReceive},
+			#{provinceCode},
+			#{cityCode},
+			#{districtCode},
+			#{isNegativeStock},
+			#{note}
+		)
+	</insert>
+
+	<update id="update" parameterType="Warehouse">
+		update warehouse
+		 <set>
+             <if test="modifyDate!=null">
+                 modify_date=now(),
+             </if>
+             <if test="pcode!=null">
+                 pcode=#{pcode},
+             </if>
+             <if test="code!=null">
+                 code=#{code},
+             </if>
+             <if test="name!=null">
+                 name=#{name},
+             </if>
+             <if test="contactName!=null">
+                 contact_name=#{contactName},
+             </if>
+             <if test="contactPhone!=null">
+                 contact_phone=#{contactPhone},
+             </if>
+             <if test="contactMobile!=null">
+                 contact_mobile=#{contactMobile},
+             </if>
+             <if test="address!=null">
+                 address=#{address},
+             </if>
+             <if test="fax!=null">
+                 fax=#{fax},
+             </if>
+             <if test="post!=null">
+                 post=#{post},
+             </if>
+             <if test="del!=null">
+                 del=#{del},
+             </if>
+             <if test="isDefaultDeliver!=null">
+                 is_default_deliver=#{isDefaultDeliver},
+             </if>
+             <if test="isDefaultReceive!=null">
+                 is_default_receive=#{isDefaultReceive},
+             </if>
+             <if test="provinceCode!=null">
+                 province_code=#{provinceCode},
+             </if>
+             <if test="cityCode!=null">
+                 city_code=#{cityCode},
+             </if>
+             <if test="districtCode!=null">
+                 district_code=#{districtCode},
+             </if>
+             <if test="isNegativeStock!=null">
+                 is_negative_stock=#{isNegativeStock},
+             </if>
+             <if test="note!=null">
+                 note=#{note}
+             </if>
+		 </set>
+
+	</update>
+
+    <select id="getCode" resultType="java.lang.Integer">
+        select count(*) from warehouse where code = #{code}
+        <if test="id != null">
+            and id &lt;&gt; #{id}
+        </if>
+    </select>
+
+</mapper>

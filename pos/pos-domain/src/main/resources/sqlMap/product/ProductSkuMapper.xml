@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.product.ProductSkuDao">
+    <resultMap id="ResultMap" type="ProductSku">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="gbCode" column="gb_code"/>
+        <result property="untPrice" column="unt_price"/>
+        <result property="costPrice" column="cost_price"/>
+        <result property="usePrice" column="use_price"/>
+        <result property="del" column="del"/>
+        <result property="memo" column="memo"/>
+    </resultMap>
+
+    <select id="getList" resultMap="ResultMap" parameterType="ProductSku" >
+        select
+            ps.id,
+            ps.pid,
+            ps.product_code,
+            p.name as product_name,
+            ps.code,
+            ps.name,
+            ps.gb_code,
+            ps.unt_price,
+            ps.cost_price,
+            ps.use_price,
+            ps.del,
+            ps.memo
+        from product_sku ps
+        left join product p on p.code = ps.product_code
+        where 1=1
+        <if test="id!=null">
+            and ps.id=#{id}
+        </if>
+        <if test="pid!=null">
+            and ps.pid=#{pid}
+        </if>
+        <if test="productCode!=null">
+            and ps.product_code=#{productCode}
+        </if>
+        <if test="code!=null">
+            and ps.code=#{code}
+        </if>
+        <if test="name!=null">
+            and ps.name=#{name}
+        </if>
+        <if test="gbCode!=null">
+            and ps.gb_code=#{gbCode}
+        </if>
+        <if test="del!=null">
+            and ps.del=#{del}
+        </if>
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+        count(*)
+        from product_sku ps
+        left join product p on p.code = ps.product_code
+        where 1=1
+        <if test="id!=null">
+            and ps.id=#{id}
+        </if>
+        <if test="pid!=null">
+            and ps.pid=#{pid}
+        </if>
+        <if test="productCode!=null">
+            and ps.product_code=#{productCode}
+        </if>
+        <if test="code!=null">
+            and ps.code=#{code}
+        </if>
+        <if test="name!=null">
+            and ps.name=#{name}
+        </if>
+        <if test="gbCode!=null">
+            and ps.gb_code=#{gbCode}
+        </if>
+        <if test="del!=null">
+            and ps.del=#{del}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="ProductSku">
+		insert into product_sku(
+			pid,
+			product_code,
+			code,
+			name,
+			gb_code,
+			unt_price,
+			cost_price,
+			use_price,
+			del,
+			memo
+		) values (
+			#{pid},
+			#{productCode},
+			#{code},
+			#{name},
+			#{gbCode},
+			#{untPrice},
+			#{costPrice},
+			#{usePrice},
+			#{del},
+			#{memo}
+		)
+	</insert>
+
+    <update id="update" parameterType="ProductSku">
+        update product_sku set
+        <if test="id!=null">
+            id=#{id},
+        </if>
+        <if test="pid!=null">
+            pid=#{pid},
+        </if>
+        <if test="productCode!=null">
+            product_code=#{productCode},
+        </if>
+        <if test="code!=null">
+            code=#{code},
+        </if>
+        <if test="name!=null">
+            name=#{name},
+        </if>
+        <if test="gbCode!=null">
+            gb_code=#{gbCode},
+        </if>
+        <if test="untPrice!=null">
+            unt_price=#{untPrice},
+        </if>
+        <if test="costPrice!=null">
+            cost_price=#{costPrice},
+        </if>
+        <if test="usePrice!=null">
+            use_price=#{usePrice},
+        </if>
+        <if test="del!=null">
+            del=#{del},
+        </if>
+        <if test="memo!=null">
+            memo=#{memo}
+        </if>
+    </update>
+</mapper>

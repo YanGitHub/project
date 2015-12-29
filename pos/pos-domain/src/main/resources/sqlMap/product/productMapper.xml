@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.product.ProductDao">
+    <resultMap id="resultMap" type="ProductInfo">
+        <result property="id" column="id"/>
+        <result property="createDate" column="create_date"/>
+        <result property="modifyDate" column="modify_date"/>
+        <result property="code"/>
+        <result property="name"/>
+        <result property="shortName" column="short_name"/>
+        <result property="attachName" column="attach_name"/>
+        <result property="attachHttp" column="attach_http"/>
+        <result property="attachDate" column="attach_date"/>
+        <result property="untPrice" column="unt_price"/>
+        <result property="costPrice" column="cost_price"/>
+        <result property="del"/>
+        <result property="brandCode" column="brand_code"/>
+        <result property="brandName" column="brand_name"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="note"/>
+    </resultMap>
+
+    <insert id="add" parameterType="ProductInfo" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO product(create_date,modify_date,code,name,short_name,
+        attach_http,attach_name,attach_date,unt_price,cost_price,category_code,del,note,brand_code)
+        VALUES(now(),now(),#{code},#{name},#{shortName},#{attachHttp},#{attachName},
+        #{attachDate},#{untPrice},#{costPrice},#{categoryCode},0,#{note},#{brandCode})
+    </insert>
+
+    <insert id="addMx">
+        insert into product_sku(pid,product_code,code,name,gb_code,unt_price,cost_price,use_price,del,memo)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.pid},#{item.productCode},#{item.code},#{item.name},#{item.gbCode},#{item.untPrice},#{item.costPrice},
+            #{item.usePrice},0,#{item.memo})
+        </foreach>
+    </insert>
+
+    <select id="getCountByCode" resultType="java.lang.Integer">
+         select count(*) from product where code = #{code}
+    </select>
+
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        from product p
+        LEFT JOIN product_category pc on pc.code = p.category_code
+        LEFT JOIN brand b on b.code = p.brand_code
+        where true
+        <if test="code != null and code != ''">
+            and p.code = #{code}
+        </if>
+        <if test="name != null and name != ''">
+            and p.name = #{name}
+        </if>
+        <if test="brandCode != null and brandCode != ''">
+            and p.brand_code = #{brandCode}
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            and p.category_code = #{categoryCode}
+        </if>
+    </select>
+
+    <select id="getList" parameterType="ProductInfo" resultMap="resultMap">
+        SELECT
+            p.id,
+            p.create_date,
+            p.modify_date,
+            p.code,
+            p.name,
+            p.short_name,
+            p.attach_http,
+            p.attach_name,
+            p.attach_date,
+            p.unt_price,
+            p.cost_price,
+            p.category_code,
+            pc.name as category_name,
+            brand_code,
+            b.name as brand_name,
+            p.del,
+            p.note
+        from product p
+        LEFT JOIN product_category pc on pc.code = p.category_code
+        LEFT JOIN brand b on b.code = p.brand_code
+        where true
+        <if test="code != null and code != ''">
+            and p.code = #{code}
+        </if>
+        <if test="name != null and name != ''">
+            and p.name = #{name}
+        </if>
+        <if test="brandCode != null and brandCode != ''">
+            and p.brand_code = #{brandCode}
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            and p.category_code = #{categoryCode}
+        </if>
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+    </select>
+
+    <update id="update" parameterType="ProductInfo">
+        update product
+        <set>
+            <if test="createDate!=null">
+                create_date=#{createDate},
+            </if>
+            <if test="modifyDate!=null">
+                modify_date=#{modifyDate},
+            </if>
+            <if test="code!=null">
+                code=#{code},
+            </if>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="shortName!=null">
+                short_name=#{shortName},
+            </if>
+            <if test="attachHttp!=null">
+                attach_http=#{attachHttp},
+            </if>
+            <if test="attachName!=null">
+                attach_name=#{attachName},
+            </if>
+            <if test="attachDate!=null">
+                attach_date=#{attachDate},
+            </if>
+            <if test="untPrice!=null">
+                unt_price=#{untPrice},
+            </if>
+            <if test="costPrice!=null">
+                cost_price=#{costPrice},
+            </if>
+            <if test="categoryCode!=null">
+                category_code=#{categoryCode},
+            </if>
+            <if test="brandCode!=null">
+                brand_code=#{brandCode},
+            </if>
+            <if test="del!=null">
+                del=#{del},
+            </if>
+            <if test="note!=null">
+                note=#{note}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
