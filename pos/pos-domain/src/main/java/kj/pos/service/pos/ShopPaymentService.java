@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ShopPaymentService {
     public Integer getTotal(ShopPayment shopPayment)throws SQLException{
         return shopPaymentDao.getTotal(shopPayment);
     }
-
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
     public void op(ShopPayment shopPayment)throws SQLException{
         shopPaymentDao.update(shopPayment);
     }

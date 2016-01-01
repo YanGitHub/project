@@ -1,5 +1,6 @@
 package kj.pos.util.web;
 
+import kj.pos.entity.admin.OrganizationInfo;
 import kj.pos.entity.admin.SysParameters;
 import kj.pos.entity.admin.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,13 @@ public class WebContextUtil {
         return null;
     }
 
+    public static OrganizationInfo getOrganizationInfo() {
+        OrganizationInfo organizationInfo = null;
+        Object object = session.getAttribute("organizationInfo");
+        if(object != null){
+            organizationInfo = (OrganizationInfo) object;
+        }
+        return organizationInfo;
+    }
 
 }

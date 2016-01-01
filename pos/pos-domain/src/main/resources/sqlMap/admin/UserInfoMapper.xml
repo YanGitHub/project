@@ -7,6 +7,8 @@
 		<result property="modifyDate" column="modify_date"/>
 		<result property="code" column="code"/>
 		<result property="name" column="name"/>
+        <result property="orgCode" column="org_code"/>
+        <result property="orgName" column="org_name"/>
 		<result property="status" column="status"/>
 		<result property="password" column="password"/>
 		<result property="phone" column="phone"/>
@@ -16,42 +18,74 @@
 	</resultMap>
 
 	<select id="getList" resultMap="ResultMap" parameterType="UserInfo" >
-		select 
-			id,
-			create_date,
-			modify_date,
-			code,
-			name,
-			status,
-			password,
-			phone,
-			mobile,
-			email,
-			note
-		from user_info
+        select
+            ui.id,
+            ui.create_date,
+            ui.modify_date,
+            ui.code,
+            ui.name,
+            ui.org_code,
+            oi.name org_name,
+            ui.status,
+            ui.password,
+            ui.phone,
+            ui.mobile,
+            ui.email,
+            ui.note
+        from user_info ui
+        left join organization_info oi on oi.code = ui.org_code
 		where 1=1 
 		<if test="id!=null">
-				and id=#{id}
+				and ui.id=#{id}
 		</if>
 		<if test="code!=null">
-				and code=#{code}
+				and ui.code=#{code}
 		</if>
 		<if test="name!=null">
-				and name=#{name}
+				and ui.name=#{name}
 		</if>
 		<if test="phone!=null">
-				and phone=#{phone}
+				and ui.phone=#{phone}
 		</if>
 		<if test="mobile!=null">
-				and mobile=#{mobile}
+				and ui.mobile=#{mobile}
 		</if>
 	</select>
-	<insert id="create" parameterType="UserInfo">
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from user_info ui
+        left join organization_info oi on oi.code = ui.org_code
+        where 1=1
+        <if test="id!=null">
+            and ui.id=#{id}
+        </if>
+        <if test="code!=null">
+            and ui.code=#{code}
+        </if>
+        <if test="name!=null">
+            and ui.name=#{name}
+        </if>
+        <if test="phone!=null">
+            and ui.phone=#{phone}
+        </if>
+        <if test="mobile!=null">
+            and ui.mobile=#{mobile}
+        </if>
+    </select>
+
+    <select id="getCountByCodyAndId" resultType="java.lang.Integer">
+        select count(*) from user_info where code = #{code} and id &lt;&gt; #{id}
+    </select>
+
+    <insert id="create" parameterType="UserInfo">
 		insert into user_info(
 			create_date,
 			modify_date,
 			code,
 			name,
+			org_code,
 			status,
 			password,
 			phone,
@@ -63,7 +97,8 @@
 			now(),
 			#{code},
 			#{name},
-			#{status},
+			#{orgCode},
+			1,
 			#{password},
 			#{phone},
 			#{mobile},
@@ -73,28 +108,40 @@
 	</insert>
 
 	<update id="update" parameterType="UserInfo">
-		update user_info set
-			modify_date=now(),
-		<if test="name!=null">
-			name=#{name},
-		</if>
-		<if test="status!=null">
-			status=#{status},
-		</if>
-		<if test="password!=null">
-			password=#{password},
-		</if>
-		<if test="phone!=null">
-			phone=#{phone},
-		</if>
-		<if test="mobile!=null">
-			mobile=#{mobile},
-		</if>
-		<if test="email!=null">
-			email=#{email},
-		</if>
-		<if test="note!=null">
-			note=#{note}
-		</if>
+		update user_info
+		<set>
+            modify_date = now(),
+            <if test="code!=null and code !=''">
+                code=#{code},
+            </if>
+            <if test="name!=null and name !=''">
+                name=#{name},
+            </if>
+            <if test="orgCode!=null and orgCode != ''">
+                org_code = #{orgCode},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="password!=null and password != ''">
+                password=#{password},
+            </if>
+            <if test="phone!=null and phone !=''">
+                phone=#{phone},
+            </if>
+            <if test="mobile!=null and mobile !=''">
+                mobile=#{mobile},
+            </if>
+            <if test="email!=null and email !=''">
+                email=#{email},
+            </if>
+            <if test="note!=null and note !=''">
+                note=#{note}
+            </if>
+		</set>
+		where id = #{id}
 	</update>
+    <update id="status">
+        update user_info set status = #{status} where id = #{id}
+    </update>
 </mapper>

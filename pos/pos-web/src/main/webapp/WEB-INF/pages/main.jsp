@@ -72,6 +72,7 @@
                                 <li><a href="#">用户信息</a></li>
                                 <li><a href="#">会员管理</a></li>
                                 <li><a href="#" onclick="addTab('支付方式','${ctx}/shopPayment')">支付方式</a></li>
+                                <li><a href="#" onclick="addTab('模板设置','${ctx}/printTemplate')">模板设置</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#" onclick="addTab('历史查询','${ctx}/pos/shopSalesDetail')">历史查询</a></li>
                             </ul>
@@ -89,6 +90,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">系统管理 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                <li><a href="#" onclick="addTab('用户信息','${ctx}/userInfo')">用户信息</a></li>
                                 <li><a href="#" onclick="addTab('系统参数','${ctx}/sysParameters')">系统参数</a></li>
                             </ul>
                         </li>
@@ -101,10 +103,15 @@
                         <li><a href="#" data-toggle="modal" data-target="#version">关于</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
+                        <c:if test="${organizationInfo != null}">
+                            <li><a href="#">${organizationInfo.name}</a></li>
+                        </c:if>
+
                         <c:if test="${userInfo != null}">
                             <li><a href="#">${userInfo.name}</a></li>
-                            <li><a href="#">${userInfo.mobile}</a></li>
+                            <%--<li><a href="#">${userInfo.mobile}</a></li>--%>
                         </c:if>
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人中心<span class="caret"></span></a>
                             <ul class="dropdown-menu">

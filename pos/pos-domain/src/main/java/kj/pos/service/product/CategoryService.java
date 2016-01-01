@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class CategoryService {
     public List<Category> getList(Category category)throws SQLException{
         return categoryDao.getList(category);
     }
-
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
     public Map<String,Object> add(Category category)throws SQLException{
         Map<String,Object> map = new HashMap<String, Object>();
         Integer n = categoryDao.getCode(category.getCode(),null);

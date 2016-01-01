@@ -59,6 +59,7 @@ public class ProductService {
         return productDao.getList(productInfo);
     }
 
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
     public void update(ProductInfo productInfo)throws SQLException{
         productDao.update(productInfo);
     }

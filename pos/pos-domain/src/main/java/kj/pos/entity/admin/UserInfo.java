@@ -1,12 +1,13 @@
 package kj.pos.entity.admin;
 
+import kj.pos.entity.BaseEntity;
 import org.apache.ibatis.type.Alias;
 
 /**
  * Created by Yan on 15-11-27.
  */
 @Alias("UserInfo")
-public class UserInfo {
+public class UserInfo extends BaseEntity {
     //id
     private Long id;
     //创建日期
@@ -17,6 +18,10 @@ public class UserInfo {
     private String code;
     //用户名称
     private String name;
+    //上级组织 code
+    private String orgCode;
+    //上级组织 name
+    private String orgName;
     //状态 0 不可用 1 可用
     private int status;
     //密码
@@ -68,6 +73,22 @@ public class UserInfo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 
     public int getStatus() {

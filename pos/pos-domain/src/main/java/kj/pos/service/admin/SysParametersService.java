@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class SysParametersService {
     public List<SysParameters> getList(SysParameters sysParameters)throws SQLException{
         return sysParametersDao.getList(sysParameters);
     }
-
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
     public Map<String,Object> save(SysParameters sysParameters)throws SQLException{
         Map<String,Object> map = new HashMap<String, Object>();
         if(sysParameters.getId() != null){
@@ -53,7 +54,7 @@ public class SysParametersService {
         }
         return map;
     }
-
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
     public void status(SysParameters sysParameters)throws SQLException{
         sysParametersDao.status(sysParameters);
     }

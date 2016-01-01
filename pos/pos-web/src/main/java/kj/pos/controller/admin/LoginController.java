@@ -1,7 +1,9 @@
 package kj.pos.controller.admin;
 
+import kj.pos.entity.admin.OrganizationInfo;
 import kj.pos.entity.admin.SysParameters;
 import kj.pos.entity.admin.UserInfo;
+import kj.pos.service.admin.OrganizationService;
 import kj.pos.service.admin.SysParametersService;
 import kj.pos.service.admin.UserInfoService;
 import kj.pos.util.web.WebContextUtil;
@@ -34,6 +36,8 @@ public class LoginController {
     private UserInfoService userInfoService;
     @Autowired
     private SysParametersService sysParametersService;
+    @Autowired
+    private OrganizationService organizationService;
 
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String index(){
@@ -43,8 +47,10 @@ public class LoginController {
     @RequestMapping(value = "/main",method = RequestMethod.GET)
     public ModelAndView main(){
         UserInfo userInfo = WebContextUtil.getCurrentUser();
+        OrganizationInfo organizationInfo = WebContextUtil.getOrganizationInfo();
         Map<String,Object> map = new HashMap<String, Object>();
         map.put("userInfo",userInfo);
+        map.put("organizationInfo",organizationInfo);
         if(userInfo != null){
             return new ModelAndView("main",map);
         }else{
@@ -60,6 +66,10 @@ public class LoginController {
         try {
             //获取登录用户信息
             List<UserInfo> userInfoList = userInfoService.getList(userInfo);
+            //获取用户所属组织
+            OrganizationInfo organizationInfo = new OrganizationInfo();
+            organizationInfo.setCode(userInfoList.get(0).getOrgCode());
+            List<OrganizationInfo> organizationInfos = organizationService.getList(organizationInfo);
             //获取系统参数列表
             SysParameters sysParameters = new SysParameters();
             sysParameters.setStatus(true);
@@ -67,6 +77,7 @@ public class LoginController {
             if(userInfoList.size() == 1){
                 session.setAttribute("currentUser",userInfoList.get(0));
                 session.setAttribute("sysParametersList",sysParametersList);
+                session.setAttribute("organizationInfo",organizationInfos.get(0));
                 map.put("status",Boolean.TRUE);
                 map.put("msg","登录成功");
             }else{

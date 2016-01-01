@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class OrganizationService {
     public List<OrganizationInfo> getList(OrganizationInfo organizationInfo)throws SQLException{
         return organizationInfoDao.getList(organizationInfo);
     }
-
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
     public Map<String,Object> save(OrganizationInfo organizationInfo)throws SQLException{
         Map<String,Object> map = new HashMap<String, Object>();
         if(organizationInfo.getId() != null){
