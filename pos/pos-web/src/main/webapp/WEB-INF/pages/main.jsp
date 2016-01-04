@@ -52,7 +52,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">营销存</a>
+                    <a class="navbar-brand" href="/main">营销存</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -72,8 +72,8 @@
                                 <li><a href="#">用户信息</a></li>
                                 <li><a href="#">会员管理</a></li>
                                 <li><a href="#" onclick="addTab('支付方式','${ctx}/shopPayment')">支付方式</a></li>
-                                <li><a href="#" onclick="addTab('模板设置','${ctx}/printTemplate')">模板设置</a></li>
                                 <li role="separator" class="divider"></li>
+                                <li><a href="#" onclick="addTab('模板设置','${ctx}/printTemplate')">模板设置</a></li>
                                 <li><a href="#" onclick="addTab('历史查询','${ctx}/pos/shopSalesDetail')">历史查询</a></li>
                             </ul>
                         </li>

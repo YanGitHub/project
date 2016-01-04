@@ -35,12 +35,15 @@
         body {
             padding: 10px 15px 0px 15px;
         }
+
         .input-group-addon {
             width: 90px;
         }
+
         .form-control {
             width: 166px;
         }
+
         .breadcrumb {
             margin-bottom: 10px;
         }
@@ -60,54 +63,62 @@
     <button class="btn btn-info" onclick="importTemp()">导入模板</button>
     <button class="btn btn-warning" onclick="setPrinter()">选择打印机</button>
 </div>
+<form id="editForm">
+    <div class="row" style="margin-top: 10px">
+        <input id="id" hidden="hidden" type="text"/>
 
-<div class="row" style="margin-top: 10px">
-    <input id="id" hidden="hidden" type="text"/>
-    <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">模板名称</span>
-            <input type="text" id="name" name="name" class="form-control" placeholder=""
-                   aria-describedby="basic-addon1">
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">模板名称</span>
+                <input type="text" id="name" name="name" class="form-control" placeholder=""
+                       aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">模板类型</span>
+                <select id="type" name="type" style="width: 168px" onchange="reloadTemplate(this)"
+                        class="form-control selectpicker">
+                    <option value="1" selected="selected">小票模板</option>
+                    <option value="2">标签模板</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">打印机名称</span>
+                <input type="text" id="printer" name="printer" class="form-control" placeholder="" readonly="readonly"
+                       aria-describedby="basic-addon1">
+            </div>
         </div>
     </div>
-    <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">模板类型</span>
-            <select id="type" name="type" style="width: 168px" class="form-control selectpicker">
-                <option value="1" selected="selected">小票模板</option>
-                <option value="2">标签模板</option>
-            </select>
+    <div class="row" style="margin-top: 10px">
+        <div class="col-sm-12">
+            <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=1000 height=390>
+                <param name="Caption" value="模板设计">
+                <param name="Border" value="1">
+                <param name="Color" value="#C0C0C0">
+                <embed id="LODOP_EM" TYPE="application/x-print-lodop" width=1000 height=390
+                       PLUGINSPAGE="install_lodop.exe">
+            </object>
         </div>
     </div>
-    <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">打印机名称</span>
-            <input type="text" id="printer" name="printer" class="form-control" placeholder="" readonly="readonly"
-                   aria-describedby="basic-addon1">
-        </div>
-    </div>
-</div>
-<div class="row" style="margin-top: 10px">
-    <div class="col-sm-12">
-        <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=1000 height=390>
-            <param name="Caption" value="模板设计">
-            <param name="Border" value="1">
-            <param name="Color" value="#C0C0C0">
-            <embed id="LODOP_EM" TYPE="application/x-print-lodop" width=1000 height=390 PLUGINSPAGE="install_lodop.exe">
-        </object>
-    </div>
-</div>
+</form>
 <script type="text/javascript">
-    $(function(){
-        $.post('${ctx}/printTemplate/getData',{type:1},function(msg){
-            displayDesign(msg.printTemplate.data);
-        });
+    $(function () {
+        loadTemplate(1);//1小票模板 2标签模板
 
     });
+    //加载模板
+    function loadTemplate(type) {
+        $.post('${ctx}/printTemplate/getData', {type: type}, function (msg) {
+            displayDesign(msg.printTemplate);
+        });
+    }
     /**
      * 导入模板
      */
-    function importTemp(){
+    function importTemp() {
         var LODOP = getLodop($("#LODOP_OB")[0], $("#LODOP_EM")[0]);
         var strFilename = LODOP.GET_DIALOG_VALUE("LocalFileFullName", "导入的模版.txt")
         $("#template_Content").val(LODOP.GET_FILE_TEXT(strFilename))
@@ -127,14 +138,41 @@
         var name = LODOP.GET_PRINTER_NAME(LODOP.SELECT_PRINTER());
         $("#printer").val(name);
     }
-
+    //设计模式
     function displayDesign(data) {
-        var LODOP = getLodop($("#LODOP_OB")[0], $("#LODOP_EM")[0]);
-        LODOP.SET_PRINT_PAGESIZE(1, parseFloat($("#width").val()) * 100, parseFloat($("#height").val()) * 100, "A5");
-        eval(data);
+        $('#printer').val(data.printer);
+        $('#name').val(data.name);
+        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        LODOP.PRINT_INITA(4, 10, 665, 600, "设计模式");
+        eval(data.data);
         LODOP.SET_SHOW_MODE("DESIGN_IN_BROWSE", 1);
         LODOP.SET_SHOW_MODE("SETUP_ENABLESS", "11111111000000");//隐藏关闭(叉)按钮
         LODOP.PRINT_DESIGN();
+    }
+    //重新加载模板，根据类型加载
+    function reloadTemplate(obj) {
+        var type = obj.options[obj.selectedIndex].value;
+        loadTemplate(type);
+    }
+    //保存模板
+    function save() {
+        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        var template = LODOP.GET_VALUE("ProgramCodes", 0);
+        template.replace(/LODOP\.PRINT_INITA\(.*\);/, "");
+        var data = $("#editForm").serializeObject();
+        data.data = template;
+        $.ajax({
+            url: '${ctx}/printTemplate/save',
+            type: 'post',
+            dataType: "json",
+            async: false,
+            data: JSON.stringify(data),
+            processData: false,
+            contentType: 'application/json',
+            success: function (map) {
+                window.location.href = '${ctx}/printTemplate';
+            }
+        });
     }
 </script>
 <script type="text/javascript">

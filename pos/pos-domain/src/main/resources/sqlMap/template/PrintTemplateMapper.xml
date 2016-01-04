@@ -58,7 +58,6 @@
 	</select>
 	<insert id="create" parameterType="PrintTemplate">
 		insert into print_template(
-			id,
 			org_code,
 			create_date,
 			modify_date,
@@ -71,10 +70,9 @@
 			note,
 			data
 		) values (
-			#{id},
 			#{orgCode},
-			#{createDate},
-			#{modifyDate},
+			now(),
+			now(),
 			#{type},
 			#{name},
 			#{printer},

@@ -33,4 +33,10 @@ public class PrintTemplateService {
         printTemplate.setOrgCode(WebContextUtil.getOrganizationInfo().getCode());
         return printTemplateDao.getList(printTemplate);
     }
+
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
+    public void save(PrintTemplate printTemplate)throws SQLException{
+        printTemplate.setOrgCode(WebContextUtil.getOrganizationInfo().getCode());
+        printTemplateDao.create(printTemplate);
+    }
 }
