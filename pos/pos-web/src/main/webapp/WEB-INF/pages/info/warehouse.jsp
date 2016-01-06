@@ -253,6 +253,7 @@
                     { field: 'id', hidden: true },
                     { field: 'code', title: '仓库代码', fitColumns: true },
                     { field: 'name', title: '仓库名称', fitColumns: true},
+                    { field: 'pname', title: '上级组织', fitColumns: true},
                     { field: 'contactName', title: '联系人', fitColumns: true},
                     { field: 'contactPhone', title: '联系人电话', fitColumns: true},
                     { field: 'contactMobile', title: '联系人手机', fitColumns: true},

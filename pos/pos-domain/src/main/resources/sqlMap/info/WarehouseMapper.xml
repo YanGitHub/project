@@ -6,6 +6,7 @@
 		<result property="createDate" column="create_date"/>
 		<result property="modifyDate" column="modify_date"/>
 		<result property="pcode" column="pcode"/>
+        <result property="pname" column="pname"/>
 		<result property="code" column="code"/>
 		<result property="name" column="name"/>
 		<result property="contactName" column="contact_name"/>
@@ -30,6 +31,7 @@
             wh.create_date,
             wh.modify_date,
             wh.pcode,
+            oi.name pname,
             wh.code,
             wh.name,
             wh.contact_name,
@@ -50,6 +52,7 @@
         LEFT JOIN region rp on rp.region_id = wh.province_code
         LEFT JOIN region rc on rc.region_id = wh.city_code
         LEFT JOIN region rd on rd.region_id = wh.district_code
+        LEFT JOIN organization_info oi on oi.code = wh.pcode
 		where 1=1 
 		<if test="id!=null">
 				and wh.id=#{id}

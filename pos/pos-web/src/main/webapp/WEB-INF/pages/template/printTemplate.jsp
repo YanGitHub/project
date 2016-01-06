@@ -63,6 +63,12 @@
     <button class="btn btn-info" onclick="importTemp()">导入模板</button>
     <button class="btn btn-warning" onclick="setPrinter()">选择打印机</button>
 </div>
+
+<%--<div id="msgAlert" hidden="hidden" class="alert alert-warning alert-dismissible" role="alert">--%>
+    <%--<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>--%>
+    <%--<strong>提示</strong> 保存成功--%>
+<%--</div>--%>
+
 <form id="editForm">
     <div class="row" style="margin-top: 10px">
         <input id="id" hidden="hidden" type="text"/>
@@ -104,6 +110,8 @@
         </div>
     </div>
 </form>
+
+
 <script type="text/javascript">
     $(function () {
         loadTemplate(1);//1小票模板 2标签模板
@@ -170,6 +178,7 @@
             processData: false,
             contentType: 'application/json',
             success: function (map) {
+//                $('#msgAlert').removeAttr('hidden');
                 window.location.href = '${ctx}/printTemplate';
             }
         });

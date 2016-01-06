@@ -62,6 +62,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">基础资料 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                <li><a href="#">会员管理</a></li>
                                 <li><a href="#" onclick="addTab('仓库信息','${ctx}/warehouse')">仓库信息</a></li>
                             </ul>
                         </li>
@@ -69,11 +70,9 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">门店管理 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#" onclick="addTab('门店资料','${ctx}/organization')">门店资料</a></li>
-                                <li><a href="#">用户信息</a></li>
-                                <li><a href="#">会员管理</a></li>
                                 <li><a href="#" onclick="addTab('支付方式','${ctx}/shopPayment')">支付方式</a></li>
-                                <li role="separator" class="divider"></li>
                                 <li><a href="#" onclick="addTab('模板设置','${ctx}/printTemplate')">模板设置</a></li>
+                                <li role="separator" class="divider"></li>
                                 <li><a href="#" onclick="addTab('历史查询','${ctx}/pos/shopSalesDetail')">历史查询</a></li>
                             </ul>
                         </li>

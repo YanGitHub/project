@@ -11,6 +11,7 @@ public class Warehouse extends BaseEntity{
 	private String createDate;//创建时间
 	private String modifyDate;//修改时间
 	private String pcode;//上级组织(organzation code)
+    private String pname;//上级组织(organzation name)
 	private String code;//仓库代码
 	private String name;//仓库名称
 	private String contactName;//联系人
@@ -60,7 +61,15 @@ public class Warehouse extends BaseEntity{
 		this.pcode = pcode;
 	}
 
-	public String getCode(){
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
+    }
+
+    public String getCode(){
 		return this.code;
 	}
 
