@@ -51,7 +51,7 @@
 
 <ol class="breadcrumb">
     <li><a href="#">我的工作台</a></li>
-    <li class="active">收银</li>
+    <li class="active">收银台</li>
 </ol>
 <div class="row" style="text-align: right">
     <div class="col-sm-9">
@@ -99,7 +99,7 @@
     <div class="col-sm-3">
         <div class="input-group">
             <span class="input-group-addon">条码</span>
-            <input type="text" id="barcode" onkeypress="scanBarcode()" class="form-control" placeholder="商品条码"
+            <input type="text" id="barcode" class="form-control" placeholder="商品条码"
                    aria-describedby="basic-addon1">
         </div>
         <div class="input-group" style="padding-top: 10px">
@@ -108,17 +108,17 @@
         </div>
         <div class="input-group" style="padding-top: 10px">
             <span class="input-group-addon">数量</span>
-            <input type="text" class="form-control" id="cqty" onkeypress="changeQty()"
+            <input type="text" class="form-control" id="cqty"
                    aria-label="Amount (to the nearest dollar)">
         </div>
         <div class="input-group" style="padding-top: 10px">
             <span class="input-group-addon">折扣</span>
-            <input type="text" class="form-control" id="cdiscount" onkeypress="changeDiscount()"
+            <input type="text" class="form-control" id="cdiscount"
                    aria-label="Amount (to the nearest dollar)">
         </div>
         <div class="input-group" style="padding-top: 10px">
             <span class="input-group-addon">金额</span>
-            <input type="text" class="form-control" id="camount" onkeypress="changeAmount()"
+            <input type="text" class="form-control" id="camount"
                    aria-label="Amount (to the nearest dollar)">
         </div>
         <div class="input-group" style="padding-top: 10px">
@@ -209,7 +209,7 @@
                         <div class="col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-addon">${s.name}</span>
-                                <input type="text" id="${s.code}" class="form-control" onkeyup="calculateChange()"
+                                <input type="text" id="${s.code}" class="form-control"
                                        style="font-weight: 700" placeholder="0.00" aria-describedby="basic-addon1">
                             </div>
                         </div>

@@ -46,7 +46,7 @@
         SELECT
         count(*)
         from product p
-        LEFT JOIN product_category pc on pc.code = p.category_code
+        LEFT JOIN category pc on pc.code = p.category_code
         LEFT JOIN brand b on b.code = p.brand_code
         where true
         <if test="code != null and code != ''">
@@ -83,7 +83,7 @@
             p.del,
             p.note
         from product p
-        LEFT JOIN product_category pc on pc.code = p.category_code
+        LEFT JOIN category pc on pc.code = p.category_code
         LEFT JOIN brand b on b.code = p.brand_code
         where true
         <if test="code != null and code != ''">

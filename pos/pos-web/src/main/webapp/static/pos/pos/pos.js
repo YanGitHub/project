@@ -22,6 +22,47 @@ $(function () {
             ]
         ]
     });
+    //扫描条码回车事件
+    $('#barcode').keyup(function(e){
+        var curKey = e.which;
+        if(curKey == 13){
+            scanBarcode();
+        }
+    });
+
+    //支付方式
+    var shopPay = $("#payDiv input[name='pay']").serializeArray();
+    for(var i = 0;i < shopPay.length;i++){
+        $('#' + shopPay[i].value).keyup(function(e){
+            var curKey = e.which;
+            calculateChange(curKey);
+        });
+    }
+
+    //改数量
+    $('#cqty').keyup(function(e){
+        var curKey = e.which;
+        if(curKey == 13){
+            changeQty();
+        }
+    });
+
+    //改折扣
+    $('#cdiscount').keyup(function(e){
+        var curKey = e.which;
+        if(curKey == 13){
+            changeDiscount();
+        }
+    });
+
+    //改金额
+    $('#camount').keyup(function(e){
+        var curKey = e.which;
+        if(curKey == 13){
+            changeAmount();
+        }
+    });
+
 });
 
 function opration(v, r, i) {
@@ -82,19 +123,15 @@ function trash(id) {
 }
 //扫描条码
 function scanBarcode() {
-    var e = event || window.event || arguments.callee.caller.arguments[0];
-    if (e && e.keyCode == 13) {
-        event.returnValue = false;
-        var barcode = $('#barcode').val().trim();
-        $.post(contextPath + '/pos/scanBarcode', {barcode: barcode}, function (data) {
-            if (data.status) {
-                addSkuJudge(data.productSku, barcode);
-                scanSuccess(data.productSku);
-            } else {
-                alertLittle(data.msg);
-            }
-        })
-    }
+    var barcode = $('#barcode').val().trim();
+    $.post(contextPath + '/pos/scanBarcode', {barcode: barcode}, function (data) {
+        if (data.status) {
+            addSkuJudge(data.productSku, barcode);
+            scanSuccess(data.productSku);
+        } else {
+            alertLittle(data.msg);
+        }
+    });
 }
 
 //扫描条码完成时清空 扫描的条码 显示商品名称 计算数量 金额
@@ -165,97 +202,85 @@ function total() {
 
 //改数量
 function changeQty(){
-    var e = event || window.event || arguments.callee.caller.arguments[0];
-    if (e && e.keyCode == 13) {
-        event.returnValue = false;
-        var qty = parseFloat($('#cqty').val().trim());
-        if(qty <= 0){
-            alertLittle("请输入大于0的数");
-            return;
-        }
-        var item = $('#grid').datagrid('getSelected');
-        if(item == null){
-            alertLittle("请选择数据");
-            return;
-        }else{
-            var price = parseFloat(item.price);
-            var discount =  parseFloat(item.discount);
-            var index = $('#grid').datagrid('getRowIndex',item);
-            $('#grid').datagrid('updateRow',{
-                index: index,
-                row: {
-                    qty: qty,
-                    amount: parseFloat(qty * discount * price / 10)
-                }
-            });
-        }
-        $('#cqty').val("");
-        total();
+    var qty = parseFloat($('#cqty').val().trim());
+    if(qty <= 0){
+        alertLittle("请输入大于0的数");
+        return;
     }
+    var item = $('#grid').datagrid('getSelected');
+    if(item == null){
+        alertLittle("请选择数据");
+        return;
+    }else{
+        var price = parseFloat(item.price);
+        var discount =  parseFloat(item.discount);
+        var index = $('#grid').datagrid('getRowIndex',item);
+        $('#grid').datagrid('updateRow',{
+            index: index,
+            row: {
+                qty: qty,
+                amount: parseFloat(qty * discount * price / 10)
+            }
+        });
+    }
+    $('#cqty').val("");
+    total();
 }
 
 //改折扣
 function changeDiscount(){
-    var e = event || window.event || arguments.callee.caller.arguments[0];
-    if (e && e.keyCode == 13) {
-        event.returnValue = false;
-        var discount = parseFloat($('#cdiscount').val().trim());
-        if(discount < 0){
-            alertLittle("请输入大于0的数");
-            return;
-        }
-        var item = $('#grid').datagrid('getSelected');
-        if(item == null){
-            alertLittle("请选择数据");
-            return;
-        }else{
-            var price = parseFloat(item.price);
-            var qty = parseFloat(item.qty);
-            var index = $('#grid').datagrid('getRowIndex',item);
-            $('#grid').datagrid('updateRow',{
-                index: index,
-                row: {
-                    discount: discount,
-                    relPrice: discount * price / 10,
-                    amount: parseFloat(qty * discount * price / 10)
-                }
-            });
-        }
-        $('#cdiscount').val("");
-        total();
+    var discount = parseFloat($('#cdiscount').val().trim());
+    if(discount < 0){
+        alertLittle("请输入大于0的数");
+        return;
     }
+    var item = $('#grid').datagrid('getSelected');
+    if(item == null){
+        alertLittle("请选择数据");
+        return;
+    }else{
+        var price = parseFloat(item.price);
+        var qty = parseFloat(item.qty);
+        var index = $('#grid').datagrid('getRowIndex',item);
+        $('#grid').datagrid('updateRow',{
+            index: index,
+            row: {
+                discount: discount,
+                relPrice: discount * price / 10,
+                amount: parseFloat(qty * discount * price / 10)
+            }
+        });
+    }
+    $('#cdiscount').val("");
+    total();
 }
 
 //改金额
 function changeAmount(){
-    var e = event || window.event || arguments.callee.caller.arguments[0];
-    if (e && e.keyCode == 13) {
-        event.returnValue = false;
-        var amount = parseFloat($('#camount').val().trim());
-        if(amount < 0){
-            alertLittle("请输入大于0的数");
-            return;
-        }
-        var item = $('#grid').datagrid('getSelected');
-        if(item == null){
-            alertLittle("请选择数据");
-            return;
-        }else{
-            var price = parseFloat(item.price);
-            var qty = parseFloat(item.qty);
-            var index = $('#grid').datagrid('getRowIndex',item);
-            $('#grid').datagrid('updateRow',{
-                index: index,
-                row: {
-                    discount: (amount / qty /price * 10),
-                    relPrice: amount / qty,
-                    amount: amount
-                }
-            });
-        }
-        $('#camount').val("");
-        total();
+    var amount = parseFloat($('#camount').val().trim());
+    if(amount < 0){
+        alertLittle("请输入大于0的数");
+        return;
     }
+    var item = $('#grid').datagrid('getSelected');
+    if(item == null){
+        alertLittle("请选择数据");
+        return;
+    }else{
+        var price = parseFloat(item.price);
+        var qty = parseFloat(item.qty);
+        var index = $('#grid').datagrid('getRowIndex',item);
+        $('#grid').datagrid('updateRow',{
+            index: index,
+            row: {
+                discount: (amount / qty /price * 10),
+                relPrice: amount / qty,
+                amount: amount
+            }
+        });
+    }
+    $('#camount').val("");
+    total();
 }
 
 //收银窗口打开
@@ -271,9 +296,8 @@ function openCash(){
 }
 
 //计算找零
-function calculateChange(){
-    var e = event || window.event || arguments.callee.caller.arguments[0];
-    if (e.keyCode == 13) {
+function calculateChange(curKey){
+    if (curKey == 13) {
         //收银
         cash();
     }else{
@@ -371,6 +395,7 @@ function print(item){
 function printData(item,data){
     var listp = data.listP;
     var listd = data.listD;
+    var listL = data.listL;
     var table = "<table>";
     table += "<tr style='font-size: 16px'><td colspan='4' style='text-align: center'>POS*MART</td></tr>";
     table += "<tr><td colspan='4'>=====================</td></tr>";
@@ -383,11 +408,13 @@ function printData(item,data){
 
     table += "<tr style='font-size: 10px'><td>品名</td><td style='text-align: right'>单价</td><td style='text-align: right'>数量</td><td style='text-align: right'>金额</td></tr>";
 
-    for(var i = 0;i < item.length;i++){
-        table += "<tr style='font-size: 10px'><td>" + item[i].productName + "</td>" +
-            "<td style='text-align: right'>" + item[i].price.toFixed(2) + "</td>" +
-            "<td style='text-align: right'>" + item[i].qty.toFixed(2) + "</td>" +
-            "<td style='text-align: right'>" + item[i].amount.toFixed(2) + "</td></tr>";
+    for(var i = 0;i < listL.length;i++){
+        table += "<tr style='font-size: 10px'><td>" + listL[i].skuName + "</td>" +
+            "<td style='text-align: right'>" + listL[i].realPrice + "</td>" +
+            "<td style='text-align: right'>" + listL[i].qty + "</td>" +
+            "<td style='text-align: right'>" + listL[i].realAmount + "</td></tr>";
+        //商品名称
+        table += "<tr style='font-size: 10px'><td colspan='4'>" + listL[i].productName + "</td></tr>";
     }
     table += "<tr><td colspan='4'>=====================</td></tr>";
     table += "<tr style='font-size: 10px'><td colspan='2'>支付方式</td><td colspan='2' style='text-align: right'>支付金额</td></tr>";
@@ -397,8 +424,8 @@ function printData(item,data){
 
     table += "<tr><td colspan='4'>=====================</td></tr>";
 
-    table += "<tr style='font-size: 14px'><td colspan='2'>总计</td><td colspan='2' style='text-align: right'>"+ $('#amount').val() +"</td></tr>";
-    table += "<tr style='font-size: 14px'><td colspan='2'>件数</td><td colspan='2' style='text-align: right'>"+ $('#qty').val() +"</td></tr>";
+    table += "<tr style='font-size: 14px'><td colspan='2'>总计</td><td colspan='2' style='text-align: right'>"+ getRealReceive(listL) +"</td></tr>";
+    table += "<tr style='font-size: 14px'><td colspan='2'>件数</td><td colspan='2' style='text-align: right'>"+ getRealQty(listL) +"</td></tr>";
     table += "<tr style='font-size: 10px'><td colspan='2'>实收金额</td><td colspan='2' style='text-align: right'>"+ getRealPay(listp) +"</td></tr>";
     table += "<tr style='font-size: 10px'><td colspan='2'>找零金额</td><td colspan='2' style='text-align: right'>"+ listd[0].fundAmount.toFixed(2) +"</td></tr>";
 
@@ -410,12 +437,13 @@ function printData(item,data){
 
     var LODOP = getLodop();
     LODOP.PRINT_INIT("POS小票打印");
+    LODOP.ADD_PRINT_BARCODE(5,5,45,45,'QRCode',listd[0].flowNo);
     LODOP.ADD_PRINT_TABLE(0,2,$('#pTable').height(),530,table);
     LODOP.SET_PRINT_PAGESIZE(3,530,20,"");
 //    LODOP.PREVIEW();
     LODOP.PRINT();
 }
-
+//实际支付总金额
 function getRealPay(listp){
     var amount = 0.0;
     for(var i = 0;i < listp.length;i++){
@@ -423,7 +451,23 @@ function getRealPay(listp){
     }
     return amount.toFixed(2);
 }
+//实际应收总金额
+function getRealReceive(listL){
+    var realAmount = 0.0;
+    for(var i = 0;i < listL.length;i++){
+        realAmount += parseFloat(listL[i].realAmount);
+    }
+    return realAmount.toFixed(2);
+}
 
+//总数量
+function getRealQty(listL){
+    var qty = 0.0;
+    for(var i = 0;i < listL.length;i++){
+        qty += parseFloat(listL[i].qty);
+    }
+    return qty.toFixed(2);
+}
 //获取调用时的系统时间
 function getNowFormatDate() {
     var date = new Date();
