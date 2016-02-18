@@ -87,14 +87,14 @@
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">仓库代码<font style="color: red">*</font></span>
-                                <input type="text" id="code" name="code" class="form-control" placeholder=""
+                                <input type="text" id="code" name="code" class="form-control" placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">仓库名称<font style="color: red">*</font></span>
-                                <input type="text" id="name" name="name" class="form-control" placeholder=""
+                                <input type="text" id="name" name="name" class="form-control" placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">联系人</span>
                                 <input type="text" id="contactName" name="contactName" class="form-control"
-                                       placeholder=""
+                                       placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -185,7 +185,7 @@
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">联系人电话</span>
                                 <input type="text" id="contactPhone" name="contactPhone" class="form-control"
-                                       placeholder=""
+                                       placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -193,7 +193,7 @@
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">联系人手机</span>
                                 <input type="text" id="contactMobile" name="contactMobile" class="form-control"
-                                       placeholder=""
+                                       placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -203,14 +203,14 @@
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">传真</span>
-                                <input type="text" id="fax" name="fax" class="form-control" placeholder=""
+                                <input type="text" id="fax" name="fax" class="form-control" placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">邮编</span>
-                                <input type="text" id="post" name="post" class="form-control" placeholder=""
+                                <input type="text" id="post" name="post" class="form-control" placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -221,7 +221,7 @@
                         <div class="col-sm-12">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">备注</span>
-                                <input type="text" id="note" name="note" class="form-control" placeholder=""
+                                <input type="text" id="note" name="note" class="form-control" placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
