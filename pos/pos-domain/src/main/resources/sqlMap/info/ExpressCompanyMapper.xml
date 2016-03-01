@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.info.ExpressCompanyDao">
+	<resultMap id="ResultMap" type="ExpressCompany">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="code" column="code"/>
+        <result property="outCode" column="out_code"/>
+		<result property="name" column="name"/>
+		<result property="contact" column="contact"/>
+		<result property="tel" column="tel"/>
+		<result property="fax" column="fax"/>
+		<result property="email" column="email"/>
+		<result property="website" column="website"/>
+		<result property="address" column="address"/>
+		<result property="del" column="del"/>
+		<result property="note" column="note"/>
+		<result property="expreeMode" column="expree_mode"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="ExpressCompany" >
+		select 
+			id,
+			create_date,
+			modify_date,
+			code,
+            out_code,
+			name,
+			contact,
+			tel,
+			fax,
+			email,
+			website,
+			address,
+			del,
+			note,
+			expree_mode
+		from express_company
+		where 1=1 
+		<if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="createDate!=null">
+				and create_date=#{createDate}
+		</if>
+		<if test="code!=null">
+				and code=#{code}
+		</if>
+        <if test="outCode!=null">
+            and out_code=#{outCode}
+        </if>
+		<if test="name!=null">
+				and name=#{name}
+		</if>
+		<if test="contact!=null">
+				and contact=#{contact}
+		</if>
+		<if test="tel!=null">
+				and tel=#{tel}
+		</if>
+		<if test="fax!=null">
+				and fax=#{fax}
+		</if>
+		<if test="email!=null">
+				and email=#{email}
+		</if>
+		<if test="del!=null">
+				and del=#{del}
+		</if>
+	</select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+        count(*)
+        from express_company
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="createDate!=null">
+            and create_date=#{createDate}
+        </if>
+        <if test="code!=null">
+            and code=#{code}
+        </if>
+        <if test="outCode!=null">
+            and out_code=#{outCode}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="contact!=null">
+            and contact=#{contact}
+        </if>
+        <if test="tel!=null">
+            and tel=#{tel}
+        </if>
+        <if test="fax!=null">
+            and fax=#{fax}
+        </if>
+        <if test="email!=null">
+            and email=#{email}
+        </if>
+        <if test="del!=null">
+            and del=#{del}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="ExpressCompany">
+		insert into express_company(
+			create_date,
+			code,
+			out_code,
+			name,
+			contact,
+			tel,
+			fax,
+			email,
+			website,
+			address,
+			del,
+			note,
+			expree_mode
+		) values (
+			now(),
+			#{code},
+			#{outCode},
+			#{name},
+			#{contact},
+			#{tel},
+			#{fax},
+			#{email},
+			#{website},
+			#{address},
+			#{del},
+			#{note},
+			#{expreeMode}
+		)
+	</insert>
+
+	<update id="update" parameterType="ExpressCompany">
+		update express_company
+        <set>
+            <if test="modifyDate!=null">
+                modify_date=now(),
+            </if>
+            <if test="code!=null">
+                code=#{code},
+            </if>
+            <if test="outCode!=null">
+                out_code=#{outCode},
+            </if>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="contact!=null">
+                contact=#{contact},
+            </if>
+            <if test="tel!=null">
+                tel=#{tel},
+            </if>
+            <if test="fax!=null">
+                fax=#{fax},
+            </if>
+            <if test="email!=null">
+                email=#{email},
+            </if>
+            <if test="website!=null">
+                website=#{website},
+            </if>
+            <if test="address!=null">
+                address=#{address},
+            </if>
+            <if test="del!=null">
+                del=#{del},
+            </if>
+            <if test="note!=null">
+                note=#{note},
+            </if>
+            <if test="expreeMode!=null">
+                expree_mode=#{expreeMode}
+            </if>
+        </set>
+
+	</update>
+</mapper>

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
+/** 省市区service
  * Created by Yan on 15-12-25.
  */
 @Service("regionService")

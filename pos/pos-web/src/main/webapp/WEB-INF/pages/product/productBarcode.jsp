@@ -99,7 +99,7 @@
             url:'${ctx}/product/barcode/list',
             title: '商品条码',
             singleSelect: true,
-            selectOnCheck: false,
+            selectOnCheck: true,
             rownumbers: true,
             height:460,
             pagination: true,

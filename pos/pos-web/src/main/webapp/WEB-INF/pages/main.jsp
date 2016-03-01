@@ -62,8 +62,11 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">基础资料 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">会员管理</a></li>
+                                <li><a href="#" onclick="addTab('会员管理','${ctx}/vipInfo')">会员管理</a></li>
                                 <li><a href="#" onclick="addTab('仓库信息','${ctx}/warehouse')">仓库信息</a></li>
+                                <li><a href="#" onclick="addTab('物流公司','${ctx}/expressCompany')">物流公司</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#" onclick="addTab('快递查询','${ctx}/expressCompany/search')">快递查询</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -129,15 +132,15 @@
 </div>
 
 <!--页脚-->
-<div id="footer" class="container">
-    <nav class="navbar navbar-default navbar-fixed-bottom">
-        <div class="navbar-inner navbar-content-center">
-            <p class="text-muted credit" style="padding: 10px;text-align: center">
-                ©2016 YAN 使用POS前必读 意见反馈
-            </p>
-        </div>
-    </nav>
-</div>
+<%--<div id="footer" class="container">--%>
+    <%--<nav class="navbar navbar-default navbar-fixed-bottom">--%>
+        <%--<div class="navbar-inner navbar-content-center">--%>
+            <%--<p class="text-muted credit" style="padding: 10px;text-align: center">--%>
+                <%--©2016 YAN 使用POS前必读 意见反馈--%>
+            <%--</p>--%>
+        <%--</div>--%>
+    <%--</nav>--%>
+<%--</div>--%>
 
 <!--关于-->
 <div class="modal fade" id="version">

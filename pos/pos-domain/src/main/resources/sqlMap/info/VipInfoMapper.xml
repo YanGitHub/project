@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.info.VipInfoDao">
+	<resultMap id="ResultMap" type="VipInfo">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="vipTypeCode" column="vip_type_code"/>
+		<result property="sex" column="sex"/>
+		<result property="shopCode" column="shop_code"/>
+		<result property="shopName" column="shop_name"/>
+		<result property="tel" column="tel"/>
+		<result property="phone" column="phone"/>
+		<result property="birthday" column="birthday"/>
+		<result property="identityCard" column="identity_card"/>
+		<result property="issuingPerson" column="issuing_person"/>
+		<result property="provinceCode" column="province_code"/>
+		<result property="cityCode" column="city_code"/>
+		<result property="districtCode" column="district_code"/>
+		<result property="post" column="post"/>
+		<result property="email" column="email"/>
+		<result property="address" column="address"/>
+		<result property="qq" column="qq"/>
+		<result property="del" column="del"/>
+		<result property="pwd" column="pwd"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="VipInfo" >
+		select 
+			id,
+			create_date,
+			modify_date,
+			code,
+			name,
+			vip_type_code,
+			sex,
+			shop_code,
+			shop_name,
+			tel,
+			phone,
+			birthday,
+			identity_card,
+			issuing_person,
+			province_code,
+			city_code,
+			district_code,
+			post,
+			email,
+			address,
+			qq,
+			del,
+			pwd
+		from vip_info
+		where 1=1 
+		<if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="createDate!=null">
+				and create_date=#{createDate}
+		</if>
+		<if test="code!=null">
+				and code=#{code}
+		</if>
+		<if test="name!=null">
+				and name=#{name}
+		</if>
+		<if test="vipTypeCode!=null">
+				and vip_type_code=#{vipTypeCode}
+		</if>
+		<if test="sex!=null">
+				and sex=#{sex}
+		</if>
+		<if test="shopCode!=null">
+				and shop_code=#{shopCode}
+		</if>
+		<if test="shopName!=null">
+				and shop_name=#{shopName}
+		</if>
+		<if test="tel!=null">
+				and tel=#{tel}
+		</if>
+		<if test="phone!=null">
+				and phone=#{phone}
+		</if>
+		<if test="identityCard!=null">
+				and identity_card=#{identityCard}
+		</if>
+		<if test="qq!=null">
+				and qq=#{qq}
+		</if>
+		<if test="del!=null">
+				and del=#{del}
+		</if>
+	</select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from vip_info
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="createDate!=null">
+            and create_date=#{createDate}
+        </if>
+        <if test="code!=null">
+            and code=#{code}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="vipTypeCode!=null">
+            and vip_type_code=#{vipTypeCode}
+        </if>
+        <if test="sex!=null">
+            and sex=#{sex}
+        </if>
+        <if test="shopCode!=null">
+            and shop_code=#{shopCode}
+        </if>
+        <if test="shopName!=null">
+            and shop_name=#{shopName}
+        </if>
+        <if test="tel!=null">
+            and tel=#{tel}
+        </if>
+        <if test="phone!=null">
+            and phone=#{phone}
+        </if>
+        <if test="identityCard!=null">
+            and identity_card=#{identityCard}
+        </if>
+        <if test="qq!=null">
+            and qq=#{qq}
+        </if>
+        <if test="del!=null">
+            and del=#{del}
+        </if>
+    </select>
+    <insert id="create" parameterType="VipInfo">
+		insert into vip_info(
+			create_date,
+			modify_date,
+			code,
+			name,
+			vip_type_code,
+			sex,
+			shop_code,
+			shop_name,
+			tel,
+			phone,
+			birthday,
+			identity_card,
+			issuing_person,
+			province_code,
+			city_code,
+			district_code,
+			post,
+			email,
+			address,
+			qq,
+			del,
+			pwd
+		) values (
+			#{createDate},
+			#{modifyDate},
+			#{code},
+			#{name},
+			#{vipTypeCode},
+			#{sex},
+			#{shopCode},
+			#{shopName},
+			#{tel},
+			#{phone},
+			#{birthday},
+			#{identityCard},
+			#{issuingPerson},
+			#{provinceCode},
+			#{cityCode},
+			#{districtCode},
+			#{post},
+			#{email},
+			#{address},
+			#{qq},
+			#{del},
+			#{pwd}
+		)
+	</insert>
+
+	<update id="update" parameterType="VipInfo">
+		update vip_info set 
+		<if test="id!=null">
+			id=#{id},
+		</if>
+		<if test="createDate!=null">
+			create_date=#{createDate},
+		</if>
+		<if test="modifyDate!=null">
+			modify_date=#{modifyDate},
+		</if>
+		<if test="code!=null">
+			code=#{code},
+		</if>
+		<if test="name!=null">
+			name=#{name},
+		</if>
+		<if test="vipTypeCode!=null">
+			vip_type_code=#{vipTypeCode},
+		</if>
+		<if test="sex!=null">
+			sex=#{sex},
+		</if>
+		<if test="shopCode!=null">
+			shop_code=#{shopCode},
+		</if>
+		<if test="shopName!=null">
+			shop_name=#{shopName},
+		</if>
+		<if test="tel!=null">
+			tel=#{tel},
+		</if>
+		<if test="phone!=null">
+			phone=#{phone},
+		</if>
+		<if test="birthday!=null">
+			birthday=#{birthday},
+		</if>
+		<if test="identityCard!=null">
+			identity_card=#{identityCard},
+		</if>
+		<if test="issuingPerson!=null">
+			issuing_person=#{issuingPerson},
+		</if>
+		<if test="provinceCode!=null">
+			province_code=#{provinceCode},
+		</if>
+		<if test="cityCode!=null">
+			city_code=#{cityCode},
+		</if>
+		<if test="districtCode!=null">
+			district_code=#{districtCode},
+		</if>
+		<if test="post!=null">
+			post=#{post},
+		</if>
+		<if test="email!=null">
+			email=#{email},
+		</if>
+		<if test="address!=null">
+			address=#{address},
+		</if>
+		<if test="qq!=null">
+			qq=#{qq},
+		</if>
+		<if test="del!=null">
+			del=#{del},
+		</if>
+		<if test="pwd!=null">
+			pwd=#{pwd}
+		</if>
+	</update>
+</mapper>
