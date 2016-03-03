@@ -34,6 +34,58 @@ function twoDecimal(value, rowData, rowIndex) {
     }
 }
 
+//获取调用时的系统时间
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+        + " " + date.getHours() + seperator2 + date.getMinutes()
+        + seperator2 + date.getSeconds();
+    return currentdate;
+}
+
+//流水号
+function getSerialNo(code){
+    var saleDate = getNowFormatDate();
+    var no = saleDate.replace(/\:/g,"").replace(/\-/g,"").replace(/\s/g,"");
+    return code + no;
+}
+
+function serializeNo(parmString){
+    var parmArray = parmString.split("&");
+    var parmStringNew="";
+    $.each(parmArray,function(index,data){
+        var li_pos = data.indexOf("=");
+        if(li_pos >0){
+            var name = data.substring(0,li_pos);
+            var value = escape(decodeURIComponent(data.substr(li_pos+1)));
+            var parm = name+"="+value;
+            parmStringNew = parmStringNew=="" ? parm : parmStringNew + '&' + parm;
+        }
+    });
+    return parmStringNew;
+}
+
+//表单经过续列化后 转成 Json对象
+function conveterParamsToJson(paramsAndValues) {
+    var jsonObj = {};
+    var param = paramsAndValues.split("&");
+    for ( var i = 0; param != null && i < param.length; i++) {
+        var para = param[i].split("=");
+        jsonObj[para[0]] = para[1];
+    }
+    return jsonObj;
+}
+
 $.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();

@@ -2,8 +2,10 @@ package kj.pos.controller.common;
 
 import kj.pos.entity.admin.OrganizationInfo;
 import kj.pos.entity.info.Region;
+import kj.pos.entity.info.VipType;
 import kj.pos.service.admin.OrganizationService;
 import kj.pos.service.info.RegionService;
+import kj.pos.service.info.VipTypeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,15 @@ public class CommonController {
     private RegionService regionService;
     @Autowired
     private OrganizationService organizationService;
+    @Autowired
+    private VipTypeService vipTypeService;
 
+    /**
+     * 获取省市区
+     * @param region
+     * @return
+     * @throws SQLException
+     */
     @RequestMapping(value = "/getRegions",method = RequestMethod.POST)
     @ResponseBody
     public List<Region> getRegion(@RequestBody Region region)throws SQLException{
@@ -50,17 +60,21 @@ public class CommonController {
         return list;
     }
 
+    /**
+     * 获取所有可用的店铺
+     * @param organizationInfo
+     * @return
+     * @throws SQLException
+     */
     @RequestMapping(value = "/getShops",method = RequestMethod.POST)
     @ResponseBody
     public List<OrganizationInfo> getShops(OrganizationInfo organizationInfo)throws SQLException{
-        Map<String,Object> map = new HashMap<String, Object>();
         List<OrganizationInfo> list = new ArrayList<OrganizationInfo>();
         try {
             //取所有可用的店铺
             organizationInfo.setStatus(1);
             organizationInfo.setProperty(1);
             list = organizationService.getList(organizationInfo);
-            map.put("organizationInfos",list);
         }catch (Exception e){
             e.printStackTrace();
             logger.error(e);
@@ -68,4 +82,23 @@ public class CommonController {
         return list;
     }
 
+    /**
+     * 获取所有可用的会员类型
+     * @param vipType
+     * @return
+     * @throws SQLException
+     */
+    @RequestMapping(value = "/getVipTypes",method = RequestMethod.POST)
+    @ResponseBody
+    public List<VipType> getVipTypes(VipType vipType)throws SQLException{
+        List<VipType> list = new ArrayList<VipType>();
+        try {
+            vipType.setDel(false);
+            list = vipTypeService.getList(vipType);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+        }
+        return list;
+    }
 }

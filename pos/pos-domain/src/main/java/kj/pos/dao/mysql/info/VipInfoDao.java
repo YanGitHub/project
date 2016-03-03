@@ -14,4 +14,8 @@ public interface VipInfoDao{
 	public void create(VipInfo vipInfo);
 
 	public void update(VipInfo vipInfo);
+
+    public Integer getCode(VipInfo vipInfo);
+
+    public void delete(VipInfo vipInfo);
 }

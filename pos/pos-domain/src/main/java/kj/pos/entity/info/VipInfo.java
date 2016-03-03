@@ -12,6 +12,7 @@ public class VipInfo extends BaseEntity{
 	private String code;//会员卡号
 	private String name;//会员名称
 	private String vipTypeCode;//会员类型
+    private String vipTypeName;//会员类型名称
 	private String sex;//性别：0、女  1男、2、保密
 	private String shopCode;//店铺代码(organization_info code)
 	private String shopName;//店铺名称
@@ -21,14 +22,18 @@ public class VipInfo extends BaseEntity{
 	private String identityCard;//身份证
 	private String issuingPerson;//发放人
 	private String provinceCode;//省
+    private String provinceName;//省
 	private String cityCode;//市
+    private String cityName;//市
 	private String districtCode;//区
+    private String districtName;//区
 	private String post;//邮编
 	private String email;//Email
 	private String address;//地址
 	private String qq;//QQ
 	private Integer del;//是否删除  0 为删除  1 已删除
 	private String pwd;//会员密码
+    private String note;//备注
 	//创建getter和setter方法
 	public Long getId(){
 		return this.id;
@@ -214,4 +219,43 @@ public class VipInfo extends BaseEntity{
 		this.pwd = pwd;
 	}
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getVipTypeName() {
+        return vipTypeName;
+    }
+
+    public void setVipTypeName(String vipTypeName) {
+        this.vipTypeName = vipTypeName;
+    }
 }

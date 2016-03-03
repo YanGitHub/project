@@ -62,7 +62,8 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">基础资料 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#" onclick="addTab('会员管理','${ctx}/vipInfo')">会员管理</a></li>
+                                <li><a href="#" onclick="addTab('会员信息','${ctx}/vipInfo')">会员信息</a></li>
+                                <li><a href="#" onclick="addTab('会员类型','${ctx}/vipType')">会员类型</a></li>
                                 <li><a href="#" onclick="addTab('仓库信息','${ctx}/warehouse')">仓库信息</a></li>
                                 <li><a href="#" onclick="addTab('物流公司','${ctx}/expressCompany')">物流公司</a></li>
                                 <li role="separator" class="divider"></li>

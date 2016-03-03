@@ -8,6 +8,7 @@
 		<result property="code" column="code"/>
 		<result property="name" column="name"/>
 		<result property="vipTypeCode" column="vip_type_code"/>
+        <result property="vipTypeName" column="vip_type_name"/>
 		<result property="sex" column="sex"/>
 		<result property="shopCode" column="shop_code"/>
 		<result property="shopName" column="shop_name"/>
@@ -17,132 +18,163 @@
 		<result property="identityCard" column="identity_card"/>
 		<result property="issuingPerson" column="issuing_person"/>
 		<result property="provinceCode" column="province_code"/>
+        <result property="provinceName" column="province_name"/>
 		<result property="cityCode" column="city_code"/>
+        <result property="cityName" column="city_name"/>
 		<result property="districtCode" column="district_code"/>
+        <result property="districtName" column="district_name"/>
 		<result property="post" column="post"/>
 		<result property="email" column="email"/>
 		<result property="address" column="address"/>
 		<result property="qq" column="qq"/>
 		<result property="del" column="del"/>
 		<result property="pwd" column="pwd"/>
+        <result property="note" column="note"/>
 	</resultMap>
 
-	<select id="getList" resultMap="ResultMap" parameterType="VipInfo" >
-		select 
-			id,
-			create_date,
-			modify_date,
-			code,
-			name,
-			vip_type_code,
-			sex,
-			shop_code,
-			shop_name,
-			tel,
-			phone,
-			birthday,
-			identity_card,
-			issuing_person,
-			province_code,
-			city_code,
-			district_code,
-			post,
-			email,
-			address,
-			qq,
-			del,
-			pwd
-		from vip_info
-		where 1=1 
-		<if test="id!=null">
-				and id=#{id}
+    <update id="delete">
+        update vip_info set del = #{del} where id = #{id}
+    </update>
+
+    <select id="getList" resultMap="ResultMap" parameterType="VipInfo" >
+        select
+            vi.id,
+            vi.create_date,
+            vi.modify_date,
+            vi.code,
+            vi.name,
+            vi.vip_type_code,
+            vt.name as vip_type_name,
+            vi.sex,
+            vi.shop_code,
+            oi.name as shop_name,
+            vi.tel,
+            vi.phone,
+            vi.birthday,
+            vi.identity_card,
+            vi.issuing_person,
+            vi.province_code,
+            rp.region_name as province_name,
+            vi.city_code,
+            rc.region_name as city_name,
+            vi.district_code,
+            rd.region_name as district_name,
+            vi.post,
+            vi.email,
+            vi.address,
+            vi.qq,
+            vi.del,
+            vi.pwd,
+            vi.note
+        from vip_info vi
+        LEFT JOIN region rp on rp.region_id = vi.province_code
+        LEFT JOIN region rc on rc.region_id = vi.city_code
+        LEFT JOIN region rd on rd.region_id = vi.district_code
+        LEFT JOIN organization_info oi on oi.code = vi.shop_code
+        LEFT JOIN vip_type vt on vt.code = vi.vip_type_code
+        where 1=1
+        <if test="id!=null">
+				and vi.id=#{id}
 		</if>
 		<if test="createDate!=null">
-				and create_date=#{createDate}
+				and vi.create_date=#{createDate}
 		</if>
 		<if test="code!=null">
-				and code=#{code}
+				and vi.code=#{code}
 		</if>
 		<if test="name!=null">
-				and name=#{name}
+				and vi.name=#{name}
 		</if>
 		<if test="vipTypeCode!=null">
-				and vip_type_code=#{vipTypeCode}
+				and vi.vip_type_code=#{vipTypeCode}
 		</if>
 		<if test="sex!=null">
-				and sex=#{sex}
+				and vi.sex=#{sex}
 		</if>
 		<if test="shopCode!=null">
 				and shop_code=#{shopCode}
 		</if>
 		<if test="shopName!=null">
-				and shop_name=#{shopName}
+				and vi.shop_name=#{shopName}
 		</if>
 		<if test="tel!=null">
-				and tel=#{tel}
+				and vi.tel=#{tel}
 		</if>
 		<if test="phone!=null">
-				and phone=#{phone}
+				and vi.phone=#{phone}
 		</if>
 		<if test="identityCard!=null">
-				and identity_card=#{identityCard}
+				and vi.identity_card=#{identityCard}
 		</if>
 		<if test="qq!=null">
-				and qq=#{qq}
+				and vi.qq=#{qq}
 		</if>
 		<if test="del!=null">
-				and del=#{del}
+				and vi.del=#{del}
 		</if>
+        limit #{pageUtil.startRow},#{pageUtil.endRow}
 	</select>
+
     <select id="getTotal" resultType="java.lang.Integer">
         select
-            count(*)
-        from vip_info
+        count(*)
+        from vip_info vi
+        LEFT JOIN region rp on rp.region_id = vi.province_code
+        LEFT JOIN region rc on rc.region_id = vi.city_code
+        LEFT JOIN region rd on rd.region_id = vi.district_code
+        LEFT JOIN organization_info oi on oi.code = vi.shop_code
         where 1=1
         <if test="id!=null">
-            and id=#{id}
+            and vi.id=#{id}
         </if>
         <if test="createDate!=null">
-            and create_date=#{createDate}
+            and vi.create_date=#{createDate}
         </if>
         <if test="code!=null">
-            and code=#{code}
+            and vi.code=#{code}
         </if>
         <if test="name!=null">
-            and name=#{name}
+            and vi.name=#{name}
         </if>
         <if test="vipTypeCode!=null">
-            and vip_type_code=#{vipTypeCode}
+            and vi.vip_type_code=#{vipTypeCode}
         </if>
         <if test="sex!=null">
-            and sex=#{sex}
+            and vi.sex=#{sex}
         </if>
         <if test="shopCode!=null">
             and shop_code=#{shopCode}
         </if>
         <if test="shopName!=null">
-            and shop_name=#{shopName}
+            and vi.shop_name=#{shopName}
         </if>
         <if test="tel!=null">
-            and tel=#{tel}
+            and vi.tel=#{tel}
         </if>
         <if test="phone!=null">
-            and phone=#{phone}
+            and vi.phone=#{phone}
         </if>
         <if test="identityCard!=null">
-            and identity_card=#{identityCard}
+            and vi.identity_card=#{identityCard}
         </if>
         <if test="qq!=null">
-            and qq=#{qq}
+            and vi.qq=#{qq}
         </if>
         <if test="del!=null">
-            and del=#{del}
+            and vi.del=#{del}
         </if>
     </select>
+
+    <select id="getCode" resultType="java.lang.Integer">
+        select count(*) from vip_info where del = 0
+        <if test="code != null and code != ''">
+            and code = #{code}
+        </if>
+    </select>
+
     <insert id="create" parameterType="VipInfo">
 		insert into vip_info(
 			create_date,
-			modify_date,
 			code,
 			name,
 			vip_type_code,
@@ -162,10 +194,10 @@
 			address,
 			qq,
 			del,
-			pwd
+			pwd,
+			note
 		) values (
-			#{createDate},
-			#{modifyDate},
+            now(),
 			#{code},
 			#{name},
 			#{vipTypeCode},
@@ -184,81 +216,79 @@
 			#{email},
 			#{address},
 			#{qq},
-			#{del},
-			#{pwd}
+			0,
+			#{pwd},
+			#{note}
 		)
 	</insert>
 
 	<update id="update" parameterType="VipInfo">
-		update vip_info set 
-		<if test="id!=null">
-			id=#{id},
-		</if>
-		<if test="createDate!=null">
-			create_date=#{createDate},
-		</if>
-		<if test="modifyDate!=null">
-			modify_date=#{modifyDate},
-		</if>
-		<if test="code!=null">
-			code=#{code},
-		</if>
-		<if test="name!=null">
-			name=#{name},
-		</if>
-		<if test="vipTypeCode!=null">
-			vip_type_code=#{vipTypeCode},
-		</if>
-		<if test="sex!=null">
-			sex=#{sex},
-		</if>
-		<if test="shopCode!=null">
-			shop_code=#{shopCode},
-		</if>
-		<if test="shopName!=null">
-			shop_name=#{shopName},
-		</if>
-		<if test="tel!=null">
-			tel=#{tel},
-		</if>
-		<if test="phone!=null">
-			phone=#{phone},
-		</if>
-		<if test="birthday!=null">
-			birthday=#{birthday},
-		</if>
-		<if test="identityCard!=null">
-			identity_card=#{identityCard},
-		</if>
-		<if test="issuingPerson!=null">
-			issuing_person=#{issuingPerson},
-		</if>
-		<if test="provinceCode!=null">
-			province_code=#{provinceCode},
-		</if>
-		<if test="cityCode!=null">
-			city_code=#{cityCode},
-		</if>
-		<if test="districtCode!=null">
-			district_code=#{districtCode},
-		</if>
-		<if test="post!=null">
-			post=#{post},
-		</if>
-		<if test="email!=null">
-			email=#{email},
-		</if>
-		<if test="address!=null">
-			address=#{address},
-		</if>
-		<if test="qq!=null">
-			qq=#{qq},
-		</if>
-		<if test="del!=null">
-			del=#{del},
-		</if>
-		<if test="pwd!=null">
-			pwd=#{pwd}
-		</if>
+		update vip_info
+		<set>
+            <if test="modifyDate!=null">
+                modify_date=now(),
+            </if>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="vipTypeCode!=null">
+                vip_type_code=#{vipTypeCode},
+            </if>
+            <if test="sex!=null">
+                sex=#{sex},
+            </if>
+            <if test="shopCode!=null">
+                shop_code=#{shopCode},
+            </if>
+            <if test="shopName!=null">
+                shop_name=#{shopName},
+            </if>
+            <if test="tel!=null">
+                tel=#{tel},
+            </if>
+            <if test="phone!=null">
+                phone=#{phone},
+            </if>
+            <if test="birthday!=null">
+                birthday=#{birthday},
+            </if>
+            <if test="identityCard!=null">
+                identity_card=#{identityCard},
+            </if>
+            <if test="issuingPerson!=null">
+                issuing_person=#{issuingPerson},
+            </if>
+            <if test="provinceCode!=null">
+                province_code=#{provinceCode},
+            </if>
+            <if test="cityCode!=null">
+                city_code=#{cityCode},
+            </if>
+            <if test="districtCode!=null">
+                district_code=#{districtCode},
+            </if>
+            <if test="post!=null">
+                post=#{post},
+            </if>
+            <if test="email!=null">
+                email=#{email},
+            </if>
+            <if test="address!=null">
+                address=#{address},
+            </if>
+            <if test="qq!=null">
+                qq=#{qq},
+            </if>
+            <if test="del!=null">
+                del=#{del},
+            </if>
+            <if test="pwd!=null">
+                pwd=#{pwd},
+            </if>
+            <if test="note!=null">
+                note=#{note},
+            </if>
+		</set>
+        where id = #{id}
 	</update>
 </mapper>
