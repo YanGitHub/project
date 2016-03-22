@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>会员管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap -->
     <link href="${ctx}/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="${ctx}/static/jquery-easyui/themes/bootstrap/easyui.css">
@@ -431,7 +432,14 @@
     }
     //生成会员卡号
     function createNo(){
-        $('#code').val(getSerialNo('vip'));
+        var id = $('#id').val();
+        if(id == "" || id == null){
+            $('#code').val(getSerialNo('vip'));
+        }else{
+            alertLittle("只有新增时才可以生成会员卡号");
+            return;
+        }
+
     }
     function getvalue(obj, se, d) {
         var parentId = obj.options[obj.selectedIndex].value;

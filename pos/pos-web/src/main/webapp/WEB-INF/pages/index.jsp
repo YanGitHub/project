@@ -54,6 +54,7 @@
             width: 100%;
         }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -163,15 +164,15 @@
     </div>
 </div>
 
-<div id="footer" class="container">
-    <nav class="navbar navbar-default navbar-fixed-bottom">
-        <div class="navbar-inner navbar-content-center">
-            <p class="text-muted credit" style="padding: 10px;text-align: center">
-                ©2016 YAN 使用POS前必读 意见反馈
-            </p>
-        </div>
-    </nav>
-</div>
+<%--<div id="footer" class="container">--%>
+    <%--<nav class="navbar navbar-default navbar-fixed-bottom">--%>
+        <%--<div class="navbar-inner navbar-content-center">--%>
+            <%--<p class="text-muted credit" style="padding: 10px;text-align: center">--%>
+                <%--©2016 YAN 使用POS前必读 意见反馈--%>
+            <%--</p>--%>
+        <%--</div>--%>
+    <%--</nav>--%>
+<%--</div>--%>
 
 <script type="text/javascript">
     function login() {

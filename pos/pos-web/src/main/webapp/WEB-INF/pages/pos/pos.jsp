@@ -31,7 +31,7 @@
     <script type="text/javascript" src="${ctx}/static/bootstrap-fileInput/js/fileinput_locale_zh.js"></script>
 
     <!--lodop 打印控件-->
-    <script type="text/javascript" src="${ctx}/static/pos/js/LodopFuncs.js"></script>
+    <script language="javascript" src="${ctx}/static/pos/js/LodopFuncs.js"></script>
     <!--[if lt IE 9]>
     <script src="${ctx}/static/bootstrap-3.3.5-dist/js/html5shiv.min.js"></script>
     <script src="${ctx}/static/bootstrap-3.3.5-dist/js/respond.min.js"></script>
@@ -46,6 +46,7 @@
             margin-bottom: 10px;
         }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 

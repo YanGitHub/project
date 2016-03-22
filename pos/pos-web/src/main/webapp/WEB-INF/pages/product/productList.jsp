@@ -38,6 +38,7 @@
             margin-bottom: 10px;
         }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body style="height: 580px">
@@ -143,7 +144,7 @@
             url:'${ctx}/product/list',
             singleSelect: true,
             rownumbers: true,
-            height:200,
+            height:240,
             pageSize:10,
             pagination: true,
             columns: [
@@ -169,7 +170,7 @@
             title: '商品规格明细',
             singleSelect: true,
             rownumbers: true,
-            height:190,
+            height:240,
             pagination: true,
             columns: [
                 [

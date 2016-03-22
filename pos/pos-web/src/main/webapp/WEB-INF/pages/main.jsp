@@ -38,6 +38,7 @@
             margin-bottom: 10px;
         }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
@@ -169,7 +170,7 @@
 <script type="text/javascript">
     $(function(){
         var height = window.innerHeight;
-        console.log(height);
+//        console.log(height);
         $('#myiframe').attr('height',height - 67);
 
     })
