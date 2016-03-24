@@ -29,7 +29,7 @@
 
     <style>
         body{
-            padding: 50px 15px 10px 15px;
+            padding: 50px 0px 0px 0px;
         }
         .input-group-addon{
             width: 90px;
@@ -63,22 +63,20 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">基础资料 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                <li><a href="#" onclick="addTab('门店资料','${ctx}/organization')">门店资料</a></li>
+                                <li><a href="#" onclick="addTab('仓库信息','${ctx}/warehouse')">仓库信息</a></li>
+                                <li role="separator" class="divider"></li>
                                 <li><a href="#" onclick="addTab('会员信息','${ctx}/vipInfo')">会员信息</a></li>
                                 <li><a href="#" onclick="addTab('会员类型','${ctx}/vipType')">会员类型</a></li>
-                                <li><a href="#" onclick="addTab('仓库信息','${ctx}/warehouse')">仓库信息</a></li>
-                                <li><a href="#" onclick="addTab('物流公司','${ctx}/expressCompany')">物流公司</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#" onclick="addTab('快递查询','${ctx}/expressCompany/search')">快递查询</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">门店管理 <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" onclick="addTab('门店资料','${ctx}/organization')">门店资料</a></li>
                                 <li><a href="#" onclick="addTab('支付方式','${ctx}/shopPayment')">支付方式</a></li>
                                 <li><a href="#" onclick="addTab('模板设置','${ctx}/printTemplate')">模板设置</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#" onclick="addTab('历史查询','${ctx}/pos/shopSalesDetail')">历史查询</a></li>
+                                <li><a href="#" onclick="addTab('物流公司','${ctx}/expressCompany')">物流公司</a></li>
+                                <li><a href="#" onclick="addTab('快递查询','${ctx}/expressCompany/search')">快递查询</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#" onclick="addTab('供应商类型','${ctx}/supplierType')">供应商类型</a></li>
+                                <li><a href="#" onclick="addTab('供应商信息','${ctx}/supplierInfo')">供应商信息</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -91,6 +89,14 @@
                                 <li><a href="#" onclick="addTab('商品品类','${ctx}/category')">商品品类</a></li>
                             </ul>
                         </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">仓库管理 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" onclick="addTab('库存统计','${ctx}/inventory')">库存统计</a></li>
+                                <li><a href="#" onclick="addTab('历史查询','${ctx}/pos/shopSalesDetail')">历史查询</a></li>
+                            </ul>
+                        </li>
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">系统管理 <span class="caret"></span></a>
                             <ul class="dropdown-menu">

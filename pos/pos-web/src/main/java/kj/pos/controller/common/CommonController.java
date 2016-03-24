@@ -2,9 +2,11 @@ package kj.pos.controller.common;
 
 import kj.pos.entity.admin.OrganizationInfo;
 import kj.pos.entity.info.Region;
+import kj.pos.entity.info.SupplierType;
 import kj.pos.entity.info.VipType;
 import kj.pos.service.admin.OrganizationService;
 import kj.pos.service.info.RegionService;
+import kj.pos.service.info.SupplierTypeService;
 import kj.pos.service.info.VipTypeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +38,8 @@ public class CommonController {
     private OrganizationService organizationService;
     @Autowired
     private VipTypeService vipTypeService;
+    @Autowired
+    private SupplierTypeService supplierTypeService;
 
     /**
      * 获取省市区
@@ -101,4 +105,18 @@ public class CommonController {
         }
         return list;
     }
+
+    @RequestMapping(value = "/getSupplierType",method = RequestMethod.POST)
+    @ResponseBody
+    public List<SupplierType> getSupplierType(SupplierType supplierType)throws SQLException{
+        List<SupplierType> list = new ArrayList<SupplierType>();
+        try {
+            list = supplierTypeService.getList(supplierType);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+        }
+        return list;
+    }
+
 }

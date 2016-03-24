@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.info.SupplierInfoDao">
+	<resultMap id="ResultMap" type="SupplierInfo">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="typeCode" column="type_code"/>
+        <result property="typeName" column="type_name"/>
+		<result property="person" column="person"/>
+		<result property="phone" column="phone"/>
+		<result property="mobile" column="mobile"/>
+		<result property="email" column="email"/>
+		<result property="website" column="website"/>
+		<result property="address" column="address"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="SupplierInfo" >
+        select
+            si.id,
+            si.create_date,
+            si.modify_date,
+            si.code,
+            si.name,
+            st.name as type_name,
+            si.type_code,
+            si.person,
+            si.phone,
+            si.mobile,
+            si.email,
+            si.website,
+            si.address,
+            si.note
+        from supplier_info si
+        LEFT JOIN supplier_type st on st.code = si.type_code
+		where 1=1 
+		<if test="id!=null">
+				and si.id=#{id}
+		</if>
+		<if test="code!=null">
+				and si.code=#{code}
+		</if>
+		<if test="name!=null">
+				and si.name=#{name}
+		</if>
+		<if test="typeCode!=null">
+				and si.type_code=#{typeCode}
+		</if>
+		<if test="person!=null">
+				and si.person=#{person}
+		</if>
+		<if test="phone!=null">
+				and si.phone=#{phone}
+		</if>
+		<if test="mobile!=null">
+				and si.mobile=#{mobile}
+		</if>
+	</select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from supplier_info si
+        LEFT JOIN supplier_type st on st.code = si.type_code
+        where 1=1
+        <if test="id!=null">
+            and si.id=#{id}
+        </if>
+        <if test="code!=null">
+            and si.code=#{code}
+        </if>
+        <if test="name!=null">
+            and si.name=#{name}
+        </if>
+        <if test="typeCode!=null">
+            and si.type_code=#{typeCode}
+        </if>
+        <if test="person!=null">
+            and si.person=#{person}
+        </if>
+        <if test="phone!=null">
+            and si.phone=#{phone}
+        </if>
+        <if test="mobile!=null">
+            and si.mobile=#{mobile}
+        </if>
+    </select>
+
+    <select id="getCode" resultType="java.lang.Integer">
+        select count(*) from supplier_info where del = 0
+        <if test="code != null and code != ''">
+            and code = #{code}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="SupplierInfo">
+		insert into supplier_info(
+			create_date,
+			modify_date,
+			code,
+			name,
+			type_code,
+			person,
+			phone,
+			mobile,
+			email,
+			website,
+			address,
+			note
+		) values (
+			now(),
+			#{modifyDate},
+			#{code},
+			#{name},
+			#{typeCode},
+			#{person},
+			#{phone},
+			#{mobile},
+			#{email},
+			#{website},
+			#{address},
+			#{note}
+		)
+	</insert>
+
+	<update id="update" parameterType="SupplierInfo">
+		update supplier_info set
+		<if test="modifyDate!=null">
+			modify_date=now(),
+		</if>
+		<if test="code!=null">
+			code=#{code},
+		</if>
+		<if test="name!=null">
+			name=#{name},
+		</if>
+		<if test="typeCode!=null">
+			type_code=#{typeCode},
+		</if>
+		<if test="person!=null">
+			person=#{person},
+		</if>
+		<if test="phone!=null">
+			phone=#{phone},
+		</if>
+		<if test="mobile!=null">
+			mobile=#{mobile},
+		</if>
+		<if test="email!=null">
+			email=#{email},
+		</if>
+		<if test="website!=null">
+			website=#{website},
+		</if>
+		<if test="address!=null">
+			address=#{address},
+		</if>
+		<if test="note!=null">
+			note=#{note}
+		</if>
+	</update>
+</mapper>

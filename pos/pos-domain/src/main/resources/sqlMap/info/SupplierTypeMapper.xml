@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.info.SupplierTypeDao">
+	<resultMap id="ResultMap" type="SupplierType">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="SupplierType" >
+		select 
+			id,
+			create_date,
+			modify_date,
+			code,
+			name,
+			note
+		from supplier_type
+		where 1=1 
+		<if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="createDate!=null">
+				and create_date=#{createDate}
+		</if>
+		<if test="modifyDate!=null">
+				and modify_date=#{modifyDate}
+		</if>
+		<if test="code!=null">
+				and code=#{code}
+		</if>
+		<if test="name!=null">
+				and name=#{name}
+		</if>
+		<if test="note!=null">
+				and note=#{note}
+		</if>
+	</select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+          count(*)
+        from supplier_type
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="createDate!=null">
+            and create_date=#{createDate}
+        </if>
+        <if test="modifyDate!=null">
+            and modify_date=#{modifyDate}
+        </if>
+        <if test="code!=null">
+            and code=#{code}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="note!=null">
+            and note=#{note}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="SupplierType">
+		insert into supplier_type(
+			create_date,
+			modify_date,
+			code,
+			name,
+			note
+		) values (
+			now(),
+			#{modifyDate},
+			#{code},
+			#{name},
+			#{note}
+		)
+	</insert>
+
+	<update id="update" parameterType="SupplierType">
+		update supplier_type
+		 <set>
+             <if test="modifyDate!=null">
+                 modify_date=now(),
+             </if>
+             <if test="code!=null">
+                 code=#{code},
+             </if>
+             <if test="name!=null">
+                 name=#{name},
+             </if>
+             <if test="note!=null">
+                 note=#{note}
+             </if>
+		 </set>
+
+	</update>
+</mapper>

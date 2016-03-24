@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.stock.InventoryDao">
+	<resultMap id="ResultMap" type="Inventory">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="warehouseCode" column="warehouse_code"/>
+		<result property="productCode" column="product_code"/>
+		<result property="skuCode" column="sku_code"/>
+		<result property="qty" column="qty"/>
+		<result property="del" column="del"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="Inventory" >
+		select 
+			id,
+			create_date,
+			modify_date,
+			warehouse_code,
+			product_code,
+			sku_code,
+			qty,
+			del
+		from inventory
+		where 1=1 
+		<if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="warehouseCode!=null">
+				and warehouse_code=#{warehouseCode}
+		</if>
+		<if test="productCode!=null">
+				and product_code=#{productCode}
+		</if>
+		<if test="skuCode!=null">
+				and sku_code=#{skuCode}
+		</if>
+		<if test="del!=null">
+				and del=#{del}
+		</if>
+	</select>
+
+    <select id="getTotal" resultType="java.lang.Integer" parameterType="Inventory" >
+        select
+        count(*)
+        from inventory
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="warehouseCode!=null">
+            and warehouse_code=#{warehouseCode}
+        </if>
+        <if test="productCode!=null">
+            and product_code=#{productCode}
+        </if>
+        <if test="skuCode!=null">
+            and sku_code=#{skuCode}
+        </if>
+        <if test="del!=null">
+            and del=#{del}
+        </if>
+    </select>
+
+	<insert id="create" parameterType="Inventory">
+		insert into inventory(
+			create_date,
+			modify_date,
+			warehouse_code,
+			product_code,
+			sku_code,
+			qty,
+			del
+		) values (
+			now(),
+			#{modifyDate},
+			#{warehouseCode},
+			#{productCode},
+			#{skuCode},
+			#{qty},
+			0
+		)
+	</insert>
+
+	<update id="update" parameterType="Inventory">
+		update inventory
+		<set>
+            <if test="modifyDate!=null">
+                modify_date=now(),
+            </if>
+            <if test="qty!=null">
+                qty=#{qty},
+            </if>
+            <if test="del!=null">
+                del=#{del}
+            </if>
+		</set>
+        where product_code = #{productCode} and sku_code = #{skuCode} and warehouse_code = #{warehouseCode}
+
+	</update>
+</mapper>
