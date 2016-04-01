@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.stock.PurchaseOrderDetailDao">
+	<resultMap id="ResultMap" type="PurchaseOrderDetail">
+		<result property="id" column="id"/>
+		<result property="pid" column="pid"/>
+		<result property="productSkuId" column="product_sku_id"/>
+		<result property="skuCode" column="sku_code"/>
+		<result property="untPrice" column="unt_price"/>
+		<result property="discount" column="discount"/>
+		<result property="cosPrice" column="cos_price"/>
+		<result property="qty" column="qty"/>
+		<result property="untAmount" column="unt_amount"/>
+		<result property="comAmount" column="com_amount"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+    <delete id="delete">
+        delete from purchase_order_detail where pid = #{pid}
+    </delete>
+
+    <select id="getList" resultMap="ResultMap" parameterType="PurchaseOrderDetail" >
+		select 
+			id,
+			pid,
+			product_sku_id,
+			sku_code,
+			unt_price,
+			discount,
+			cos_price,
+			qty,
+			unt_amount,
+			com_amount,
+			note
+		from purchase_order_detail
+		where 1=1 
+		<if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="pid!=null">
+				and pid=#{pid}
+		</if>
+		<if test="productSkuId!=null">
+				and product_sku_id=#{productSkuId}
+		</if>
+		<if test="skuCode!=null">
+				and sku_code=#{skuCode}
+		</if>
+	</select>
+	<insert id="create" parameterType="PurchaseOrderDetail">
+		insert into purchase_order_detail(
+			pid,
+			product_sku_id,
+			sku_code,
+			unt_price,
+			discount,
+			cos_price,
+			qty,
+			unt_amount,
+			com_amount,
+			note
+		) values
+		<foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item.pid},
+            #{item.productSkuId},
+            #{item.skuCode},
+            #{item.untPrice},
+            #{item.discount},
+            #{item.cosPrice},
+            #{item.qty},
+            #{item.untAmount},
+            #{item.comAmount},
+            #{item.note}
+		</foreach>
+	</insert>
+
+</mapper>

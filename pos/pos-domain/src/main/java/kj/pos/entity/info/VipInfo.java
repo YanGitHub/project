@@ -34,6 +34,8 @@ public class VipInfo extends BaseEntity{
 	private Integer del;//是否删除  0 为删除  1 已删除
 	private String pwd;//会员密码
     private String note;//备注
+
+    private Double vipDiscount;//会员类型折扣
 	//创建getter和setter方法
 	public Long getId(){
 		return this.id;
@@ -257,5 +259,13 @@ public class VipInfo extends BaseEntity{
 
     public void setVipTypeName(String vipTypeName) {
         this.vipTypeName = vipTypeName;
+    }
+
+    public Double getVipDiscount() {
+        return vipDiscount;
+    }
+
+    public void setVipDiscount(Double vipDiscount) {
+        this.vipDiscount = vipDiscount;
     }
 }

@@ -6,38 +6,47 @@
 		<result property="createDate" column="create_date"/>
 		<result property="modifyDate" column="modify_date"/>
 		<result property="warehouseCode" column="warehouse_code"/>
+        <result property="warehouseName" column="warehouse_name"/>
 		<result property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="skuId" column="sku_id"/>
 		<result property="skuCode" column="sku_code"/>
+        <result property="skuName" column="sku_name"/>
 		<result property="qty" column="qty"/>
 		<result property="del" column="del"/>
 	</resultMap>
 
 	<select id="getList" resultMap="ResultMap" parameterType="Inventory" >
-		select 
-			id,
-			create_date,
-			modify_date,
-			warehouse_code,
-			product_code,
-			sku_code,
-			qty,
-			del
-		from inventory
-		where 1=1 
-		<if test="id!=null">
-				and id=#{id}
+        select
+            iv.id,
+            iv.create_date,
+            iv.modify_date,
+            iv.warehouse_code,
+            wh.name as warehouse_name,
+            iv.product_code,
+            iv.sku_id,
+            iv.sku_code,
+            iv.qty,
+            iv.del
+        from inventory iv
+        LEFT JOIN warehouse wh on iv.warehouse_code = wh.code
+        LEFT JOIN product_sku ps on ps.id = iv.sku_id
+        LEFT JOIN product p on ps.pid = p.id
+        where 1=1
+        <if test="id!=null">
+				and iv.id=#{id}
 		</if>
 		<if test="warehouseCode!=null">
-				and warehouse_code=#{warehouseCode}
+				and iv.warehouse_code=#{warehouseCode}
 		</if>
 		<if test="productCode!=null">
-				and product_code=#{productCode}
+				and iv.product_code=#{productCode}
 		</if>
 		<if test="skuCode!=null">
-				and sku_code=#{skuCode}
+				and iv.sku_code=#{skuCode}
 		</if>
 		<if test="del!=null">
-				and del=#{del}
+				and iv.del=#{del}
 		</if>
 	</select>
 

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.stock.PurchaseOrderMainDao">
+	<resultMap id="ResultMap" type="PurchaseOrderMain">
+		<result property="id" column="id"/>
+		<result property="billNo" column="bill_no"/>
+		<result property="billDate" column="bill_date"/>
+		<result property="purchaseTypeCode" column="purchase_type_code"/>
+		<result property="orgCode" column="org_code"/>
+		<result property="warehouseCode" column="warehouse_code"/>
+		<result property="supplierInfoCode" column="supplier_info_code"/>
+		<result property="status" column="status"/>
+		<result property="createUser" column="create_user"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyUser" column="modify_user"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="auditUser" column="audit_user"/>
+		<result property="auditDate" column="audit_date"/>
+		<result property="cancelUser" column="cancel_user"/>
+		<result property="cancelDate" column="cancel_date"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="PurchaseOrderMain" >
+		select 
+			id,
+			bill_no,
+			bill_date,
+			purchase_type_code,
+			org_code,
+			warehouse_code,
+			supplier_info_code,
+			status,
+			create_user,
+			create_date,
+			modify_user,
+			modify_date,
+			audit_user,
+			audit_date,
+			cancel_user,
+			cancel_date,
+			note
+		from purchase_order_main
+		where 1=1 
+		<if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="billNo!=null">
+				and bill_no=#{billNo}
+		</if>
+		<if test="billDate!=null">
+				and bill_date=#{billDate}
+		</if>
+		<if test="purchaseTypeCode!=null">
+				and purchase_type_code=#{purchaseTypeCode}
+		</if>
+		<if test="orgCode!=null">
+				and org_code=#{orgCode}
+		</if>
+		<if test="warehouseCode!=null">
+				and warehouse_code=#{warehouseCode}
+		</if>
+		<if test="supplierInfoCode!=null">
+				and supplier_info_code=#{supplierInfoCode}
+		</if>
+		<if test="status!=null">
+				and status=#{status}
+		</if>
+	</select>
+	<insert id="create" parameterType="PurchaseOrderMain" keyProperty="id" useGeneratedKeys="true">
+		insert into purchase_order_main(
+			bill_no,
+			bill_date,
+			purchase_type_code,
+			org_code,
+			warehouse_code,
+			supplier_info_code,
+			status,
+			create_user,
+			create_date,
+			modify_user,
+			modify_date,
+			audit_user,
+			audit_date,
+			cancel_user,
+			cancel_date,
+			note
+		) values (
+			#{billNo},
+			#{billDate},
+			#{purchaseTypeCode},
+			#{orgCode},
+			#{warehouseCode},
+			#{supplierInfoCode},
+			#{status},
+			#{createUser},
+			#{createDate},
+			#{modifyUser},
+			#{modifyDate},
+			#{auditUser},
+			#{auditDate},
+			#{cancelUser},
+			#{cancelDate},
+			#{note}
+		)
+	</insert>
+
+	<update id="update" parameterType="PurchaseOrderMain">
+		update purchase_order_main
+        <set>
+            <if test="purchaseTypeCode!=null">
+                purchase_type_code=#{purchaseTypeCode},
+            </if>
+            <if test="orgCode!=null">
+                org_code=#{orgCode},
+            </if>
+            <if test="warehouseCode!=null">
+                warehouse_code=#{warehouseCode},
+            </if>
+            <if test="supplierInfoCode!=null">
+                supplier_info_code=#{supplierInfoCode},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="modifyUser!=null">
+                modify_user=#{modifyUser},
+            </if>
+            <if test="modifyDate!=null">
+                modify_date=now(),
+            </if>
+            <if test="auditUser!=null">
+                audit_user=#{auditUser},
+            </if>
+            <if test="auditDate!=null">
+                audit_date=#{auditDate},
+            </if>
+            <if test="cancelUser!=null">
+                cancel_user=#{cancelUser},
+            </if>
+            <if test="cancelDate!=null">
+                cancel_date=#{cancelDate},
+            </if>
+            <if test="note!=null">
+                note=#{note}
+            </if>
+        </set>
+
+	</update>
+</mapper>

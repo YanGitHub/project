@@ -46,7 +46,6 @@
             margin-bottom: 10px;
         }
     </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
@@ -60,8 +59,8 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="input-group" style="padding-top: 10px">
-                    <span class="input-group-addon">会员折扣</span>
-                    <input type="text" readonly="readonly" id="vipDiscount" class="form-control" placeholder="0.00"
+                    <span class="input-group-addon">会员信息</span>
+                    <input type="text" readonly="readonly" id="vipInfo" class="form-control" placeholder=""
                            aria-describedby="basic-addon1">
                 </div>
             </div>
@@ -88,7 +87,7 @@
             </div>
         </div>
         <div class="btn-group" style="padding-top: 10px">
-            <button class="btn btn-danger" onclick="escBtn()">ESC撤单</button>
+            <button class="btn btn-danger" onclick="clean()">ESC撤单</button>
             <button class="btn btn-primary" onclick="showHistory()">历史查询</button>
             <button class="btn btn-success" onclick="">库存查询</button>
             <button class="btn btn-warning" onclick="">重打印小票</button>
@@ -105,7 +104,7 @@
         </div>
         <div class="input-group" style="padding-top: 10px">
             <span class="input-group-addon">会员</span>
-            <input type="text" class="form-control" id="cvipcode" placeholder="会员卡号/名称/手机" aria-describedby="basic-addon1">
+            <input type="text" class="form-control" id="cvipcode" placeholder="会员卡号" aria-describedby="basic-addon1">
         </div>
         <div class="input-group" style="padding-top: 10px">
             <span class="input-group-addon">数量</span>

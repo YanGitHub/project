@@ -3,7 +3,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>库存统计</title>
+    <title>采购类型</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap -->
     <link href="${ctx}/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
@@ -56,7 +56,7 @@
 <!--main-->
 <ol class="breadcrumb">
     <li><a href="#">仓库管理</a></li>
-    <li class="active">库存统计</li>
+    <li class="active">采购类型</li>
 </ol>
 <!--操作-->
 <div class="btn-group btn-group-sm">
@@ -73,8 +73,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#grid").datagrid({
-            url:'${ctx}/inventory/getList',
-            title: '库存统计',
+            url:'${ctx}/stock/purchaseType/getList',
+            title: '采购类型',
             singleSelect: true,
             selectOnCheck: false,
             rownumbers: true,
@@ -83,13 +83,11 @@
             columns: [
                 [
                     { field: 'id', hidden: true },
-                    { field: 'productName', title: '商品名称', width: 120 },
-                    { field: 'productCode', title: '商品代码', width: 120 },
-                    { field: 'skuName', title: '规格名称', width: 120 },
-                    { field: 'skuCode', title: '规格代码', width: 120},
-                    { field: 'warehouseCode', title: '仓库代码', width: 120 },
-                    { field: 'warehouseName', title: '仓库名称', width: 120 },
-                    { field: 'qty', title: '数量',align:'right', width: 120 }
+                    { field: 'code', title: '代码', width: 120 },
+                    { field: 'name', title: '名称', width: 120 },
+                    { field: 'createDate', title: '创建日期', width: 120 },
+                    { field: 'modifyDate', title: '修改日期', width: 120},
+                    { field: 'note', title: '备注', width: 120 }
                 ]
             ]
         });

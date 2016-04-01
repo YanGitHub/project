@@ -1,3 +1,4 @@
+var cvipDiscount = 10;
 $(function () {
     $('#grid').datagrid({
         nowrap: false,
@@ -63,6 +64,13 @@ $(function () {
         }
     });
 
+    //扫描会员卡号
+    $('#cvipcode').keyup(function(e){
+        var curKey = e.which;
+        if(curKey == 13){
+            scanVipCode();
+        }
+    });
 });
 
 function opration(v, r, i) {
@@ -173,6 +181,7 @@ function addSkuJudge(data, barcode) {
 }
 //添加商品
 function addSku(data, barcode) {
+    var relPrice = data.untPrice * cvipDiscount / 10;
     $('#grid').datagrid('appendRow', {
         id: data.id,
         productCode: data.productCode,
@@ -182,9 +191,9 @@ function addSku(data, barcode) {
         skuName: data.name,
         price: data.untPrice,
         qty: 1,
-        discount: 10,
-        relPrice:data.untPrice,
-        amount: data.untPrice
+        discount: cvipDiscount,
+        relPrice:relPrice,
+        amount: relPrice
     });
 }
 //计算总计，数量
@@ -254,7 +263,42 @@ function changeDiscount(){
     $('#cdiscount').val("");
     total();
 }
-
+//会员信息
+function scanVipCode(){
+    var vipCode =$('#cvipcode').val().trim();
+    $.post(contextPath + 'vipInfo/getList',{code:vipCode},function(data){
+        var list = data.rows;
+        if(list.length > 0){
+            $('#vipInfo').val(list[0].name + ' / ' + list[0].vipTypeName + ' / ' + list[0].vipDiscount);
+            cvipDiscount = list[0].vipDiscount;
+            //根据会员折扣重新计算价格
+            resolveVipDiscount();
+        }else{
+            $('#cvipcode').val("");
+            alertLittle("没有此会员");
+            return;
+        }
+    });
+}
+//扫描会员后，重新计算已描的商品折扣
+function resolveVipDiscount(){
+    var item = $('#grid').datagrid('getRows');
+    for (var i = 0; i < item.length; i++) {
+        var qty = parseFloat(item[i].qty);
+        var price = parseFloat(item[i].price);
+        var discount = cvipDiscount;
+        var relPrice = price * discount / 10;
+        $('#grid').datagrid('updateRow', {
+            index: i,
+            row: {
+                discount:discount,
+                relPrice: relPrice,
+                amount: qty * relPrice
+            }
+        });
+    }
+    total();
+}
 //改金额
 function changeAmount(){
     var amount = parseFloat($('#camount').val().trim());
@@ -503,7 +547,7 @@ function clean(){
     $('#productName').val("");
     $('#subtotal').val("");
 
-    $('#vipDiscount').val("");
+    $('#vipInfo').val("");
     $('#inventoryQty').val("");
     $('#qty').val("");
     $('#amount').val("");

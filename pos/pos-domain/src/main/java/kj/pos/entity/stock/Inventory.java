@@ -10,8 +10,12 @@ public class Inventory extends BaseEntity{
 	private String createDate;//创建日期
 	private String modifyDate;//修改日期
 	private String warehouseCode;//仓库代码
+    private String warehouseName;//仓库名称
 	private String productCode;//商品代码
+    private String productName;//商品名称
+    private Long skuId;//skuid
 	private String skuCode;//规格代码
+    private String skuName;//规格名称
 	private Double qty;//数量
 	private Boolean del;//是否删除
 	//创建getter和setter方法
@@ -47,7 +51,15 @@ public class Inventory extends BaseEntity{
 		this.warehouseCode = warehouseCode;
 	}
 
-	public String getProductCode(){
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
+
+    public String getProductCode(){
 		return this.productCode;
 	}
 
@@ -79,4 +91,27 @@ public class Inventory extends BaseEntity{
 		this.del = del;
 	}
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getSkuName() {
+        return skuName;
+    }
+
+    public void setSkuName(String skuName) {
+        this.skuName = skuName;
+    }
+
+    public Long getSkuId() {
+        return skuId;
+    }
+
+    public void setSkuId(Long skuId) {
+        this.skuId = skuId;
+    }
 }

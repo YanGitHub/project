@@ -30,6 +30,7 @@
 		<result property="del" column="del"/>
 		<result property="pwd" column="pwd"/>
         <result property="note" column="note"/>
+        <result property="vipDiscount" column="vip_discount"/>
 	</resultMap>
 
     <update id="delete">
@@ -45,6 +46,7 @@
             vi.name,
             vi.vip_type_code,
             vt.name as vip_type_name,
+            vt.cons_discount as vip_discount,
             vi.sex,
             vi.shop_code,
             oi.name as shop_name,

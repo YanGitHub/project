@@ -55,12 +55,7 @@ public class ProductController {
 
     @RequestMapping(value = "/add",method = RequestMethod.GET)
     public ModelAndView productAdd()throws SQLException{
-        Map<String,Object> map = new HashMap<String, Object>();
-        List<Brand> brands = brandService.getList(new Brand());
-        List<Category> categories = categoryService.getList(new Category());
-        map.put("brands",brands);
-        map.put("categories",categories);
-        return new ModelAndView("product/productAdd",map);
+        return new ModelAndView("product/productAdd");
     }
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
