@@ -61,6 +61,8 @@
 <!--操作-->
 <div class="btn-group btn-group-sm">
     <button class="btn btn-info" onclick="create()">新增</button>
+    <button class="btn btn-primary" onclick="audit()">审核</button>
+    <button class="btn btn-warning" onclick="cancel()">终止</button>
 </div>
 
 <div class="row" style="padding-top: 15px">
@@ -73,26 +75,55 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#grid").datagrid({
-            url:'${ctx}/stock/purchaseType/getList',
+            url:'${ctx}/stock/purchaseOrderMain/getList',
             title: '采购订单列表',
             singleSelect: true,
-            selectOnCheck: false,
+            selectOnCheck: true,
+            pagination: true,
             rownumbers: true,
             height:430,
-            pagination: true,
             columns: [
                 [
                     { field: 'id', hidden: true },
-                    { field: 'code', title: '代码', width: 120 },
-                    { field: 'name', title: '名称', width: 120 },
-                    { field: 'createDate', title: '创建日期', width: 120 },
-                    { field: 'modifyDate', title: '修改日期', width: 120},
-                    { field: 'note', title: '备注', width: 120 }
+                    { field: 'ck', checkbox: true },
+                    { field: 'billNo', title: '单据编号', fitColumns:true},
+                    { field: 'billDate', title: '单据日期',fitColumns:true},
+                    { field: 'purchaseTypeName', title: '采购类型',fitColumns:true},
+                    { field: 'orgName', title: '店铺名称',fitColumns:true},
+                    { field: 'warehouseName', title: '采购店仓',fitColumns:true},
+                    { field: 'supplierInfoName', title: '供应商',fitColumns:true},
+                    { field: 'status', title: '状态',fitColumns:true,formatter:statusString},
+                    { field: 'createUser', title: '创建人',fitColumns:true},
+                    { field: 'createDate', title: '创建日期',fitColumns:true},
+                    { field: 'modifyUser', title: '修改人',fitColumns:true},
+                    { field: 'modifyDate', title: '修改日期',fitColumns:true},
+                    { field: 'auditUser', title: '审核人',fitColumns:true},
+                    { field: 'auditDate', title: '审核日期',fitColumns:true},
+                    { field: 'cancelUser', title: '终止人',fitColumns:true},
+                    { field: 'cancelDate', title: '终止日期',fitColumns:true},
+                    { field: 'note', title: '备注',fitColumns:true}
                 ]
             ]
         });
     });
 
+    function statusString(v,r,i){
+        if(v == 1){
+            return "未审核";
+        }else if(v == 2){
+            return "已审核";
+        }else if(v == 3){
+            return "已终止";
+        }
+    }
+    //审核
+    function audit(){
+
+    }
+    //终止
+    function cancel(){
+
+    }
     //跳到新增页面
     function create(){
         window.location.href = "${ctx}/stock/purchaseOrderMain/add"

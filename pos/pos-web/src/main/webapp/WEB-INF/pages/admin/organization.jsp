@@ -33,11 +33,6 @@
     <script src="${ctx}/static/bootstrap-datetimepicker/js/moment-with-locales.js"></script>
     <script src="${ctx}/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
 
-    <!--[if lt IE 9]>
-    <script src="${ctx}/static/bootstrap-3.3.5-dist/js/html5shiv.min.js"></script>
-    <script src="${ctx}/static/bootstrap-3.3.5-dist/js/respond.min.js"></script>
-    <![endif]-->
-
     <style>
         body {
             padding: 10px 15px 0px 15px;
@@ -48,7 +43,7 @@
         }
 
         .form-control {
-            width: 166px;
+            width: 168px;
         }
 
         .breadcrumb {
@@ -96,14 +91,14 @@
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">店铺代码<font style="color: red">*</font></span>
-                                <input type="text" id="code" name="code" class="form-control" placeholder=""
+                                <input type="text" id="code" name="code" class="form-control" placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">店铺名称<font style="color: red">*</font></span>
-                                <input type="text" id="name" name="name" class="form-control" placeholder=""
+                                <input type="text" id="name" name="name" class="form-control" placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -164,7 +159,7 @@
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">联系人</span>
                                 <input type="text" id="person" name="person" class="form-control"
-                                       placeholder=""
+                                       placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -172,7 +167,7 @@
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">手机</span>
                                 <input type="text" id="phone" name="phone" class="form-control"
-                                       placeholder=""
+                                       placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -180,7 +175,7 @@
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">电话</span>
                                 <input type="text" id="mobile" name="mobile" class="form-control"
-                                       placeholder=""
+                                       placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
@@ -190,14 +185,14 @@
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">邮箱</span>
-                                <input type="text" id="email" name="email" class="form-control" placeholder=""
+                                <input type="text" id="email" name="email" class="form-control" placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">网址</span>
-                                <input type="text" id="website" name="website" class="form-control" placeholder=""
+                                <input type="text" id="website" name="website" class="form-control" placeholder="" style="width: 168px"
                                        aria-describedby="basic-addon1">
                             </div>
                         </div>

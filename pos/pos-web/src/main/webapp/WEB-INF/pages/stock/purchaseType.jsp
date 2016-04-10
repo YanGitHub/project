@@ -83,11 +83,11 @@
             columns: [
                 [
                     { field: 'id', hidden: true },
-                    { field: 'code', title: '代码', width: 120 },
-                    { field: 'name', title: '名称', width: 120 },
-                    { field: 'createDate', title: '创建日期', width: 120 },
-                    { field: 'modifyDate', title: '修改日期', width: 120},
-                    { field: 'note', title: '备注', width: 120 }
+                    { field: 'code', title: '代码', fitColumns:true },
+                    { field: 'name', title: '名称', fitColumns:true},
+                    { field: 'createDate', title: '创建日期',fitColumns:true },
+                    { field: 'modifyDate', title: '修改日期', fitColumns:true},
+                    { field: 'note', title: '备注',fitColumns:true }
                 ]
             ]
         });

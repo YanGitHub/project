@@ -4,6 +4,7 @@ import kj.pos.dao.mysql.stock.PurchaseOrderDetailDao;
 import kj.pos.dao.mysql.stock.PurchaseOrderMainDao;
 import kj.pos.entity.stock.PurchaseOrderDetail;
 import kj.pos.entity.stock.PurchaseOrderMain;
+import kj.pos.util.web.WebContextUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class PurchaseOrderMainService {
 
     @Transactional(value = "mysql",rollbackFor = Exception.class)
     public void create(PurchaseOrderMain purchaseOrderMain)throws SQLException{
+        purchaseOrderMain.setCreateUser(WebContextUtil.getCurrentUser().getName());
+        purchaseOrderMain.setStatus(1);//未审核
         purchaseOrderMainDao.create(purchaseOrderMain);
         Long id = purchaseOrderMain.getId();
         List<PurchaseOrderDetail> d = purchaseOrderMain.getPurchaseOrderDetailList();
@@ -38,6 +41,14 @@ public class PurchaseOrderMainService {
             details.add(p);
         }
         purchaseOrderDetailDao.create(details);
+    }
+
+    public List<PurchaseOrderMain> getList(PurchaseOrderMain purchaseOrderMain)throws SQLException{
+        return purchaseOrderMainDao.getList(purchaseOrderMain);
+    }
+
+    public Integer getTotal(PurchaseOrderMain purchaseOrderMain)throws SQLException{
+        return purchaseOrderMainDao.getTotal(purchaseOrderMain);
     }
 
 }

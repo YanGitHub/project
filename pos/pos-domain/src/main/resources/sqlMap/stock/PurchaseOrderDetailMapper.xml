@@ -60,8 +60,8 @@
 			com_amount,
 			note
 		) values
-		<foreach collection="list" open="(" close=")" separator="," item="item">
-            #{item.pid},
+		<foreach collection="list" separator="," item="item">
+            (#{item.pid},
             #{item.productSkuId},
             #{item.skuCode},
             #{item.untPrice},
@@ -70,7 +70,7 @@
             #{item.qty},
             #{item.untAmount},
             #{item.comAmount},
-            #{item.note}
+            #{item.note})
 		</foreach>
 	</insert>
 

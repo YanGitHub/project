@@ -6,9 +6,13 @@
 		<result property="billNo" column="bill_no"/>
 		<result property="billDate" column="bill_date"/>
 		<result property="purchaseTypeCode" column="purchase_type_code"/>
+        <result property="purchaseTypeName" column="purchase_type_name"/>
 		<result property="orgCode" column="org_code"/>
+        <result property="orgName" column="org_name"/>
 		<result property="warehouseCode" column="warehouse_code"/>
+        <result property="warehouseName" column="warehouse_name"/>
 		<result property="supplierInfoCode" column="supplier_info_code"/>
+        <result property="supplierInfoName" column="supplier_info_name"/>
 		<result property="status" column="status"/>
 		<result property="createUser" column="create_user"/>
 		<result property="createDate" column="create_date"/>
@@ -22,52 +26,99 @@
 	</resultMap>
 
 	<select id="getList" resultMap="ResultMap" parameterType="PurchaseOrderMain" >
-		select 
-			id,
-			bill_no,
-			bill_date,
-			purchase_type_code,
-			org_code,
-			warehouse_code,
-			supplier_info_code,
-			status,
-			create_user,
-			create_date,
-			modify_user,
-			modify_date,
-			audit_user,
-			audit_date,
-			cancel_user,
-			cancel_date,
-			note
-		from purchase_order_main
-		where 1=1 
-		<if test="id!=null">
-				and id=#{id}
+        select
+            pom.id,
+            pom.bill_no,
+            pom.bill_date,
+            pom.purchase_type_code,
+            pt.name as purchase_type_name,
+            pom.org_code,
+            oi.name as org_name,
+            pom.warehouse_code,
+            wh.name as warehouse_name,
+            pom.supplier_info_code,
+            si.name as supplier_info_name,
+            pom.status,
+            pom.create_user,
+            pom.create_date,
+            pom.modify_user,
+            pom.modify_date,
+            pom.audit_user,
+            pom.audit_date,
+            pom.cancel_user,
+            pom.cancel_date,
+            pom.note
+        from purchase_order_main pom
+        LEFT JOIN purchase_type pt on pt.code = pom.purchase_type_code
+        LEFT JOIN organization_info oi on oi.code = pom.org_code
+        LEFT JOIN warehouse wh on wh.code = pom.warehouse_code
+        LEFT JOIN supplier_info si on si.code = pom.supplier_info_code
+        where 1=1
+        <if test="id!=null">
+				and pom.id=#{id}
 		</if>
-		<if test="billNo!=null">
-				and bill_no=#{billNo}
+		<if test="billNo!=null and billNo != ''">
+				and pom.bill_no=#{billNo}
 		</if>
-		<if test="billDate!=null">
-				and bill_date=#{billDate}
+		<if test="billDate!=null and billDate != ''">
+				and pom.bill_date=#{billDate}
 		</if>
-		<if test="purchaseTypeCode!=null">
-				and purchase_type_code=#{purchaseTypeCode}
+		<if test="purchaseTypeCode!=null and purchaseTypeCode != ''">
+				and pom.purchase_type_code=#{purchaseTypeCode}
 		</if>
-		<if test="orgCode!=null">
-				and org_code=#{orgCode}
+		<if test="orgCode!=null and orgCode != ''">
+				and pom.org_code=#{orgCode}
 		</if>
-		<if test="warehouseCode!=null">
-				and warehouse_code=#{warehouseCode}
+		<if test="warehouseCode!=null and warehouseCode != ''">
+				and pom.warehouse_code=#{warehouseCode}
 		</if>
-		<if test="supplierInfoCode!=null">
-				and supplier_info_code=#{supplierInfoCode}
+		<if test="supplierInfoCode!=null and supplierInfoCode != ''">
+				and pom.supplier_info_code=#{supplierInfoCode}
 		</if>
 		<if test="status!=null">
-				and status=#{status}
+				and pom.status=#{status}
 		</if>
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
 	</select>
-	<insert id="create" parameterType="PurchaseOrderMain" keyProperty="id" useGeneratedKeys="true">
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from purchase_order_main pom
+        LEFT JOIN purchase_type pt on pt.code = pom.purchase_type_code
+        LEFT JOIN organization_info oi on oi.code = pom.org_code
+        LEFT JOIN warehouse wh on wh.code = pom.warehouse_code
+        LEFT JOIN supplier_info si on si.code = pom.supplier_info_code
+        where 1=1
+        <if test="id!=null">
+            and pom.id=#{id}
+        </if>
+        <if test="billNo!=null and billNo != ''">
+            and pom.bill_no=#{billNo}
+        </if>
+        <if test="billDate!=null and billDate != ''">
+            and pom.bill_date=#{billDate}
+        </if>
+        <if test="purchaseTypeCode!=null and purchaseTypeCode != ''">
+            and pom.purchase_type_code=#{purchaseTypeCode}
+        </if>
+        <if test="orgCode!=null and orgCode != ''">
+            and pom.org_code=#{orgCode}
+        </if>
+        <if test="warehouseCode!=null and warehouseCode != ''">
+            and pom.warehouse_code=#{warehouseCode}
+        </if>
+        <if test="supplierInfoCode!=null and supplierInfoCode != ''">
+            and pom.supplier_info_code=#{supplierInfoCode}
+        </if>
+        <if test="status!=null">
+            and pom.status=#{status}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="PurchaseOrderMain" keyProperty="id" useGeneratedKeys="true">
 		insert into purchase_order_main(
 			bill_no,
 			bill_date,
@@ -80,13 +131,9 @@
 			create_date,
 			modify_user,
 			modify_date,
-			audit_user,
-			audit_date,
-			cancel_user,
-			cancel_date,
 			note
 		) values (
-			#{billNo},
+			generate_number('CGDD'),
 			#{billDate},
 			#{purchaseTypeCode},
 			#{orgCode},
@@ -94,13 +141,9 @@
 			#{supplierInfoCode},
 			#{status},
 			#{createUser},
-			#{createDate},
+			now(),
 			#{modifyUser},
-			#{modifyDate},
-			#{auditUser},
-			#{auditDate},
-			#{cancelUser},
-			#{cancelDate},
+			now(),
 			#{note}
 		)
 	</insert>

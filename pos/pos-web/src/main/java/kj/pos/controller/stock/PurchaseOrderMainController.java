@@ -1,17 +1,17 @@
 package kj.pos.controller.stock;
 
+import kj.pos.entity.PageUtil;
 import kj.pos.entity.stock.PurchaseOrderMain;
 import kj.pos.service.stock.PurchaseOrderMainService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,9 +37,31 @@ public class PurchaseOrderMainController {
         return "stock/purchaseOrderMainAdd";
     }
 
+    @RequestMapping(value = "/getList",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> getList(PurchaseOrderMain purchaseOrderMain,
+                                      @RequestParam(value = "page",defaultValue = "1")int page,
+                                      @RequestParam(value = "rows",defaultValue = "10")int rows)throws SQLException {
+        Map<String,Object> map = new HashMap<String, Object>();
+        try {
+            int total = purchaseOrderMainService.getTotal(purchaseOrderMain);
+            PageUtil pageUtil = new PageUtil(page,rows,total);
+            purchaseOrderMain.setPageUtil(pageUtil);
+            List<PurchaseOrderMain> list = purchaseOrderMainService.getList(purchaseOrderMain);
+            map.put("total",total);
+            map.put("rows",list);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            map.put("total",0);
+            map.put("rows",null);
+        }
+        return map;
+    }
+
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> create(PurchaseOrderMain purchaseOrderMain)throws SQLException{
+    public Map<String,Object> create(@RequestBody PurchaseOrderMain purchaseOrderMain)throws SQLException{
         Map<String,Object> result = new HashMap<String, Object>();
         try {
             purchaseOrderMainService.create(purchaseOrderMain);

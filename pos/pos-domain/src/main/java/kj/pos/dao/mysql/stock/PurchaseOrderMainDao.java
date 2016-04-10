@@ -8,6 +8,8 @@ import java.util.List;
 @MyBatisRepository
 public interface PurchaseOrderMainDao{
 
+    public Integer getTotal(PurchaseOrderMain purchaseOrderMain);
+
 	public List<PurchaseOrderMain> getList(PurchaseOrderMain purchaseOrderMain);
 
 	public void create(PurchaseOrderMain purchaseOrderMain);

@@ -8,8 +8,11 @@ public class PurchaseOrderDetail implements Serializable{
 	//创建字段
 	private Long id;//id
 	private Long pid;//采购订单主表(purchase_order_main id)
+    private String productCode;
+    private String productName;
 	private Long productSkuId;//商品明细表(product_sku id)
 	private String skuCode;//商品明细表(product_sku code)
+    private String skuName;
 	private Double untPrice;//标准单价
 	private Double discount;//折扣
 	private Double cosPrice;//入库单价
@@ -106,4 +109,27 @@ public class PurchaseOrderDetail implements Serializable{
 		this.note = note;
 	}
 
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getSkuName() {
+        return skuName;
+    }
+
+    public void setSkuName(String skuName) {
+        this.skuName = skuName;
+    }
 }

@@ -22,10 +22,6 @@
     <!--图片上传js-->
     <script type="text/javascript" src="${ctx}/static/bootstrap-fileInput/js/fileinput.min.js"></script>
     <script type="text/javascript" src="${ctx}/static/bootstrap-fileInput/js/fileinput_locale_zh.js"></script>
-    <!--[if lt IE 9]>
-    <script src="${ctx}/static/bootstrap-3.3.5-dist/js/html5shiv.min.js"></script>
-    <script src="${ctx}/static/bootstrap-3.3.5-dist/js/respond.min.js"></script>
-    <![endif]-->
 
     <style>
         body{
@@ -142,17 +138,6 @@
     </div>
 </div>
 
-<!--页脚-->
-<%--<div id="footer" class="container">--%>
-    <%--<nav class="navbar navbar-default navbar-fixed-bottom">--%>
-        <%--<div class="navbar-inner navbar-content-center">--%>
-            <%--<p class="text-muted credit" style="padding: 10px;text-align: center">--%>
-                <%--©2016 YAN 使用POS前必读 意见反馈--%>
-            <%--</p>--%>
-        <%--</div>--%>
-    <%--</nav>--%>
-<%--</div>--%>
-
 <!--关于-->
 <div class="modal fade" id="version">
     <div class="modal-dialog">
@@ -181,8 +166,7 @@
         var height = window.innerHeight;
 //        console.log(height);
         $('#myiframe').attr('height',height - 67);
-
-    })
+    });
     function addTab(title, url) {
         $('#myiframe').attr('src',url);
     }

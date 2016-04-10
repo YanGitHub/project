@@ -68,76 +68,79 @@
     <button class="btn btn-info" onclick="returnList()">返回</button>
 </div>
 <hr/>
-<div class="row">
-    <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">单据编号</span>
-            <input type="text" id="billNo" name="billNo" class="form-control" placeholder="" style="width: 168px"
-                   aria-describedby="basic-addon1">
+<form id="editForm">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">单据编号</span>
+                <input type="text" id="billNo" name="billNo" class="form-control" placeholder="" style="width: 168px" readonly="readonly"
+                       aria-describedby="basic-addon1">
+            </div>
         </div>
-    </div>
-    <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">采购类型<span style="color: red">*</span></span>
-            <select id="purchaseTypeCode" name="purchaseTypeCode" style="width: 168px"
-                    class="form-control selectpicker">
-            </select>
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">采购类型<span style="color: red">*</span></span>
+                <select id="purchaseTypeCode" name="purchaseTypeCode" style="width: 168px"
+                        class="form-control selectpicker">
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">店铺<span style="color: red">*</span></span>
-            <select id="shopCode" name="shopCode" style="width: 168px" onchange="joinShop(this)"
-                    class="form-control selectpicker">
-            </select>
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">店铺<span style="color: red">*</span></span>
+                <select id="orgCode" name="orgCode" style="width: 168px" onchange="joinShop(this)"
+                        class="form-control selectpicker">
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">仓库<span style="color: red">*</span></span>
-            <select id="warehouseCode" name="warehouseCode" style="width: 168px"
-                    class="form-control selectpicker">
-            </select>
-        </div>
-    </div>
-</div>
-
-<div class="row" style="margin-top: 10px">
-    <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">供应商<span style="color: red">*</span></span>
-            <select id="supplierInfoCode" name="supplierInfoCode" style="width: 168px"
-                    class="form-control selectpicker">
-            </select>
-        </div>
-    </div>
-
-    <div class='col-sm-3'>
-        <div class="form-group">
-            <div class='input-group input-group-sm date' id='datetimepicker1'>
-                    <span class="input-group-addon">
-                        单据日期
-                    </span>
-                <input type='text' id="billDate" name="billDate" class="form-control" style="width: 168px" />
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">仓库<span style="color: red">*</span></span>
+                <select id="warehouseCode" name="warehouseCode" style="width: 168px"
+                        class="form-control selectpicker">
+                </select>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $(function () {
-            $('#datetimepicker1').datetimepicker();
-        });
-    </script>
 
-    <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon">备注</span>
-            <input type="text" id="note" name="note" class="form-control" placeholder=""
-                   style="width: 168px"
-                   aria-describedby="basic-addon1">
+    <div class="row" style="margin-top: 10px">
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">供应商<span style="color: red">*</span></span>
+                <select id="supplierInfoCode" name="supplierInfoCode" style="width: 168px"
+                        class="form-control selectpicker">
+                </select>
+            </div>
+        </div>
+
+        <div class='col-sm-3'>
+            <div class="form-group">
+                <div class='input-group input-group-sm date' id='datetimepicker1'>
+                    <span class="input-group-addon">
+                        单据日期
+                    </span>
+                    <input type='text' id="billDate" name="billDate" class="form-control" style="width: 168px"/>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker({
+                    format: 'YYYY-MM-DD HH:mm:ss'
+                });
+            });
+        </script>
+
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">备注</span>
+                <input type="text" id="note" name="note" class="form-control" placeholder=""
+                       style="width: 168px"
+                       aria-describedby="basic-addon1">
+            </div>
         </div>
     </div>
-</div>
-
+</form>
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist" style="margin-top: 10px">
@@ -163,111 +166,433 @@
 </div>
 <!-- Nav tabs -->
 
+<!--dialog-->
+<div class="modal fade bs-example-modal-lg" id="productInfoModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    添加商品
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">商品代码</span>
+                            <input type="text" id="cprodcutCode" name="cprodcutCode" class="form-control" placeholder=""
+                                   style="width: 168px"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">商品名称</span>
+                            <input type="text" id="cproductName" name="cproductName" class="form-control" placeholder=""
+                                   style="width: 168px"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-info" onclick="search()">搜索</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-sm-4">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">规格代码</span>
+                            <input type="text" id="cskuCode" name="cskuCode" class="form-control" placeholder=""
+                                   style="width: 168px"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">规格名称</span>
+                            <input type="text" id="cskuName" name="cskuName" class="form-control" placeholder=""
+                                   style="width: 168px"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-info" onclick="reset()">重置</button>
+                        </div>
+                    </div>
+                </div>
+                <!---grid-->
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-sm-12">
+                        <table id="productInfos" class="easyui-datagrid" data-options="
+                               rownumbers: true,
+                               url:'${ctx}/product/getSkuList',
+                               height:280,
+                               width:868,
+                               pagination:true,
+                               selectOnCheck:false"
+                               toolbar="#toolbar">
+                            <thead>
+                            <tr>
+                                <th data-options="field:'ck',checkbox:true"></th>
+                                <th data-options="field:'id',hidden:true"></th>
+                                <th data-options="field:'productCode',fitColumns:true,width:100">商品代码</th>
+                                <th data-options="field:'productName',fitColumns:true,width:90">商品名称</th>
+                                <th data-options="field:'code',fitColumns:true,width:100">规格代码</th>
+                                <th data-options="field:'name',fitColumns:true,width:90">规格名称</th>
+                                <th data-options="field:'gbCode',fitColumns:true,width:90">国标码</th>
+                                <th data-options="field:'untPrice',fitColumns:true,width:90">标准售价</th>
+                                <th data-options="field:'costPrice',fitColumns:true,width:90">成本价</th>
+                                <th data-options="field:'usePrice',fitColumns:true,width:90">代理价</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="cAdd()">添加</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
+</div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#grid").datagrid({
-            singleSelect: true,
-            selectOnCheck: false,
-            rownumbers: true,
-            height: 250,
-            columns: [
-                [
-                    { field: 'productSkuId', hidden: true },
-                    { field: 'productCode', title: '商品代码', width: 120 },
-                    { field: 'productName', title: '商品名称', width: 120 },
-                    { field: 'skuCode', title: '规格代码', width: 120 },
-                    { field: 'skuName', title: '规格名称', width: 120 },
-                    { field: 'untPrice', title: '标准单价', width: 100 },
-                    { field: 'discount', title: '折扣', width: 100},
-                    { field: 'cosPrice', title: '入库单价', width: 100 },
-                    { field: 'qty', title: '采购数量', width: 100},
-                    { field: 'untAmount', title: '标准金额', width: 100},
-                    { field: 'comAmount', title: '采购金额', width: 100},
-                    { field: 'note', title: '备注', width: 120}
-
-                ]
+$(document).ready(function () {
+    $("#grid").datagrid({
+        singleSelect: true,
+        selectOnCheck: false,
+        rownumbers: true,
+        onClickRow: editCell,
+        height: 250,
+        columns: [
+            [
+                { field: 'ck', checkbox: true},
+                { field: 'productSkuId', hidden: true },
+                { field: 'productCode', title: '商品代码', width: 120},
+                { field: 'productName', title: '商品名称', width: 120 },
+                { field: 'skuCode', title: '规格代码', width: 120 },
+                { field: 'skuName', title: '规格名称', width: 120 },
+                { field: 'untPrice', title: '标准单价', width: 100, align: 'right', editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 2, readonly: 'readonly', required: true}}},
+                { field: 'discount', title: '折扣', width: 100, align: 'right', editor: {type: 'validatebox', options: {required: true}}},
+                { field: 'cosPrice', title: '入库单价', width: 100, align: 'right', formatter: twoDecimal, editor: {type: 'validatebox', options: {required: true}}},
+                { field: 'qty', title: '采购数量', width: 100, align: 'right', editor: {type: 'validatebox', options: {required: true}}},
+                { field: 'untAmount', title: '标准金额', width: 100, align: 'right', formatter: twoDecimal, editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 2, readonly: 'readonly', required: true}}},
+                { field: 'comAmount', title: '采购金额', width: 100, align: 'right', formatter: twoDecimal, editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 2, readonly: 'readonly', required: true}}},
+                { field: 'note', title: '备注', width: 120}
             ]
-        });
+        ]
+    });
+    //加载下拉框
+    loadShop();
+    loadPurchaseTypes();
+    loadSupplierInfo();
+});
+function banding(index) {
+    var editors = $('#grid').datagrid('getEditors', index);
+    //给折扣绑定事件
+    var discount = editors[1];
+    discount.target.bind('keyup', function () {
+        setCosAndCom(index);
+    });
+    //给数量绑定事件
+    var qty = editors[3];
+    qty.target.bind('keyup', function () {
+        setUntAmountAndCosAmount(index);
+    });
+    //给采购金额绑定事件
+    var cosPrice = editors[2];
+    cosPrice.target.bind('keyup', function () {
+        setDisCountAndCosAmount(index);
+    });
+}
+var editIndex = undefined;
+function endEditing() {
+    if (editIndex == undefined) {
+        return true;
+    }
+    if ($('#grid').datagrid('validateRow', editIndex)) {
+        var rowLen = $('#grid').datagrid('getRows').length;
+        for (var i = 0; i < rowLen; i++) {
+            $('#grid').datagrid('unselectRow', i);
+            $('#grid').datagrid('endEdit', i);
+        }
+        editIndex = undefined;
+        return true;
+    } else {
+        return false;
+    }
+}
+function editCell(index, row) {
+    if (endEditing()) {
+        $('#grid').datagrid('selectRow', index).datagrid('beginEdit', index);
+        editIndex = index;
+        banding(index);
+    }
+}
+//计算 折扣 采购金额
+function setDisCountAndCosAmount(rowIndex) {
+    var grid = $("#grid");
+    //获取输入框对象
+    var setQtyEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'qty'});
+    var setUntPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'untPrice'});
+    var setDiscountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'discount'});
+    var setCosPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'cosPrice'});
+    var setCosAmountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'comAmount'});
+    var setUntAmountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'untAmount'});
+    //获取输入框里的值
+    var editQty = parseFloat(setQtyEdt.target.val());
+    var editUntPrice = parseFloat(setUntPriceEdt.target.val());
+    var editDiscount = parseFloat(setDiscountEdt.target.val());
+    var editCosPrice = parseFloat(setCosPriceEdt.target.val());
+    var editCosAmount = parseFloat(setCosAmountEdt.target.val());
+    var editUntAmount = parseFloat(setUntAmountEdt.target.val());
 
-        loadShop();
-        loadPurchaseTypes();
-        loadSupplierInfo();
+    setDiscountEdt.target.val((parseFloat(editCosPrice / editUntPrice * 10)).toFixed(2));  //采购金额
+    setCosAmountEdt.target.numberbox("setValue", parseFloat(editCosPrice * editQty).toFixed(2));  //标准金额
+}
+//计算 标准金额，采购金额
+function setUntAmountAndCosAmount(rowIndex) {
+    var grid = $("#grid");
+    //获取输入框对象
+    var setQtyEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'qty'});
+    var setUntPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'untPrice'});
+    var setDiscountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'discount'});
+    var setCosPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'cosPrice'});
+    var setCosAmountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'comAmount'});
+    var setUntAmountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'untAmount'});
+    //获取输入框里的值
+    var editQty = parseFloat(setQtyEdt.target.val());
+    var editUntPrice = parseFloat(setUntPriceEdt.target.val());
+    var editDiscount = parseFloat(setDiscountEdt.target.val());
+    var editCosPrice = parseFloat(setCosPriceEdt.target.val());
+    var editCosAmount = parseFloat(setCosAmountEdt.target.val());
+    var editUntAmount = parseFloat(setUntAmountEdt.target.val());
+
+    setCosAmountEdt.target.numberbox("setValue", (parseFloat(editCosPrice * editQty).toFixed(2)));  //采购金额
+    setUntAmountEdt.target.numberbox("setValue", (parseFloat(editUntPrice * editQty).toFixed(2)));  //标准金额
+}
+//计算 采购单价，采购金额
+function setCosAndCom(rowIndex) {
+    var grid = $("#grid");
+    //获取输入框对象
+    var setQtyEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'qty'});
+    var setUntPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'untPrice'});
+    var setDiscountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'discount'});
+    var setCosPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'cosPrice'});
+    var setCosAmountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'comAmount'});
+    //获取输入框里的值
+    var editQty = parseFloat(setQtyEdt.target.val());
+    var editUntPrice = parseFloat(setUntPriceEdt.target.val());
+    var editDiscount = parseFloat(setDiscountEdt.target.val());
+    var editCosPrice = parseFloat(setCosPriceEdt.target.val());
+    var editCosAmount = parseFloat(setCosAmountEdt.target.val());
+
+    setCosPriceEdt.target.val(parseFloat(editUntPrice * editDiscount / 10).toFixed(2));  //采购单价
+    setCosAmountEdt.target.numberbox("setValue", (parseFloat(editUntPrice * editDiscount / 10) * editQty).toFixed(2));
+}
+//删除行
+function delRow() {
+    var items = $('#grid').datagrid('getChecked');
+    for (var i = items.length - 1; i >= 0; i--) {
+        var k = $('#grid').datagrid('getRowIndex', items[i]);
+        $('#grid').datagrid('deleteRow', k);
+    }
+}
+//打开商品列表
+function newRow() {
+    $('#productInfoModal').modal('show');
+    setTimeout("$('#productInfos').datagrid('reload')", 500);
+}
+//商品搜索
+function search() {
+    var productCode = $('#cprodcutCode').val().trim();
+    var productName = $('#cproductName').val().trim();
+    var skuCode = $('#cskuCode').val().trim();
+    var skuName = $('#cskuName').val().trim();
+    var param = {productCode: productCode, productName: productName, code: skuCode, name: skuName};
+    $("#productInfos").datagrid("load", param);
+}
+//重置搜索条件
+function reset() {
+    $('#cprodcutCode').val("");
+    $('#cproductName').val("");
+    $('#cskuCode').val("");
+    $('#cskuName').val("");
+}
+//添加商品
+function addSku(items) {
+    $('#grid').datagrid('appendRow', {
+        productSkuId: items.id,
+        productCode: items.productCode,
+        productName: items.productName,
+        skuCode: items.code,
+        skuName: items.name,
+        untPrice: items.untPrice,
+        discount: 10,
+        cosPrice: items.untPrice,
+        qty: 1,
+        untAmount: items.untPrice,
+        comAmount: items.untPrice,
+        note: ''
     });
 
-    //与店铺下列联动
-    function joinShop(obj) {
-        var shopCode = obj.options[obj.selectedIndex].value;
-        loadStock(shopCode);
+}
+//添加商品判断
+function cAdd() {
+    var items = $('#productInfos').datagrid('getChecked');
+    $('#productInfoModal').modal('hide');
+    if (items.length == 0) {
+        alertLittle("请选择商品数据...");
+        return;
+    } else {
+        var skus = $('#grid').datagrid('getRows');
+        if (skus.length == 0) {
+            for (var i = 0; i < items.length; i++) {
+                addSku(items[i]);
+            }
+        } else {
+            for (var i = 0; i < items.length; i++) {
+                var num = 0;
+                for (var j = 0; j < skus.length; j++) {
+                    if (skus[j].productSkuId == items[i].id) {
+                        var untPrice = parseFloat(skus[j].untPrice);
+                        var cosPrice = parseFloat(skus[j].cosPrice);
+                        var qty = parseFloat(skus[j].qty) + 1;
+                        $('#grid').datagrid('updateRow', {
+                            index: j,
+                            row: {
+                                qty: qty,
+                                untAmount: qty * untPrice,
+                                comAmount: cosPrice * qty
+                            }
+                        });
+                        break;
+                    } else {
+                        num++;
+                    }
+                }
+                if (num == skus.length) {
+                    addSku(items[i]);
+                }
+            }
+        }
     }
-    //根店铺加载仓库
-    function loadStock(shopCode) {
-        $.post('${ctx}/common/getWarehouseByShopCode', {pcode: shopCode}, function (data) {
+}
+//与店铺下列联动
+function joinShop(obj) {
+    var orgCode = obj.options[obj.selectedIndex].value;
+    loadStock(orgCode);
+}
+//根店铺加载仓库
+function loadStock(orgCode) {
+    $.post('${ctx}/common/getWarehouseByShopCode', {pcode: orgCode}, function (data) {
+        var op = "";
+        if (data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+            }
+        } else {
+            op = "";
+        }
+        $('#warehouseCode').html(op);
+    });
+}
+//加载 店铺
+function loadShop() {
+    $.post('${ctx}/common/getShops', null, function (data) {
+        if (data.length > 0) {
             var op = "";
-            if (data.length > 0) {
-                for (var i = 0; i < data.length; i++) {
-                    op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
-                }
-            } else {
-                op = "";
-                alertLittle("请为店铺代码为:" + shopCode + "的维护仓库");
+            for (var i = 0; i < data.length; i++) {
+                op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
             }
-            $('#warehouseCode').html(op);
-        });
-    }
-    //加载 店铺
-    function loadShop() {
-        $.post('${ctx}/common/getShops', null, function (data) {
-            if (data.length > 0) {
-                var op = "";
-                for (var i = 0; i < data.length; i++) {
-                    op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
-                }
-                $('#shopCode').html(op);
-                //第一次加载仓库
-                loadStock(data[0].code);
-            }
-        });
-    }
-
-    //加载 采购类型
-    function loadPurchaseTypes() {
-        $.post('${ctx}/common/getPurchaseTypes', null, function (data) {
-            if (data.length > 0) {
-                var op = "";
-                for (var i = 0; i < data.length; i++) {
-                    op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
-                }
-                $('#purchaseTypeCode').html(op);
-            }
-        });
-    }
-
-    //加载 供应商
-    function loadSupplierInfo() {
-        $.post('${ctx}/common/getSupplierInfo', null, function (data) {
-            if (data.length > 0) {
-                var op = "";
-                for (var i = 0; i < data.length; i++) {
-                    op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
-                }
-                $('#supplierInfoCode').html(op);
-            }
-        });
-    }
-
-    //保存
-    function save() {
-
-    }
-
-    //返回列表
-    function returnList() {
-        window.location.href = "${ctx}/stock/purchaseOrderMain";
-    }
-    $(window).resize(function () {
-        $('#grid').datagrid('resize');
+            $('#orgCode').html(op);
+            //第一次加载仓库
+            loadStock(data[0].code);
+        }
     });
+}
+
+//加载 采购类型
+function loadPurchaseTypes() {
+    $.post('${ctx}/common/getPurchaseTypes', null, function (data) {
+        if (data.length > 0) {
+            var op = "";
+            for (var i = 0; i < data.length; i++) {
+                op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+            }
+            $('#purchaseTypeCode').html(op);
+        }
+    });
+}
+
+//加载 供应商
+function loadSupplierInfo() {
+    $.post('${ctx}/common/getSupplierInfo', null, function (data) {
+        if (data.length > 0) {
+            var op = "";
+            for (var i = 0; i < data.length; i++) {
+                op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+            }
+            $('#supplierInfoCode').html(op);
+        }
+    });
+}
+
+//保存
+function save() {
+    setTimeout("$('#grid').datagrid('selectRow', editIndex).datagrid('endEdit', editIndex)", 500);
+    var data = $('#editForm').serializeObject();
+    if(data.purchaseTypeCode == null || data.purchaseTypeCode == ""){
+        alertLittle("请选择采购类型");
+        return;
+    }
+    if(data.orgCode == null || data.orgCode == ""){
+        alertLittle("请选择店铺");
+        return;
+    }
+    if(data.warehouseCode == null || data.warehouseCode == ""){
+        alertLittle("请选择仓库");
+        return;
+    }
+    if(data.billDate == null || data.billDate == ""){
+        alertLittle("请选择单据日期");
+        return;
+    }
+    if(data.supplierInfoCode == null || data.supplierInfoCode == ""){
+        alertLittle("请选择供应商");
+        return;
+    }
+    var items = $('#grid').datagrid('getRows');
+    data.purchaseOrderDetailList = items;
+
+    $.ajax({
+        type: 'POST',
+        url: '${ctx}/stock/purchaseOrderMain/create',
+        contentType:"application/json",
+        data: JSON.stringify(data),
+        success: function(map){
+            window.location.href = "${ctx}/stock/purchaseOrderMain";
+        }
+    });
+}
+
+//返回列表
+function returnList() {
+    window.location.href = "${ctx}/stock/purchaseOrderMain";
+}
+$(window).resize(function () {
+    $('#grid').datagrid('resize');
+});
 
 </script>
 </body>

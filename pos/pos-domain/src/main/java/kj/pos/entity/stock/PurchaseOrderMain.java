@@ -12,9 +12,13 @@ public class PurchaseOrderMain extends BaseEntity implements Serializable{
 	private String billNo;//单据编号
 	private String billDate;//单据日期
 	private String purchaseTypeCode;//采购类型(purchase_type code)
+    private String purchaseTypeName;
 	private String orgCode;//店铺代码(organization_info code)
+    private String orgName;
 	private String warehouseCode;//采购店仓(warehouse code)
+    private String warehouseName;
 	private String supplierInfoCode;//供应商(supplier_info code)
+    private String supplierInfoName;
 	private Integer status;//1 未审核 2 业务审核 3 终止
 	private String createUser;//创建人
 	private String createDate;//创建日期
@@ -28,141 +32,174 @@ public class PurchaseOrderMain extends BaseEntity implements Serializable{
 
     private List<PurchaseOrderDetail> purchaseOrderDetailList;
 	//创建getter和setter方法
-	public Long getId(){
-		return this.id;
-	}
 
-	public void setId(Long id){
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getBillNo(){
-		return this.billNo;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setBillNo(String billNo){
-		this.billNo = billNo;
-	}
+    public String getBillNo() {
+        return billNo;
+    }
 
-	public String getBillDate(){
-		return this.billDate;
-	}
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
+    }
 
-	public void setBillDate(String billDate){
-		this.billDate = billDate;
-	}
+    public String getBillDate() {
+        return billDate;
+    }
 
-	public String getPurchaseTypeCode(){
-		return this.purchaseTypeCode;
-	}
+    public void setBillDate(String billDate) {
+        this.billDate = billDate;
+    }
 
-	public void setPurchaseTypeCode(String purchaseTypeCode){
-		this.purchaseTypeCode = purchaseTypeCode;
-	}
+    public String getPurchaseTypeCode() {
+        return purchaseTypeCode;
+    }
 
-	public String getOrgCode(){
-		return this.orgCode;
-	}
+    public void setPurchaseTypeCode(String purchaseTypeCode) {
+        this.purchaseTypeCode = purchaseTypeCode;
+    }
 
-	public void setOrgCode(String orgCode){
-		this.orgCode = orgCode;
-	}
+    public String getPurchaseTypeName() {
+        return purchaseTypeName;
+    }
 
-	public String getWarehouseCode(){
-		return this.warehouseCode;
-	}
+    public void setPurchaseTypeName(String purchaseTypeName) {
+        this.purchaseTypeName = purchaseTypeName;
+    }
 
-	public void setWarehouseCode(String warehouseCode){
-		this.warehouseCode = warehouseCode;
-	}
+    public String getOrgCode() {
+        return orgCode;
+    }
 
-	public String getSupplierInfoCode(){
-		return this.supplierInfoCode;
-	}
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
+    }
 
-	public void setSupplierInfoCode(String supplierInfoCode){
-		this.supplierInfoCode = supplierInfoCode;
-	}
+    public String getOrgName() {
+        return orgName;
+    }
 
-	public Integer getStatus(){
-		return this.status;
-	}
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
 
-	public void setStatus(Integer status){
-		this.status = status;
-	}
+    public String getWarehouseCode() {
+        return warehouseCode;
+    }
 
-	public String getCreateUser(){
-		return this.createUser;
-	}
+    public void setWarehouseCode(String warehouseCode) {
+        this.warehouseCode = warehouseCode;
+    }
 
-	public void setCreateUser(String createUser){
-		this.createUser = createUser;
-	}
+    public String getWarehouseName() {
+        return warehouseName;
+    }
 
-	public String getCreateDate(){
-		return this.createDate;
-	}
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
 
-	public void setCreateDate(String createDate){
-		this.createDate = createDate;
-	}
+    public String getSupplierInfoCode() {
+        return supplierInfoCode;
+    }
 
-	public String getModifyUser(){
-		return this.modifyUser;
-	}
+    public void setSupplierInfoCode(String supplierInfoCode) {
+        this.supplierInfoCode = supplierInfoCode;
+    }
 
-	public void setModifyUser(String modifyUser){
-		this.modifyUser = modifyUser;
-	}
+    public String getSupplierInfoName() {
+        return supplierInfoName;
+    }
 
-	public String getModifyDate(){
-		return this.modifyDate;
-	}
+    public void setSupplierInfoName(String supplierInfoName) {
+        this.supplierInfoName = supplierInfoName;
+    }
 
-	public void setModifyDate(String modifyDate){
-		this.modifyDate = modifyDate;
-	}
+    public Integer getStatus() {
+        return status;
+    }
 
-	public String getAuditUser(){
-		return this.auditUser;
-	}
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
-	public void setAuditUser(String auditUser){
-		this.auditUser = auditUser;
-	}
+    public String getCreateUser() {
+        return createUser;
+    }
 
-	public String getAuditDate(){
-		return this.auditDate;
-	}
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
 
-	public void setAuditDate(String auditDate){
-		this.auditDate = auditDate;
-	}
+    public String getCreateDate() {
+        return createDate;
+    }
 
-	public String getCancelUser(){
-		return this.cancelUser;
-	}
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
 
-	public void setCancelUser(String cancelUser){
-		this.cancelUser = cancelUser;
-	}
+    public String getModifyUser() {
+        return modifyUser;
+    }
 
-	public String getCancelDate(){
-		return this.cancelDate;
-	}
+    public void setModifyUser(String modifyUser) {
+        this.modifyUser = modifyUser;
+    }
 
-	public void setCancelDate(String cancelDate){
-		this.cancelDate = cancelDate;
-	}
+    public String getModifyDate() {
+        return modifyDate;
+    }
 
-	public String getNote(){
-		return this.note;
-	}
+    public void setModifyDate(String modifyDate) {
+        this.modifyDate = modifyDate;
+    }
 
-	public void setNote(String note){
-		this.note = note;
-	}
+    public String getAuditUser() {
+        return auditUser;
+    }
+
+    public void setAuditUser(String auditUser) {
+        this.auditUser = auditUser;
+    }
+
+    public String getAuditDate() {
+        return auditDate;
+    }
+
+    public void setAuditDate(String auditDate) {
+        this.auditDate = auditDate;
+    }
+
+    public String getCancelUser() {
+        return cancelUser;
+    }
+
+    public void setCancelUser(String cancelUser) {
+        this.cancelUser = cancelUser;
+    }
+
+    public String getCancelDate() {
+        return cancelDate;
+    }
+
+    public void setCancelDate(String cancelDate) {
+        this.cancelDate = cancelDate;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 
     public List<PurchaseOrderDetail> getPurchaseOrderDetailList() {
         return purchaseOrderDetailList;
