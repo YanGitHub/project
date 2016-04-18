@@ -20,6 +20,7 @@ public class PurchaseOrderMain extends BaseEntity implements Serializable{
 	private String supplierInfoCode;//供应商(supplier_info code)
     private String supplierInfoName;
 	private Integer status;//1 未审核 2 业务审核 3 终止
+    private String statusStr;
 	private String createUser;//创建人
 	private String createDate;//创建日期
 	private String modifyUser;//修改人
@@ -29,6 +30,9 @@ public class PurchaseOrderMain extends BaseEntity implements Serializable{
 	private String cancelUser;//终止人
 	private String cancelDate;//终止日期
 	private String note;//备注
+
+    private String beginDate;
+    private String endDate;
 
     private List<PurchaseOrderDetail> purchaseOrderDetailList;
 	//创建getter和setter方法
@@ -207,5 +211,29 @@ public class PurchaseOrderMain extends BaseEntity implements Serializable{
 
     public void setPurchaseOrderDetailList(List<PurchaseOrderDetail> purchaseOrderDetailList) {
         this.purchaseOrderDetailList = purchaseOrderDetailList;
+    }
+
+    public String getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
     }
 }

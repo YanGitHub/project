@@ -16,4 +16,7 @@ public interface PurchaseOrderMainDao{
 
 	public void update(PurchaseOrderMain purchaseOrderMain);
 
+    public void audit(PurchaseOrderMain purchaseOrderMain);
+
+    public void cancel(PurchaseOrderMain purchaseOrderMain);
 }

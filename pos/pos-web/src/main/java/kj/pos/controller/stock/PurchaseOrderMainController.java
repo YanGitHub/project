@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -33,8 +34,10 @@ public class PurchaseOrderMainController {
     }
     //新增页面
     @RequestMapping(value = "/add",method = RequestMethod.GET)
-    public String purchaseOrderMainAdd(){
-        return "stock/purchaseOrderMainAdd";
+    public ModelAndView purchaseOrderMainAdd(Long id){
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("id",id);
+        return new ModelAndView("stock/purchaseOrderMainAdd",map);
     }
 
     @RequestMapping(value = "/getList",method = RequestMethod.POST)
@@ -59,6 +62,18 @@ public class PurchaseOrderMainController {
         return map;
     }
 
+    @RequestMapping(value = "/getEdit",method = RequestMethod.POST)
+    @ResponseBody
+    public PurchaseOrderMain getEdit(PurchaseOrderMain purchaseOrderMain)throws SQLException {
+        try {
+            purchaseOrderMain = purchaseOrderMainService.getEdit(purchaseOrderMain);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+        }
+        return purchaseOrderMain;
+    }
+
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> create(@RequestBody PurchaseOrderMain purchaseOrderMain)throws SQLException{
@@ -72,6 +87,51 @@ public class PurchaseOrderMainController {
             logger.error(e);
             result.put("status",Boolean.FALSE);
             result.put("msg","添加失败");
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> update(@RequestBody PurchaseOrderMain purchaseOrderMain)throws SQLException{
+        Map<String,Object> result = new HashMap<String, Object>();
+        try {
+            result = purchaseOrderMainService.update(purchaseOrderMain);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            result.put("status",Boolean.FALSE);
+            result.put("msg","更新失败");
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/audit",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> audit(String id)throws SQLException{
+        Map<String,Object> result = new HashMap<String, Object>();
+        try {
+            result = purchaseOrderMainService.audit(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            result.put("status",Boolean.FALSE);
+            result.put("msg","审核失败");
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/cancel",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> cancel(String id)throws SQLException{
+        Map<String,Object> result = new HashMap<String, Object>();
+        try {
+            result = purchaseOrderMainService.cancel(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            result.put("status",Boolean.FALSE);
+            result.put("msg","终止失败");
         }
         return result;
     }

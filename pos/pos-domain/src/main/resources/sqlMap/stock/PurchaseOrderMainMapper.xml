@@ -14,6 +14,7 @@
 		<result property="supplierInfoCode" column="supplier_info_code"/>
         <result property="supplierInfoName" column="supplier_info_name"/>
 		<result property="status" column="status"/>
+        <result property="statusStr" column="status_str"/>
 		<result property="createUser" column="create_user"/>
 		<result property="createDate" column="create_date"/>
 		<result property="modifyUser" column="modify_user"/>
@@ -38,6 +39,11 @@
             wh.name as warehouse_name,
             pom.supplier_info_code,
             si.name as supplier_info_name,
+            CASE pom.status
+            WHEN 1 THEN '未审核'
+            WHEN 2 THEN '已审核'
+            WHEN 3 THEN '已终止'
+            END as status_str,
             pom.status,
             pom.create_user,
             pom.create_date,
@@ -78,6 +84,10 @@
 		<if test="status!=null">
 				and pom.status=#{status}
 		</if>
+        <if test="beginDate!=null and beginDate!=''">
+                and pom.bill_date,
+        </if>
+        order by pom.bill_date desc
         <if test="pageUtil != null">
             limit #{pageUtil.startRow},#{pageUtil.endRow}
         </if>
@@ -139,7 +149,7 @@
 			#{orgCode},
 			#{warehouseCode},
 			#{supplierInfoCode},
-			#{status},
+			1,
 			#{createUser},
 			now(),
 			#{modifyUser},
@@ -188,6 +198,18 @@
                 note=#{note}
             </if>
         </set>
-
+        where 1=1
+        <if test="id != null">
+            and id = #{id}
+        </if>
 	</update>
+    <update id="audit">
+        update purchase_order_main set status =2,audit_user = #{auditUser},audit_date = now()
+        where id = #{id}
+    </update>
+
+    <update id="cancel">
+        update purchase_order_main set status =3,cancel_user = #{cancelUser},cancel_date = now()
+        where id = #{id}
+    </update>
 </mapper>

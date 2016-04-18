@@ -59,7 +59,17 @@ function getSerialNo(code){
     var no = saleDate.replace(/\:/g,"").replace(/\-/g,"").replace(/\s/g,"");
     return code + no;
 }
-
+/**
+ * 如是null "null" 返回 ""
+ * @param value
+ */
+function ifNull(value){
+    if(value == null || value == "null"){
+        return "";
+    }else{
+        return value;
+    }
+}
 function serializeNo(parmString){
     var parmArray = parmString.split("&");
     var parmStringNew="";

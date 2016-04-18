@@ -60,15 +60,18 @@
     <li><a href="#">仓库管理</a></li>
     <li class="active">采购订单</li>
     <li class="active">新增</li>
+    <li class="active">修改</li>
 </ol>
 
 <!--操作-->
 <div class="btn-group btn-group-sm">
-    <button class="btn btn-primary" onclick="save()">保存</button>
-    <button class="btn btn-info" onclick="returnList()">返回</button>
+    <button class="btn btn-primary" id="modifyBtn" onclick="modify()">修改</button>
+    <button class="btn btn-info" id="saveBtn" onclick="save()">保存</button>
+    <button class="btn btn-success" onclick="returnList()">返回</button>
 </div>
 <hr/>
 <form id="editForm">
+    <input id="id" name="id" hidden="hidden"/>
     <div class="row">
         <div class="col-sm-3">
             <div class="input-group input-group-sm">
@@ -117,7 +120,7 @@
             <div class="form-group">
                 <div class='input-group input-group-sm date' id='datetimepicker1'>
                     <span class="input-group-addon">
-                        单据日期
+                        单据日期<span style="color: red">*</span>
                     </span>
                     <input type='text' id="billDate" name="billDate" class="form-control" style="width: 168px"/>
                 </div>
@@ -130,7 +133,14 @@
                 });
             });
         </script>
-
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">状态</span>
+                <input type="text" id="status" name="status" class="form-control" placeholder="" readonly="readonly"
+                       style="width: 168px"
+                       aria-describedby="basic-addon1">
+            </div>
+        </div>
         <div class="col-sm-3">
             <div class="input-group input-group-sm">
                 <span class="input-group-addon">备注</span>
@@ -153,8 +163,8 @@
     <div role="tabpanel" class="tab-pane active" id="home">
 
         <div class="btn-group btn-group-sm" style="margin-top: 10px">
-            <button class="btn btn-info" onclick="newRow()">新增行</button>
-            <button class="btn btn-warning" onclick="delRow()">删除行</button>
+            <button class="btn btn-info" id="newRowBtn" onclick="newRow()">新增行</button>
+            <button class="btn btn-warning" id="delRowBtn" onclick="delRow()">删除行</button>
         </div>
 
         <div class="row" style="margin-top: 10px">
@@ -267,12 +277,14 @@
 </div>
 
 <script type="text/javascript">
+var url = "${ctx}/stock/purchaseOrderMain/create";
+var edit = true;
 $(document).ready(function () {
     $("#grid").datagrid({
         singleSelect: true,
         selectOnCheck: false,
         rownumbers: true,
-        onClickRow: editCell,
+        onClickRow:editCell,
         height: 250,
         columns: [
             [
@@ -296,7 +308,41 @@ $(document).ready(function () {
     loadShop();
     loadPurchaseTypes();
     loadSupplierInfo();
+    //加载明细
+    if('${id}' != '0'){
+        $.post('${ctx}/stock/purchaseOrderMain/getEdit',{id:${id}},function(data){
+            url = "${ctx}/stock/purchaseOrderMain/update";
+            $('#id').val(data.id);
+            $('#billNo').val(data.billNo);
+            $('#purchaseTypeCode').val(data.purchaseTypeCode);
+            $('#orgCode').val(data.orgCode);
+            loadStock(data.orgCode);
+            $('#warehouseCode').val(data.warehouseCode);
+            $('#supplierInfoCode').val(data.supplierInfoCode);
+            $('#billDate').val(data.billDate);
+            $('#note').val(data.note);
+            //datagrid 不可编缉
+            edit = false;
+            //明细
+            $('#grid').datagrid('loadData', { total: data.purchaseOrderDetailList.length, rows: data.purchaseOrderDetailList });
+            //禁用
+            disable();
+            //状态
+            $('#status').val(changeStatus(data.status));
+        });
+    }else{
+        $('#modifyBtn').attr("disabled","disabled");
+    }
 });
+function changeStatus(v){
+    if(v == 1){
+        return "未审核";
+    }else if(v == 2){
+        return "业务审核";
+    }else if(v == 3){
+        return "终止";
+    }
+}
 function banding(index) {
     var editors = $('#grid').datagrid('getEditors', index);
     //给折扣绑定事件
@@ -333,7 +379,7 @@ function endEditing() {
     }
 }
 function editCell(index, row) {
-    if (endEditing()) {
+    if (endEditing() && edit) {
         $('#grid').datagrid('selectRow', index).datagrid('beginEdit', index);
         editIndex = index;
         banding(index);
@@ -495,62 +541,122 @@ function joinShop(obj) {
 }
 //根店铺加载仓库
 function loadStock(orgCode) {
-    $.post('${ctx}/common/getWarehouseByShopCode', {pcode: orgCode}, function (data) {
-        var op = "";
-        if (data.length > 0) {
-            for (var i = 0; i < data.length; i++) {
-                op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+    $.ajax({
+        async:false,
+        type: 'POST',
+        url: '${ctx}/common/getWarehouseByShopCode?pcode=' + orgCode,
+        contentType:"application/json",
+        success: function(data){
+            var op = "";
+            if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+                }
+            } else {
+                op = "";
             }
-        } else {
-            op = "";
+            $('#warehouseCode').html(op);
         }
-        $('#warehouseCode').html(op);
     });
 }
 //加载 店铺
 function loadShop() {
-    $.post('${ctx}/common/getShops', null, function (data) {
-        if (data.length > 0) {
-            var op = "";
-            for (var i = 0; i < data.length; i++) {
-                op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+    $.ajax({
+        async:false,
+        type: 'POST',
+        url: '${ctx}/common/getShops',
+        contentType:"application/json",
+        data: null,
+        success: function(data){
+            if (data.length > 0) {
+                var op = "";
+                for (var i = 0; i < data.length; i++) {
+                    op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+                }
+                $('#orgCode').html(op);
+                //第一次加载仓库
+                loadStock(data[0].code);
             }
-            $('#orgCode').html(op);
-            //第一次加载仓库
-            loadStock(data[0].code);
         }
     });
 }
 
 //加载 采购类型
 function loadPurchaseTypes() {
-    $.post('${ctx}/common/getPurchaseTypes', null, function (data) {
-        if (data.length > 0) {
-            var op = "";
-            for (var i = 0; i < data.length; i++) {
-                op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+    $.ajax({
+        async:false,
+        type: 'POST',
+        url: '${ctx}/common/getPurchaseTypes',
+        contentType:"application/json",
+        data: null,
+        success: function(data){
+            if (data.length > 0) {
+                var op = "";
+                for (var i = 0; i < data.length; i++) {
+                    op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+                }
+                $('#purchaseTypeCode').html(op);
             }
-            $('#purchaseTypeCode').html(op);
         }
     });
 }
 
 //加载 供应商
 function loadSupplierInfo() {
-    $.post('${ctx}/common/getSupplierInfo', null, function (data) {
-        if (data.length > 0) {
-            var op = "";
-            for (var i = 0; i < data.length; i++) {
-                op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+    $.ajax({
+        async:false,
+        type: 'POST',
+        url: '${ctx}/common/getSupplierInfo',
+        contentType:"application/json",
+        data: null,
+        success: function(data){
+            if (data.length > 0) {
+                var op = "";
+                for (var i = 0; i < data.length; i++) {
+                    op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
+                }
+                $('#supplierInfoCode').html(op);
             }
-            $('#supplierInfoCode').html(op);
         }
     });
 }
 
+//禁用
+function disable(){
+    $('#billDate').attr("disabled","disabled");
+    $('#purchaseTypeCode').attr("disabled","disabled");
+    $('#orgCode').attr("disabled","disabled");
+    $('#warehouseCode').attr("disabled","disabled");
+    $('#supplierInfoCode').attr("disabled","disabled");
+    $('#note').attr("disabled","disabled");
+
+    $('#newRowBtn').attr("disabled","disabled");
+    $('#delRowBtn').attr("disabled","disabled");
+    $('#saveBtn').attr("disabled","disabled");
+}
+
+//修改
+function modify(){
+    var status = $('#status').val();
+    if(status != "未审核"){
+        alertLittle("已经审核或已经终止订单不能修改");
+        return;
+    }
+    $('#billDate').removeAttr("disabled","disabled");
+    $('#purchaseTypeCode').removeAttr("disabled","disabled");
+    $('#orgCode').removeAttr("disabled","disabled");
+    $('#warehouseCode').removeAttr("disabled","disabled");
+    $('#supplierInfoCode').removeAttr("disabled","disabled");
+    $('#note').removeAttr("disabled","disabled");
+    $('#newRowBtn').removeAttr("disabled","disabled");
+    $('#delRowBtn').removeAttr("disabled","disabled");
+    $('#saveBtn').removeAttr("disabled","disabled");
+    edit = true;
+}
+
 //保存
 function save() {
-    setTimeout("$('#grid').datagrid('selectRow', editIndex).datagrid('endEdit', editIndex)", 500);
+    $('#grid').datagrid('selectRow', editIndex).datagrid('endEdit', editIndex);
     var data = $('#editForm').serializeObject();
     if(data.purchaseTypeCode == null || data.purchaseTypeCode == ""){
         alertLittle("请选择采购类型");
@@ -572,12 +678,13 @@ function save() {
         alertLittle("请选择供应商");
         return;
     }
+    data.status = 1;
     var items = $('#grid').datagrid('getRows');
     data.purchaseOrderDetailList = items;
 
     $.ajax({
         type: 'POST',
-        url: '${ctx}/stock/purchaseOrderMain/create',
+        url: url,
         contentType:"application/json",
         data: JSON.stringify(data),
         success: function(map){

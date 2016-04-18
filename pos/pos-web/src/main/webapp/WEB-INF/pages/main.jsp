@@ -107,6 +107,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">开发者选项 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#" onclick="addTab('mybaties文件创建','${ctx}/createMyBatiseFile')">mybaties文件创建</a></li>
+                                <li><a href="#" onclick="addTab('生成二维码','${ctx}/generatedQRCode')">生成二维码</a></li>
                             </ul>
                         </li>
                         <li><a href="#" data-toggle="modal" data-target="#version">关于</a></li>

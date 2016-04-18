@@ -5,7 +5,10 @@
 		<result property="id" column="id"/>
 		<result property="pid" column="pid"/>
 		<result property="productSkuId" column="product_sku_id"/>
+        <result property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
 		<result property="skuCode" column="sku_code"/>
+        <result property="skuName" column="sku_name"/>
 		<result property="untPrice" column="unt_price"/>
 		<result property="discount" column="discount"/>
 		<result property="cosPrice" column="cos_price"/>
@@ -20,31 +23,36 @@
     </delete>
 
     <select id="getList" resultMap="ResultMap" parameterType="PurchaseOrderDetail" >
-		select 
-			id,
-			pid,
-			product_sku_id,
-			sku_code,
-			unt_price,
-			discount,
-			cos_price,
-			qty,
-			unt_amount,
-			com_amount,
-			note
-		from purchase_order_detail
-		where 1=1 
-		<if test="id!=null">
-				and id=#{id}
+        select
+            pod.id,
+            pod.pid,
+            pod.product_sku_id,
+            p.name product_name,
+            p.code product_code,
+            pod.sku_code,
+            ps.name sku_name,
+            pod.unt_price,
+            pod.discount,
+            pod.cos_price,
+            pod.qty,
+            pod.unt_amount,
+            pod.com_amount,
+            pod.note
+        from purchase_order_detail pod
+        LEFT JOIN product_sku ps on ps.id = pod.product_sku_id
+        LEFT JOIN product p on p.id = ps.pid
+        where 1=1
+        <if test="id!=null">
+				and pod.id=#{id}
 		</if>
 		<if test="pid!=null">
-				and pid=#{pid}
+				and pod.pid=#{pid}
 		</if>
 		<if test="productSkuId!=null">
-				and product_sku_id=#{productSkuId}
+				and pod.product_sku_id=#{productSkuId}
 		</if>
 		<if test="skuCode!=null">
-				and sku_code=#{skuCode}
+				and pod.sku_code=#{skuCode}
 		</if>
 	</select>
 	<insert id="create" parameterType="PurchaseOrderDetail">
