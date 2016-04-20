@@ -84,8 +84,15 @@
 		<if test="status!=null">
 				and pom.status=#{status}
 		</if>
-        <if test="beginDate!=null and beginDate!=''">
-                and pom.bill_date,
+        <if test="beginDate != null and beginDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(pom.bill_date, '%Y-%m-%d') >= DATE_FORMAT(#{beginDate}, '%Y-%m-%d')
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(pom.bill_date, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            ]]>
         </if>
         order by pom.bill_date desc
         <if test="pageUtil != null">
@@ -125,6 +132,16 @@
         </if>
         <if test="status!=null">
             and pom.status=#{status}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(pom.bill_date, '%Y-%m-%d') >= DATE_FORMAT(#{beginDate}, '%Y-%m-%d')
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(pom.bill_date, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            ]]>
         </if>
     </select>
 

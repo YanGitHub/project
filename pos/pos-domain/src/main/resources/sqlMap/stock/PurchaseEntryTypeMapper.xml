@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.stock.PurchaseEntryTypeDao">
+	<resultMap id="ResultMap" type="PurchaseEntryType">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="del" column="del"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="PurchaseEntryType" >
+		select 
+			id,
+			create_date,
+			modify_date,
+			code,
+			name,
+			del,
+			note
+		from purchase_entry_type
+		where 1=1 
+		<if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="code!=null">
+				and code=#{code}
+		</if>
+		<if test="name!=null">
+				and name=#{name}
+		</if>
+		<if test="del!=null">
+				and del=#{del}
+		</if>
+	</select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from purchase_entry_type
+        where 1=1
+        <if test="id!=null">
+            and id=#{id}
+        </if>
+        <if test="code!=null">
+            and code=#{code}
+        </if>
+        <if test="name!=null">
+            and name=#{name}
+        </if>
+        <if test="del!=null">
+            and del=#{del}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="PurchaseEntryType">
+		insert into purchase_entry_type(
+			create_date,
+			code,
+			name,
+			del,
+			note
+		) values (
+			now(),
+			#{code},
+			#{name},
+			#{del},
+			#{note}
+		)
+	</insert>
+
+	<update id="update" parameterType="PurchaseEntryType">
+		update purchase_entry_type
+		<set>
+            modify_date=now(),
+            <if test="code!=null">
+                code=#{code},
+            </if>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="del!=null">
+                del=#{del},
+            </if>
+            <if test="note!=null">
+                note=#{note}
+            </if>
+		</set>
+
+	</update>
+</mapper>

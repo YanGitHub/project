@@ -358,6 +358,7 @@ function see() {
 function reset(){
     $('#billNo').val("");
     $('#purchaseTypeCode').val("");
+    $('#supplierInfoCode').val("");
     $('#orgCode').val("");
     $('#warehouseCode').val("");
     $('#beginDate').val("");
