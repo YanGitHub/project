@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.stock.PurchaseEntryMainDao">
+	<resultMap id="ResultMap" type="PurchaseEntryMain">
+		<result property="id" column="id"/>
+		<result property="billNo" column="bill_no"/>
+		<result property="billDate" column="bill_date"/>
+		<result property="purchaseEntryTypeCode" column="purchase_entry_type_code"/>
+        <result property="purchaseEntryTypeName" column="purchase_entry_type_code"/>
+		<result property="orgCode" column="org_code"/>
+        <result property="orgName" column="org_name"/>
+		<result property="warehouseCode" column="warehouse_code"/>
+        <result property="warehouseName" column="warehouse_name"/>
+		<result property="supplierInfoCode" column="supplier_info_code"/>
+        <result property="supplierInfoName" column="supplier_info_name"/>
+		<result property="purchaseOrderMainId" column="purchase_order_main_id"/>
+		<result property="status" column="status"/>
+		<result property="createUser" column="create_user"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyUser" column="modify_user"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="auditUser" column="audit_user"/>
+		<result property="auditDate" column="audit_date"/>
+		<result property="faAuditUser" column="fa_audit_user"/>
+		<result property="faAuditDate" column="fa_audit_date"/>
+		<result property="cancelUser" column="cancel_user"/>
+		<result property="cancelDate" column="cancel_date"/>
+		<result property="accountUser" column="account_user"/>
+		<result property="accountDate" column="account_date"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="PurchaseEntryMain" >
+        select
+            pem.id,
+            pem.bill_no,
+            pem.bill_date,
+            pem.purchase_entry_type_code,
+            pet.name as purchase_entry_type_name,
+            pem.org_code,
+            oi.name as org_name,
+            pem.warehouse_code,
+            wh.name as warehouse_name,
+            pem.supplier_info_code,
+            si.name as supplier_info_name,
+            pem.purchase_order_main_id,
+            pem.status,
+            pem.create_user,
+            pem.create_date,
+            pem.modify_user,
+            pem.modify_date,
+            pem.audit_user,
+            pem.audit_date,
+            pem.fa_audit_user,
+            pem.fa_audit_date,
+            pem.cancel_user,
+            pem.cancel_date,
+            pem.account_user,
+            pem.account_date,
+            pem.note
+        from purchase_entry_main pem
+        LEFT JOIN organization_info oi on oi.code = pem.org_code
+        LEFT JOIN supplier_info si on si.code = pem.supplier_info_code
+        LEFT JOIN warehouse wh on wh.code = pem.warehouse_code
+        LEFT JOIN purchase_entry_type pet on pet.code = pem.purchase_entry_type_code
+        where 1=1
+        <if test="id!=null">
+				and pem.id=#{id}
+		</if>
+		<if test="billNo!=null and billNo != ''">
+				and pem.bill_no=#{billNo}
+		</if>
+		<if test="billDate!=null and billDate != ''">
+				and pem.bill_date=#{billDate}
+		</if>
+		<if test="purchaseEntryTypeCode!=null and purchaseEntryTypeCode != ''">
+				and pem.purchase_entry_type_code=#{purchaseEntryTypeCode}
+		</if>
+		<if test="orgCode!=null and orgCode != ''">
+				and pem.org_code=#{orgCode}
+		</if>
+		<if test="warehouseCode!=null and warehouseCode != ''">
+				and pem.warehouse_code=#{warehouseCode}
+		</if>
+		<if test="supplierInfoCode!=null and supplierInfoCode != ''">
+				and pem.supplier_info_code=#{supplierInfoCode}
+		</if>
+		<if test="purchaseOrderMainId!=null">
+				and pem.purchase_order_main_id=#{purchaseOrderMainId}
+		</if>
+		<if test="status!=null">
+				and pem.status=#{status}
+		</if>
+        order by pem.id desc
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+	</select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from purchase_entry_main pem
+        LEFT JOIN organization_info oi on oi.code = pem.org_code
+        LEFT JOIN supplier_info si on si.code = pem.supplier_info_code
+        LEFT JOIN warehouse wh on wh.code = pem.warehouse_code
+        LEFT JOIN purchase_entry_type pet on pet.code = pem.purchase_entry_type_code
+        where 1=1
+        <if test="id!=null">
+            and pem.id=#{id}
+        </if>
+        <if test="billNo!=null and billNo != ''">
+            and pem.bill_no=#{billNo}
+        </if>
+        <if test="billDate!=null and billDate != ''">
+            and pem.bill_date=#{billDate}
+        </if>
+        <if test="purchaseEntryTypeCode!=null and purchaseEntryTypeCode != ''">
+            and pem.purchase_entry_type_code=#{purchaseEntryTypeCode}
+        </if>
+        <if test="orgCode!=null and orgCode != ''">
+            and pem.org_code=#{orgCode}
+        </if>
+        <if test="warehouseCode!=null and warehouseCode != ''">
+            and pem.warehouse_code=#{warehouseCode}
+        </if>
+        <if test="supplierInfoCode!=null and supplierInfoCode != ''">
+            and pem.supplier_info_code=#{supplierInfoCode}
+        </if>
+        <if test="purchaseOrderMainId!=null">
+            and pem.purchase_order_main_id=#{purchaseOrderMainId}
+        </if>
+        <if test="status!=null">
+            and pem.status=#{status}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="PurchaseEntryMain" useGeneratedKeys="true" keyProperty="id">
+		insert into purchase_entry_main(
+			bill_no,
+			bill_date,
+			purchase_entry_type_code,
+			org_code,
+			warehouse_code,
+			supplier_info_code,
+			purchase_order_main_id,
+			status,
+			create_user,
+			create_date,
+			note
+		) values (
+			generate_number('CGRK'),
+			#{billDate},
+			#{purchaseEntryTypeCode},
+			#{orgCode},
+			#{warehouseCode},
+			#{supplierInfoCode},
+			#{purchaseOrderMainId},
+			1,
+			#{createUser},
+			now(),
+			#{note}
+		)
+	</insert>
+
+	<update id="update" parameterType="PurchaseEntryMain">
+		update purchase_entry_main
+		<set>
+            modify_date=now(),
+            <if test="billDate!=null">
+                bill_date=#{billDate},
+            </if>
+            <if test="purchaseEntryTypeCode!=null">
+                purchase_entry_type_code=#{purchaseEntryTypeCode},
+            </if>
+            <if test="orgCode!=null">
+                org_code=#{orgCode},
+            </if>
+            <if test="warehouseCode!=null">
+                warehouse_code=#{warehouseCode},
+            </if>
+            <if test="supplierInfoCode!=null">
+                supplier_info_code=#{supplierInfoCode},
+            </if>
+            <if test="purchaseOrderMainId!=null">
+                purchase_order_main_id=#{purchaseOrderMainId},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="createDate!=null">
+                create_date=#{createDate},
+            </if>
+            <if test="modifyUser!=null">
+                modify_user=#{modifyUser},
+            </if>
+            <if test="note!=null">
+                note=#{note}
+            </if>
+		</set>
+        where id = #{id}
+	</update>
+</mapper>

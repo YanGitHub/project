@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.stock.PurchaseEntryDetailDao">
+	<resultMap id="ResultMap" type="PurchaseEntryDetail">
+		<result property="id" column="id"/>
+		<result property="pid" column="pid"/>
+		<result property="productSkuId" column="product_sku_id"/>
+        <result property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+		<result property="skuCode" column="sku_code"/>
+        <result property="skuName" column="sku_name"/>
+		<result property="untPrice" column="unt_price"/>
+		<result property="discount" column="discount"/>
+		<result property="cosPrice" column="cos_price"/>
+		<result property="purchaseQty" column="purchase_qty"/>
+		<result property="qty" column="qty"/>
+		<result property="untAmount" column="unt_amount"/>
+		<result property="comAmount" column="com_amount"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+    <delete id="delete">
+        delete from purchase_entry_detail where pid = #{pid}
+    </delete>
+
+    <select id="getList" resultMap="ResultMap" parameterType="PurchaseEntryDetail" >
+        select
+            ped.id,
+            ped.pid,
+            ped.product_sku_id,
+            ped.sku_code,
+            p.name as product_name,
+            p.code as product_code,
+            ps.name as sku_name,
+            ped.unt_price,
+            ped.discount,
+            ped.cos_price,
+            ped.purchase_qty,
+            ped.qty,
+            ped.unt_amount,
+            ped.com_amount,
+            ped.note
+        from purchase_entry_detail ped
+        LEFT JOIN product_sku ps on ps.id = ped.product_sku_id
+        LEFT JOIN product p on p.id = ps.pid
+		where 1=1
+		<if test="id!=null">
+				and ped.id=#{id}
+		</if>
+		<if test="pid!=null">
+				and ped.pid=#{pid}
+		</if>
+		<if test="productSkuId!=null">
+				and ped.product_sku_id=#{productSkuId}
+		</if>
+		<if test="skuCode!=null">
+				and ped.sku_code=#{skuCode}
+		</if>
+	</select>
+
+    <insert id="create" parameterType="PurchaseEntryDetail">
+        insert into purchase_entry_detail(
+            pid,
+            product_sku_id,
+            sku_code,
+            unt_price,
+            discount,
+            cos_price,
+            purchase_qty,
+            qty,
+            unt_amount,
+            com_amount,
+            note
+        ) values
+        <foreach collection="list" separator="," item="item">
+            (#{item.pid},
+            #{item.productSkuId},
+            #{item.skuCode},
+            #{item.untPrice},
+            #{item.discount},
+            #{item.cosPrice},
+            #{item.purchaseQty},
+            #{item.qty},
+            #{item.untAmount},
+            #{item.comAmount},
+            #{item.note})
+        </foreach>
+	</insert>
+
+</mapper>

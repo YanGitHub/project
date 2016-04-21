@@ -4,11 +4,13 @@ import kj.pos.entity.admin.OrganizationInfo;
 import kj.pos.entity.info.*;
 import kj.pos.entity.product.Brand;
 import kj.pos.entity.product.Category;
+import kj.pos.entity.stock.PurchaseEntryType;
 import kj.pos.entity.stock.PurchaseType;
 import kj.pos.service.admin.OrganizationService;
 import kj.pos.service.info.*;
 import kj.pos.service.product.BrandService;
 import kj.pos.service.product.CategoryService;
+import kj.pos.service.stock.PurchaseEntryTypeService;
 import kj.pos.service.stock.PurchaseTypeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,6 +48,8 @@ public class CommonController {
     private SupplierInfoService supplierInfoService;
     @Autowired
     private PurchaseTypeService purchaseTypeService;
+    @Autowired
+    private PurchaseEntryTypeService purchaseEntryTypeService;
     @Autowired
     private WarehouseService warehouseService;
     @Autowired
@@ -149,6 +153,20 @@ public class CommonController {
         try {
             purchaseType.setDel(false);
             list = purchaseTypeService.getList(purchaseType);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+        }
+        return list;
+    }
+
+    @RequestMapping(value = "/getPurchaseEntryType",method = RequestMethod.POST)
+    @ResponseBody
+    public List<PurchaseEntryType> getPurchaseEntryType(PurchaseEntryType purchaseEntryType)throws SQLException{
+        List<PurchaseEntryType> list = new ArrayList<PurchaseEntryType>();
+        try {
+            purchaseEntryType.setDel(false);
+            list = purchaseEntryTypeService.getList(purchaseEntryType);
         }catch (Exception e){
             e.printStackTrace();
             logger.error(e);
