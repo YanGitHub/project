@@ -72,6 +72,7 @@
 <hr/>
 <form id="editForm">
     <input id="id" name="id" hidden="hidden"/>
+    <input id="purchaseOrderMainId" name="purchaseOrderMainId" hidden="hidden"/>
     <div class="row">
         <div class="col-sm-3">
             <div class="input-group input-group-sm">
@@ -105,8 +106,16 @@
             </div>
         </div>
     </div>
-
     <div class="row" style="margin-top: 10px">
+        <div class="col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">采购订单</span>
+                <input type="text" id="purchaseOrderMainBillNo" name="purchaseOrderMainBillNo" class="form-control" readonly="readonly"
+                       placeholder="" style="width: 168px" onclick="showPurchase()"
+                       aria-describedby="basic-addon1">
+            </div>
+        </div>
+
         <div class="col-sm-3">
             <div class="input-group input-group-sm">
                 <span class="input-group-addon">供应商<span style="color: red">*</span></span>
@@ -117,7 +126,7 @@
         </div>
 
         <div class='col-sm-3'>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 0px">
                 <div class='input-group input-group-sm date' id='datetimepicker1'>
                     <span class="input-group-addon">
                         单据日期<span style="color: red">*</span>
@@ -126,13 +135,6 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-            $(function () {
-                $('#datetimepicker1').datetimepicker({
-                    format: 'YYYY-MM-DD HH:mm:ss'
-                });
-            });
-        </script>
         <div class="col-sm-3">
             <div class="input-group input-group-sm">
                 <span class="input-group-addon">状态</span>
@@ -141,11 +143,13 @@
                        aria-describedby="basic-addon1">
             </div>
         </div>
-        <div class="col-sm-3">
+    </div>
+    <div class="row" style="margin-top: 10px">
+        <div class="col-sm-6">
             <div class="input-group input-group-sm">
                 <span class="input-group-addon">备注</span>
                 <input type="text" id="note" name="note" class="form-control" placeholder=""
-                       style="width: 168px"
+                       style="width: 504px"
                        aria-describedby="basic-addon1">
             </div>
         </div>
@@ -276,10 +280,70 @@
     <!-- /.modal -->
 </div>
 
+
+<!--dialog-->
+<div class="modal fade bs-example-modal-lg" id="purchaseOrderDialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    采购订单
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="purchaseOrderGrid" class="easyui-datagrid" data-options="
+                               rownumbers: true,
+                               url:'${ctx}/stock/purchaseOrderMain/getList?status=2',
+                               height:280,
+                               width:868,
+                               pagination:true,
+                               singleSelect:true,
+                               striped:true,
+                               selectOnCheck:true"
+                               toolbar="#toolbar">
+                            <thead>
+                            <tr>
+                                <th data-options="field:'ck',checkbox:true"></th>
+                                <th data-options="field:'id',hidden:true"></th>
+                                <th data-options="field:'billNo',fitColumns:true">单据编号</th>
+                                <th data-options="field:'billDate',fitColumns:true">单据日期</th>
+                                <th data-options="field:'purchaseTypeName',fitColumns:true">采购类型</th>
+                                <th data-options="field:'orgName',fitColumns:true">店铺名称</th>
+                                <th data-options="field:'warehouseName',fitColumns:true">采购店仓</th>
+                                <th data-options="field:'supplierInfoName',fitColumns:true">供应商</th>
+                                <th data-options="field:'note',fitColumns:true">备注</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="addPurchaseOrder()">添加</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
+</div>
+
 <script type="text/javascript">
 var url = "${ctx}/stock/purchaseEntryMain/create";
 var edit = true;
 $(document).ready(function () {
+
+    $('#datetimepicker1').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss'
+    });
+    //入库list
     $("#grid").datagrid({
         singleSelect: true,
         selectOnCheck: false,
@@ -295,9 +359,9 @@ $(document).ready(function () {
                 { field: 'skuCode', title: '规格代码', width: 120 },
                 { field: 'skuName', title: '规格名称', width: 120 },
                 { field: 'untPrice', title: '标准单价', width: 100, align: 'right', editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 2, readonly: 'readonly', required: true}}},
-                { field: 'discount', title: '折扣', width: 100, align: 'right', editor: {type: 'validatebox', options: {required: true}}},
-                { field: 'cosPrice', title: '入库单价', width: 100, align: 'right', formatter: twoDecimal, editor: {type: 'validatebox', options: {required: true}}},
-                { field: 'purchaseQty', title: '采购数量', width: 100, align: 'right', editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 2, readonly: 'readonly', required: true}}},
+                { field: 'discount', title: '折扣', width: 100, align: 'right', editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 2, readonly: 'readonly', required: true}}},
+                { field: 'cosPrice', title: '入库单价', width: 100, align: 'right', formatter: twoDecimal, editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 2, readonly: 'readonly', required: true}}},
+                { field: 'purchaseQty', title: '采购数量', width: 100, align: 'right', editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 0, readonly: 'readonly', required: true}}},
                 { field: 'qty', title: '入库数量', width: 100, align: 'right', editor: {type: 'validatebox', options: {required: true}}},
                 { field: 'untAmount', title: '标准金额', width: 100, align: 'right', formatter: twoDecimal, editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 2, readonly: 'readonly', required: true}}},
                 { field: 'comAmount', title: '入库金额', width: 100, align: 'right', formatter: twoDecimal, editor: {type: 'numberbox', options: {min: 0, max: 999999, precision: 2, readonly: 'readonly', required: true}}},
@@ -316,6 +380,7 @@ $(document).ready(function () {
             $('#id').val(data.id);
             $('#billNo').val(data.billNo);
             $('#purchaseEntryTypeCode').val(data.purchaseEntryTypeCode);
+            $('#purchaseOrderMainBillNo').val(data.purchaseOrderMainBillNo);
             $('#orgCode').val(data.orgCode);
             loadStock(data.orgCode);
             $('#warehouseCode').val(data.warehouseCode);
@@ -336,6 +401,43 @@ $(document).ready(function () {
     }
 });
 
+//显示采购订单
+function showPurchase(){
+    if('${id}' == '0'){
+        $('#purchaseOrderDialog').modal('show');
+        setTimeout("$('#purchaseOrderGrid').datagrid('reload')", 500);
+    }else{
+        alertLittle("只有新增时才可以引用采购订单");
+        return;
+    }
+}
+//添加采购 订单
+function addPurchaseOrder(){
+    var item = $('#purchaseOrderGrid').datagrid('getSelected');
+    if(item == null){
+        alertLittle("请选择采购订单数据");
+        return;
+    }
+    $('#purchaseOrderDialog').modal('hide');
+    $('#grid').datagrid('loadData', { total:0, rows: []});
+    $.post('${ctx}/stock/purchaseOrderMain/getEdit',{id:item.id},function(data){
+        $('#purchaseOrderMainId').val(data.id);
+        $('#purchaseOrderMainBillNo').val(data.billNo);
+        $('#orgCode').val(data.orgCode);
+        loadStock(data.orgCode);
+        $('#warehouseCode').val(data.warehouseCode);
+        $('#supplierInfoCode').val(data.supplierInfoCode);
+        $('#note').val(data.note);
+        //明细
+        for(var i = 0;i < data.purchaseOrderDetailList.length;i++){
+            addSkuFromPurchaseOrder(data.purchaseOrderDetailList[i]);
+        }
+        //禁用
+        $('#newRowBtn').attr("disabled","disabled");
+        $('#delRowBtn').attr("disabled","disabled");
+    });
+}
+
 //1 未审核 2 终止 3 已审核 4 已入库 5已记帐
 function changeStatus(v){
     if(v == 1){
@@ -352,20 +454,10 @@ function changeStatus(v){
 }
 function banding(index) {
     var editors = $('#grid').datagrid('getEditors', index);
-    //给折扣绑定事件
-    var discount = editors[1];
-    discount.target.bind('keyup', function () {
-        setCosAndCom(index);
-    });
     //给数量绑定事件
     var qty = editors[4];
     qty.target.bind('keyup', function () {
         setUntAmountAndCosAmount(index);
-    });
-    //给采购金额绑定事件
-    var cosPrice = editors[2];
-    cosPrice.target.bind('keyup', function () {
-        setDisCountAndCosAmount(index);
     });
 }
 var editIndex = undefined;
@@ -392,27 +484,6 @@ function editCell(index, row) {
         banding(index);
     }
 }
-//计算 折扣 采购金额
-function setDisCountAndCosAmount(rowIndex) {
-    var grid = $("#grid");
-    //获取输入框对象
-    var setQtyEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'qty'});
-    var setUntPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'untPrice'});
-    var setDiscountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'discount'});
-    var setCosPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'cosPrice'});
-    var setCosAmountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'comAmount'});
-    var setUntAmountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'untAmount'});
-    //获取输入框里的值
-    var editQty = parseFloat(setQtyEdt.target.val());
-    var editUntPrice = parseFloat(setUntPriceEdt.target.val());
-    var editDiscount = parseFloat(setDiscountEdt.target.val());
-    var editCosPrice = parseFloat(setCosPriceEdt.target.val());
-    var editCosAmount = parseFloat(setCosAmountEdt.target.val());
-    var editUntAmount = parseFloat(setUntAmountEdt.target.val());
-
-    setDiscountEdt.target.val((parseFloat(editCosPrice / editUntPrice * 10)).toFixed(2));  //采购金额
-    setCosAmountEdt.target.numberbox("setValue", parseFloat(editCosPrice * editQty).toFixed(2));  //标准金额
-}
 //计算 标准金额，采购金额
 function setUntAmountAndCosAmount(rowIndex) {
     var grid = $("#grid");
@@ -433,25 +504,6 @@ function setUntAmountAndCosAmount(rowIndex) {
 
     setCosAmountEdt.target.numberbox("setValue", (parseFloat(editCosPrice * editQty).toFixed(2)));  //采购金额
     setUntAmountEdt.target.numberbox("setValue", (parseFloat(editUntPrice * editQty).toFixed(2)));  //标准金额
-}
-//计算 采购单价，采购金额
-function setCosAndCom(rowIndex) {
-    var grid = $("#grid");
-    //获取输入框对象
-    var setQtyEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'qty'});
-    var setUntPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'untPrice'});
-    var setDiscountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'discount'});
-    var setCosPriceEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'cosPrice'});
-    var setCosAmountEdt = grid.datagrid('getEditor', {index: rowIndex, field: 'comAmount'});
-    //获取输入框里的值
-    var editQty = parseFloat(setQtyEdt.target.val());
-    var editUntPrice = parseFloat(setUntPriceEdt.target.val());
-    var editDiscount = parseFloat(setDiscountEdt.target.val());
-    var editCosPrice = parseFloat(setCosPriceEdt.target.val());
-    var editCosAmount = parseFloat(setCosAmountEdt.target.val());
-
-    setCosPriceEdt.target.val(parseFloat(editUntPrice * editDiscount / 10).toFixed(2));  //采购单价
-    setCosAmountEdt.target.numberbox("setValue", (parseFloat(editUntPrice * editDiscount / 10) * editQty).toFixed(2));
 }
 //删除行
 function delRow() {
@@ -497,6 +549,26 @@ function addSku(items) {
         purchaseQty:0,
         untAmount: items.untPrice,
         comAmount: items.untPrice,
+        note: ''
+    });
+
+}
+
+//添加商品
+function addSkuFromPurchaseOrder(items) {
+    $('#grid').datagrid('appendRow', {
+        productSkuId: items.productSkuId,
+        productCode: items.productCode,
+        productName: items.productName,
+        skuCode: items.skuCode,
+        skuName: items.skuName,
+        untPrice: items.untPrice,
+        discount: items.discount,
+        cosPrice: items.untPrice,
+        qty: items.qty,
+        purchaseQty:items.qty,
+        untAmount: items.untAmount,
+        comAmount: items.comAmount,
         note: ''
     });
 
@@ -696,7 +768,9 @@ function save() {
         contentType:"application/json",
         data: JSON.stringify(data),
         success: function(map){
-            window.location.href = "${ctx}/stock/purchaseEntryMain";
+            if(map.status){
+                window.location.href = "${ctx}/stock/purchaseEntryMain";
+            }
         }
     });
 }

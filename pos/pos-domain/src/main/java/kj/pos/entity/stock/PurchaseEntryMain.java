@@ -20,6 +20,7 @@ public class PurchaseEntryMain extends BaseEntity{
 	private String supplierInfoCode;//供应商(supplier_info code)
     private String supplierInfoName;
 	private Long purchaseOrderMainId;//采购订单(purchase_order_main id)
+    private String purchaseOrderMainBillNo;//采购订单号
 	private Integer status;//1 未审核 2 终止 3 已审核 4 已入库 5已记帐
     private String statusString;
 	private String createUser;//创建人
@@ -37,6 +38,10 @@ public class PurchaseEntryMain extends BaseEntity{
 	private String note;//备注
 
     private List<PurchaseEntryDetail> purchaseEntryDetailList;
+
+    private String beginDate;
+    private String endDate;
+
 	//创建getter和setter方法
 
 
@@ -142,6 +147,14 @@ public class PurchaseEntryMain extends BaseEntity{
 
     public void setPurchaseOrderMainId(Long purchaseOrderMainId) {
         this.purchaseOrderMainId = purchaseOrderMainId;
+    }
+
+    public String getPurchaseOrderMainBillNo() {
+        return purchaseOrderMainBillNo;
+    }
+
+    public void setPurchaseOrderMainBillNo(String purchaseOrderMainBillNo) {
+        this.purchaseOrderMainBillNo = purchaseOrderMainBillNo;
     }
 
     public Integer getStatus() {
@@ -262,5 +275,21 @@ public class PurchaseEntryMain extends BaseEntity{
 
     public void setPurchaseEntryDetailList(List<PurchaseEntryDetail> purchaseEntryDetailList) {
         this.purchaseEntryDetailList = purchaseEntryDetailList;
+    }
+
+    public String getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

@@ -24,9 +24,11 @@
             iv.warehouse_code,
             wh.name as warehouse_name,
             iv.product_code,
+            p.name as product_name,
             iv.sku_id,
             iv.sku_code,
-            iv.qty,
+            ps.name as sku_name,
+            sum(iv.qty) as qty,
             iv.del
         from inventory iv
         LEFT JOIN warehouse wh on iv.warehouse_code = wh.code
@@ -34,37 +36,47 @@
         LEFT JOIN product p on ps.pid = p.id
         where 1=1
         <if test="id!=null">
-				and iv.id=#{id}
-		</if>
-		<if test="warehouseCode!=null">
-				and iv.warehouse_code=#{warehouseCode}
-		</if>
-		<if test="productCode!=null">
-				and iv.product_code=#{productCode}
-		</if>
-		<if test="skuCode!=null">
-				and iv.sku_code=#{skuCode}
-		</if>
-		<if test="del!=null">
-				and iv.del=#{del}
-		</if>
+            and iv.id=#{id}
+        </if>
+        <if test="skuId != null">
+            and iv.sku_id = #{skuId}
+        </if>
+        <if test="warehouseCode!=null">
+            and iv.warehouse_code=#{warehouseCode}
+        </if>
+        <if test="productCode!=null and productCode != ''">
+            and iv.product_code=#{productCode}
+        </if>
+        <if test="skuCode!=null and skuCode != ''">
+            and iv.sku_code=#{skuCode}
+        </if>
+        <if test="del!=null">
+            and iv.del=#{del}
+        </if>
+        group by iv.warehouse_code,iv.sku_id
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
 	</select>
 
     <select id="getTotal" resultType="java.lang.Integer" parameterType="Inventory" >
         select
-        count(*)
+            count(*)
         from inventory
         where 1=1
         <if test="id!=null">
             and id=#{id}
         </if>
+        <if test="skuId != null">
+            and sku_id = #{skuId}
+        </if>
         <if test="warehouseCode!=null">
             and warehouse_code=#{warehouseCode}
         </if>
-        <if test="productCode!=null">
+        <if test="productCode!=null and productCode != ''">
             and product_code=#{productCode}
         </if>
-        <if test="skuCode!=null">
+        <if test="skuCode!=null and skuCode != ''">
             and sku_code=#{skuCode}
         </if>
         <if test="del!=null">
@@ -74,6 +86,7 @@
 
 	<insert id="create" parameterType="Inventory">
 		insert into inventory(
+		    sku_id,
 			create_date,
 			modify_date,
 			warehouse_code,
@@ -82,11 +95,12 @@
 			qty,
 			del
 		) values (
+		    #{skuId},
 			now(),
 			#{modifyDate},
 			#{warehouseCode},
-			#{productCode},
-			#{skuCode},
+			(SELECT product_code from product p LEFT JOIN product_sku ps on ps.pid = p.id WHERE ps.id = #{skuId}),
+			(SELECT code from product_sku WHERE id = #{skuId}),
 			#{qty},
 			0
 		)
@@ -99,13 +113,10 @@
                 modify_date=now(),
             </if>
             <if test="qty!=null">
-                qty=#{qty},
-            </if>
-            <if test="del!=null">
-                del=#{del}
+                qty=IFNULL(qty,0) + #{qty}
             </if>
 		</set>
-        where product_code = #{productCode} and sku_code = #{skuCode} and warehouse_code = #{warehouseCode}
+        where id = #{id}
 
 	</update>
 </mapper>

@@ -6,7 +6,7 @@
 		<result property="billNo" column="bill_no"/>
 		<result property="billDate" column="bill_date"/>
 		<result property="purchaseEntryTypeCode" column="purchase_entry_type_code"/>
-        <result property="purchaseEntryTypeName" column="purchase_entry_type_code"/>
+        <result property="purchaseEntryTypeName" column="purchase_entry_type_name"/>
 		<result property="orgCode" column="org_code"/>
         <result property="orgName" column="org_name"/>
 		<result property="warehouseCode" column="warehouse_code"/>
@@ -14,6 +14,7 @@
 		<result property="supplierInfoCode" column="supplier_info_code"/>
         <result property="supplierInfoName" column="supplier_info_name"/>
 		<result property="purchaseOrderMainId" column="purchase_order_main_id"/>
+        <result property="purchaseOrderMainBillNo" column="purchase_order_main_bill_no"/>
 		<result property="status" column="status"/>
 		<result property="createUser" column="create_user"/>
 		<result property="createDate" column="create_date"/>
@@ -30,7 +31,12 @@
 		<result property="note" column="note"/>
 	</resultMap>
 
-	<select id="getList" resultMap="ResultMap" parameterType="PurchaseEntryMain" >
+    <delete id="cancel">
+        update purchase_entry_main set status =2,cancel_user = #{cancelUser},cancel_date = now()
+        where id = #{id}
+    </delete>
+
+    <select id="getList" resultMap="ResultMap" parameterType="PurchaseEntryMain" >
         select
             pem.id,
             pem.bill_no,
@@ -44,6 +50,7 @@
             pem.supplier_info_code,
             si.name as supplier_info_name,
             pem.purchase_order_main_id,
+            pom.bill_no as purchase_order_main_bill_no,
             pem.status,
             pem.create_user,
             pem.create_date,
@@ -63,15 +70,13 @@
         LEFT JOIN supplier_info si on si.code = pem.supplier_info_code
         LEFT JOIN warehouse wh on wh.code = pem.warehouse_code
         LEFT JOIN purchase_entry_type pet on pet.code = pem.purchase_entry_type_code
+        LEFT JOIN purchase_order_main pom on pom.id = pem.purchase_order_main_id
         where 1=1
         <if test="id!=null">
 				and pem.id=#{id}
 		</if>
 		<if test="billNo!=null and billNo != ''">
 				and pem.bill_no=#{billNo}
-		</if>
-		<if test="billDate!=null and billDate != ''">
-				and pem.bill_date=#{billDate}
 		</if>
 		<if test="purchaseEntryTypeCode!=null and purchaseEntryTypeCode != ''">
 				and pem.purchase_entry_type_code=#{purchaseEntryTypeCode}
@@ -91,6 +96,16 @@
 		<if test="status!=null">
 				and pem.status=#{status}
 		</if>
+        <if test="beginDate != null and beginDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(pem.bill_date, '%Y-%m-%d') >= DATE_FORMAT(#{beginDate}, '%Y-%m-%d')
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(pem.bill_date, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            ]]>
+        </if>
         order by pem.id desc
         <if test="pageUtil != null">
             limit #{pageUtil.startRow},#{pageUtil.endRow}
@@ -132,6 +147,16 @@
         </if>
         <if test="status!=null">
             and pem.status=#{status}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(pem.bill_date, '%Y-%m-%d') >= DATE_FORMAT(#{beginDate}, '%Y-%m-%d')
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(pem.bill_date, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            ]]>
         </if>
     </select>
 
@@ -200,4 +225,15 @@
 		</set>
         where id = #{id}
 	</update>
+
+    <update id="audit">
+        update purchase_entry_main set status =3,audit_user = #{auditUser},audit_date = now()
+        where id = #{id}
+    </update>
+
+    <update id="enterStock">
+        update purchase_entry_main set status =4,fa_audit_user = #{faAuditUser},fa_audit_date = now()
+        where id = #{id}
+    </update>
+
 </mapper>

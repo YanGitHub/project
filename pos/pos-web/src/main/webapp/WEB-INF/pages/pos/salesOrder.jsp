@@ -86,7 +86,7 @@
             singleSelect: true,
             selectOnCheck: false,
             rownumbers: true,
-            height:200,
+            height:250,
             pagination: true,
             columns: [
                 [

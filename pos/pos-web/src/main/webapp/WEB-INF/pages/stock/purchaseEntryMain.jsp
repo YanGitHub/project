@@ -66,6 +66,7 @@
     <button class="btn btn-info" onclick="create()">新增</button>
     <button class="btn btn-success" onclick="see()">查看</button>
     <button class="btn btn-primary" onclick="audit()">审核</button>
+    <button class="btn btn-info" onclick="enterStock()">入库</button>
     <button class="btn btn-warning" onclick="cancel()">终止</button>
     <button class="btn btn-info" onclick="exportExcel()">导出Excel</button>
 </div>
@@ -82,8 +83,8 @@
         </div>
         <div class="col-sm-3">
             <div class="input-group input-group-sm">
-                <span class="input-group-addon">采购类型</span>
-                <select id="purchaseTypeCode" name="purchaseTypeCode" style="width: 168px"
+                <span class="input-group-addon">入库类型<span style="color: red">*</span></span>
+                <select id="purchaseEntryTypeCode" name="purchaseEntryTypeCode" style="width: 168px"
                         class="form-control selectpicker">
                 </select>
             </div>
@@ -182,6 +183,7 @@ $(document).ready(function () {
                 { field: 'ck', checkbox: true },
                 { field: 'billNo', title: '单据编号', fitColumns: true},
                 { field: 'billDate', title: '单据日期', fitColumns: true},
+                { field: 'purchaseOrderMainBillNo', title: '采购订单', fitColumns: true},
                 { field: 'status', title: '状态', fitColumns: true, formatter: statusString},
                 { field: 'purchaseEntryTypeName', title: '入库类型', fitColumns: true},
                 { field: 'orgName', title: '店铺名称', fitColumns: true},
@@ -204,7 +206,7 @@ $(document).ready(function () {
         ]
     });
     loadShop();
-    loadPurchaseTypes();
+    loadPurchaseEntryTypes();
     loadSupplierInfo();
 });
 //加载 店铺
@@ -253,21 +255,21 @@ function joinShop(obj) {
     var orgCode = obj.options[obj.selectedIndex].value;
     loadStock(orgCode);
 }
-//加载 采购类型
-function loadPurchaseTypes() {
+//加载 采购入库类型
+function loadPurchaseEntryTypes() {
     $.ajax({
-        async: false,
+        async:false,
         type: 'POST',
-        url: '${ctx}/common/getPurchaseTypes',
-        contentType: "application/json",
+        url: '${ctx}/common/getPurchaseEntryType',
+        contentType:"application/json",
         data: null,
-        success: function (data) {
+        success: function(data){
             if (data.length > 0) {
                 var op = "";
                 for (var i = 0; i < data.length; i++) {
                     op += "<option value=" + data[i].code + ">" + data[i].name + "</option>";
                 }
-                $('#purchaseTypeCode').html(op);
+                $('#purchaseEntryTypeCode').html(op);
             }
         }
     });
@@ -293,12 +295,16 @@ function loadSupplierInfo() {
     });
 }
 function statusString(v, r, i) {
-    if (v == 1) {
+    if(v == 1){
         return "未审核";
-    } else if (v == 2) {
+    }else if(v == 2){
+        return "终止";
+    }else if(v == 3){
         return "已审核";
-    } else if (v == 3) {
-        return "已终止";
+    }else if(v == 4){
+        return "已入库";
+    }else if(v == 5){
+        return "已记帐";
     }
 }
 //查询
@@ -318,7 +324,7 @@ function audit() {
         alertLittle("请选择未审核的数据");
         return;
     }
-    $.post('${ctx}/stock/purchaseOrderMain/audit', {id: id}, function (data) {
+    $.post('${ctx}/stock/purchaseEntryMain/audit', {id: id}, function (data) {
         alert("提示", data.msg, 2000);
         $('#grid').datagrid('reload');
     });
@@ -327,6 +333,24 @@ function audit() {
 //导出
 function exportExcel(){
     window.location.href = exportUrl;
+}
+//入库
+function enterStock(){
+    var item = $('#grid').datagrid('getChecked');
+    var id = "";
+    for (var i = 0; i < item.length; i++) {
+        if (item[i].status == 3) {
+            id += item[i].id + ",";
+        }
+    }
+    if (id == "") {
+        alertLittle("请选择已审核的数据");
+        return;
+    }
+    $.post('${ctx}/stock/purchaseEntryMain/enterStock', {id: id}, function (data) {
+        alert("提示", data.msg, 2000);
+        $('#grid').datagrid('reload');
+    });
 }
 //终止
 function cancel() {
@@ -341,7 +365,7 @@ function cancel() {
         alertLittle("请选择未审核的数据");
         return;
     }
-    $.post('${ctx}/stock/purchaseOrderMain/cancel', {id: id}, function (data) {
+    $.post('${ctx}/stock/purchaseEntryMain/cancel', {id: id}, function (data) {
         alert("提示", data.msg, 2000);
         $('#grid').datagrid('reload');
     });
@@ -361,7 +385,7 @@ function see() {
 }
 function reset(){
     $('#billNo').val("");
-    $('#purchaseTypeCode').val("");
+    $('#purchaseEntryTypeCode').val("");
     $('#supplierInfoCode').val("");
     $('#orgCode').val("");
     $('#warehouseCode').val("");
@@ -371,7 +395,7 @@ function reset(){
 //查询
 function search() {
     var billNo = $('#billNo').val();
-    var purchaseTypeCode = $('#purchaseTypeCode').val();
+    var purchaseEntryTypeCode = $('#purchaseEntryTypeCode').val();
     var orgCode = $('#orgCode').val();
     var warehouseCode = $('#warehouseCode').val();
     var supplierInfoCode = $('#supplierInfoCode').val();
@@ -379,14 +403,14 @@ function search() {
     var endDate = $('#endDate').val();
     $('#grid').datagrid('reload', {
         billNo: billNo,
-        purchaseTypeCode: purchaseTypeCode,
+        purchaseEntryTypeCode: purchaseEntryTypeCode,
         supplierInfoCode:supplierInfoCode,
         orgCode: orgCode,
         warehouseCode: warehouseCode,
         beginDate: beginDate,
         endDate: endDate
     });
-    exportUrl = '${ctx}/export/purchaseOrderReport' +'?billNo='+billNo + '&purchaseTypeCode='+purchaseTypeCode + '&supplierInfoCode='+supplierInfoCode +'&orgCode=' + orgCode
+    exportUrl = '${ctx}/export/purchaseOrderReport' +'?billNo='+billNo + '&purchaseEntryTypeCode='+purchaseEntryTypeCode + '&supplierInfoCode='+supplierInfoCode +'&orgCode=' + orgCode
             +'&warehouseCode='+warehouseCode +'&beginDate='+beginDate +'&endDate='+endDate;
 }
 

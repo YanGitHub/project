@@ -104,4 +104,49 @@ public class PurchaseEntryMainController {
         }
         return result;
     }
+
+    @RequestMapping(value = "/audit",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> audit(String id)throws SQLException{
+        Map<String,Object> result = new HashMap<String, Object>();
+        try {
+            result = purchaseEntryMainService.audit(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            result.put("status",Boolean.FALSE);
+            result.put("msg","审核失败");
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/cancel",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> cancel(String id)throws SQLException{
+        Map<String,Object> result = new HashMap<String, Object>();
+        try {
+            result = purchaseEntryMainService.cancel(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            result.put("status",Boolean.FALSE);
+            result.put("msg","终止失败");
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/enterStock",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> enterStock(String id)throws SQLException{
+        Map<String,Object> result = new HashMap<String, Object>();
+        try {
+            result = purchaseEntryMainService.enterStock(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            result.put("status",Boolean.FALSE);
+            result.put("msg","入库失败");
+        }
+        return result;
+    }
 }

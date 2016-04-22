@@ -17,4 +17,9 @@ public interface PurchaseEntryMainDao{
 
 	public void update(PurchaseEntryMain purchaseEntryMain);
 
+    public void audit(PurchaseEntryMain purchaseEntryMain);
+
+    public void cancel(PurchaseEntryMain purchaseEntryMain);
+
+    public void enterStock(PurchaseEntryMain purchaseEntryMain);
 }

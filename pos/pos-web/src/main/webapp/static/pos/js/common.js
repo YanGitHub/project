@@ -20,7 +20,7 @@ function alert(title,content,second){
 function alertLittle(content){
     $.confirm({
         title: false,
-        content: content,
+        content: '友情提示：'+content,
         cancelButton: false,
         confirmButton: false
     });
