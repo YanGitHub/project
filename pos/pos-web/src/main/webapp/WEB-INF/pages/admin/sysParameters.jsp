@@ -3,7 +3,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>mybaties文件创建</title>
+    <title>系统参数</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap -->
     <link href="${ctx}/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
@@ -144,12 +144,12 @@
             pagination: true,
             columns: [
                 [
+                    {field: 'op', title: '操作', width: 120, align: 'center', fitColumns: true, formatter: opration},
                     {field: 'id', title: '', hidden: true},
-                    {field: 'sysKey', title: '参数名', width: 120, fitColumns: true},
+                    {field: 'sysKey', title: '参数名', fitColumns: true},
                     {field: 'sysValue', title: '参数值', width: 70, align: 'center', fitColumns: true},
                     {field: 'status', title: '状态', width: 100, fitColumns: true,align: 'center',formatter:statusString},
-                    {field: 'note', title: '备注', width: 200, fitColumns: true},
-                    {field: 'op', title: '操作', width: 120, align: 'center', fitColumns: true, formatter: opration}
+                    {field: 'note', title: '备注', fitColumns: true}
                 ]
             ]
         });

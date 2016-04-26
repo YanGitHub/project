@@ -66,4 +66,36 @@ public class WarehouseController {
         }
         return map;
     }
+
+    @RequestMapping(value = "/setDeliver",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> setDeliver(Warehouse warehouse)throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        try {
+            warehouseService.setDeliver(warehouse);
+            map.put("status",Boolean.TRUE);
+            map.put("msg","设置成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("status",Boolean.FALSE);
+            map.put("msg","设置失败");
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/setReceive",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> setReceive(Warehouse warehouse)throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        try {
+            warehouseService.setReceive(warehouse);
+            map.put("status",Boolean.TRUE);
+            map.put("msg","设置成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("status",Boolean.FALSE);
+            map.put("msg","设置失败");
+        }
+        return map;
+    }
 }

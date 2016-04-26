@@ -83,13 +83,13 @@
             columns: [
                 [
                     { field: 'id', hidden: true },
-                    { field: 'productName', title: '商品名称', width: 120 },
-                    { field: 'productCode', title: '商品代码', width: 120 },
-                    { field: 'skuName', title: '规格名称', width: 120 },
-                    { field: 'skuCode', title: '规格代码', width: 120},
-                    { field: 'warehouseCode', title: '仓库代码', width: 120 },
-                    { field: 'warehouseName', title: '仓库名称', width: 120 },
-                    { field: 'qty', title: '数量',align:'right', width: 120 }
+                    { field: 'productName', title: '商品名称', fitColumns:true },
+                    { field: 'productCode', title: '商品代码', fitColumns:true },
+                    { field: 'skuName', title: '规格名称', fitColumns:true },
+                    { field: 'skuCode', title: '规格代码', fitColumns:true},
+                    { field: 'warehouseCode', title: '仓库代码', fitColumns:true },
+                    { field: 'warehouseName', title: '仓库名称', fitColumns:true },
+                    { field: 'qty', title: '数量',align:'right',fitColumns:true }
                 ]
             ]
         });

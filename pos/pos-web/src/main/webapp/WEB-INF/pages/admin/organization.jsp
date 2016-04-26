@@ -69,6 +69,24 @@
     </div>
 </div>
 
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist" style="margin-top: 10px">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">仓库信息</a>
+    </li>
+</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">
+
+        <div class="row" style="margin-top: 10px">
+            <div class="col-sm-12">
+                <table id="warehouseGrid"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Nav tabs -->
+
 <!--dialog-->
 <div class="modal fade bs-example-modal-lg" id="myModal">
     <div class="modal-dialog modal-lg">
@@ -220,11 +238,13 @@
 
     $(function () {
         $('#grid').datagrid({
+            rownumbers:true,
             nowrap: false,
             striped: true,
             url: '${ctx}/organization/getList',
             title: '门店列表',
-            height: 430,
+            onClickRow:showWarehouse,
+            height: 230,
             singleSelect: true,
             pagination: true,
             columns: [
@@ -246,7 +266,62 @@
                 ]
             ]
         });
+
+        $("#warehouseGrid").datagrid({
+            singleSelect: true,
+            selectOnCheck: false,
+            rownumbers: true,
+            height: 230,
+            pagination: true,
+            columns: [
+                [
+                    {field: 'op', title: '操作', align: 'center', fitColumns: true, formatter: opration},
+                    { field: 'id', hidden: true },
+                    { field: 'code', title: '仓库代码', fitColumns: true },
+                    { field: 'name', title: '仓库名称', fitColumns: true},
+                    { field: 'pcode', title: '上级组织',hidden:true},
+                    { field: 'isDefaultDeliver', title: '是否是默认发货仓',align:'center', fitColumns: true,formatter:statusStringw},
+                    { field: 'isDefaultReceive', title: '是否是默认收货仓',align:'center', fitColumns: true,formatter:statusStringw}
+                ]
+            ]
+        });
     });
+    //仓库 status
+    function statusStringw(v,r,i){
+        if(v == 1){
+            return '是';
+        }else{
+            return '否';
+        }
+    }
+    //
+    //操作
+    function opration(v,r,i){
+        var btn = "";
+        btn += "<button type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"modifyDeliver('" + i + "')\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span> 默置发货仓</button>";
+        btn += "&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"modifyReceive('" + i + "')\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span> 默置收货仓</button>";
+        return btn;
+    }
+    function modifyDeliver(i){
+        var item = $('#warehouseGrid').datagrid('getRows')[i];
+        $.post('${ctx}/warehouse/setDeliver',{id:item.id,pcode:item.pcode},function(data){
+            alert('提示',data.msg,2000);
+            $('#warehouseGrid').datagrid('reload');
+        });
+    }
+    function modifyReceive(i){
+        var item = $('#warehouseGrid').datagrid('getRows')[i];
+        $.post('${ctx}/warehouse/setReceive',{id:item.id,pcode:item.pcode},function(data){
+            alert('提示',data.msg,2000);
+            $('#warehouseGrid').datagrid('reload');
+        });
+    }
+
+    //刷新仓库列表
+    function showWarehouse(i,r){
+        $('#warehouseGrid').datagrid({url: '${ctx}/warehouse/getList?pcode=' + r.code});
+    }
+
     function getvalue(obj, se, d) {
         var parentId = obj.options[obj.selectedIndex].value;
         getCity(parentId, se, d);

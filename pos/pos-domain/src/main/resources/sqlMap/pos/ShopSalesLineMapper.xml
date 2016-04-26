@@ -22,6 +22,7 @@
 	<insert id="create" parameterType="ShopSalesLine">
 		insert into shop_sales_line(
 			pid,
+            sku_id,
 			sku_code,
             product_code,
 			sale_id,
@@ -37,6 +38,7 @@
 		<foreach collection="list" item="item" separator=",">
             (
             #{item.pid},
+            #{item.skuId},
             #{item.skuCode},
             #{item.productCode},
             #{item.saleId},

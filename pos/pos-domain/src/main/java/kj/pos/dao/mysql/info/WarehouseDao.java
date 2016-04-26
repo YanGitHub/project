@@ -18,4 +18,14 @@ public interface WarehouseDao{
 	public void update(Warehouse warehouse);
 
     public Integer getCode(@Param(value = "code")String code,@Param(value = "id")Long id);
+
+    public void setDeliver(Warehouse warehouse);
+
+    public void updateSetDeliver(Warehouse warehouse);
+
+    public void setReceive(Warehouse warehouse);
+
+    public void updateSetReceive(Warehouse warehouse);
+
+    public Warehouse getWarehouseByOrg(Warehouse warehouse);
 }

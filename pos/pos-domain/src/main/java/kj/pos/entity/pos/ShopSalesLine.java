@@ -10,6 +10,7 @@ public class ShopSalesLine extends BaseEntity{
 	//创建字段
 	private Long id;//id
 	private Long pid;//门店销售明细表(shop_sales_detail id)
+    private Long skuId;
 	private String skuCode;//商品明细表(product_sku code)
     private String skuName;
     private String productCode;//商品代码
@@ -40,7 +41,15 @@ public class ShopSalesLine extends BaseEntity{
 		this.pid = pid;
 	}
 
-	public String getSkuCode(){
+    public Long getSkuId() {
+        return skuId;
+    }
+
+    public void setSkuId(Long skuId) {
+        this.skuId = skuId;
+    }
+
+    public String getSkuCode(){
 		return this.skuCode;
 	}
 

@@ -9,6 +9,7 @@ $(function () {
         columns: [
             [
                 {field: 'id', title: '', hidden: true},
+                {field: 'skuId', title: '', hidden: true},
                 {field: 'productCode',hidden:true},
                 {field: 'code',hidden:true},//skuCode
                 {field: 'barcode', title: '条码', width: 150, fitColumns: true},
@@ -87,14 +88,20 @@ function plus(i, n) {
     var qty = parseFloat(item[i].qty);
     var price = parseFloat(item[i].price);
     var discount = parseFloat(item[i].discount);
-    $('#grid').datagrid('updateRow', {
-        index: i,
-        row: {
-            qty: qty + num,
-            amount: ((qty + num) * price * discount / 10)
+    $.post(contextPath + '/pos/scanBarcode', {barcode: item[i].barcode,qty:qty + 1}, function (data) {
+        if (data.status) {
+            $('#grid').datagrid('updateRow', {
+                index: i,
+                row: {
+                    qty: qty + num,
+                    amount: ((qty + num) * price * discount / 10)
+                }
+            });
+            total();
+        } else {
+            alertLittle(data.msg);
         }
     });
-    total();
 }
 
 //数量减
@@ -131,8 +138,20 @@ function trash(id) {
 }
 //扫描条码
 function scanBarcode() {
+    var item = $('#grid').datagrid('getRows');
     var barcode = $('#barcode').val().trim();
-    $.post(contextPath + '/pos/scanBarcode', {barcode: barcode}, function (data) {
+    var qty = 0;
+    if(item.length > 0){
+        for(var i = 0;i < item.length;i++){
+            if(item[i].barcode == barcode){
+                qty += item[i].qty;
+            }
+        }
+        qty += 1;
+    }else{
+        qty = 1;
+    }
+    $.post(contextPath + '/pos/scanBarcode', {barcode: barcode,qty:qty}, function (data) {
         if (data.status) {
             addSkuJudge(data.productSku, barcode);
             scanSuccess(data.productSku);
@@ -184,6 +203,7 @@ function addSku(data, barcode) {
     var relPrice = data.untPrice * cvipDiscount / 10;
     $('#grid').datagrid('appendRow', {
         id: data.id,
+        skuId: data.id,
         productCode: data.productCode,
         code: data.code,
         barcode: barcode,
@@ -221,19 +241,25 @@ function changeQty(){
         alertLittle("请选择数据");
         return;
     }else{
-        var price = parseFloat(item.price);
-        var discount =  parseFloat(item.discount);
-        var index = $('#grid').datagrid('getRowIndex',item);
-        $('#grid').datagrid('updateRow',{
-            index: index,
-            row: {
-                qty: qty,
-                amount: parseFloat(qty * discount * price / 10)
+        $.post(contextPath + '/pos/scanBarcode', {barcode: item.barcode,qty:qty}, function (data) {
+            if (data.status) {
+                var price = parseFloat(item.price);
+                var discount =  parseFloat(item.discount);
+                var index = $('#grid').datagrid('getRowIndex',item);
+                $('#grid').datagrid('updateRow',{
+                    index: index,
+                    row: {
+                        qty: qty,
+                        amount: parseFloat(qty * discount * price / 10)
+                    }
+                });
+                $('#cqty').val("");
+                total();
+            } else {
+                alertLittle(data.msg);
             }
         });
     }
-    $('#cqty').val("");
-    total();
 }
 
 //改折扣
@@ -377,6 +403,7 @@ function cash(){
         var ob = new Object();
         ob.flowNo = flowNo;
         ob.saleDate = saleDate;
+        ob.skuId = item[i].skuId;
         ob.barcode = item[i].barcode;
         ob.productCode = item[i].productCode;
         ob.productName = item[i].productName;
@@ -421,6 +448,11 @@ function cash(){
 //历史查询
 function showHistory(){
     window.location.href = contextPath + 'pos/shopSalesDetail';
+}
+
+//库存查询
+function showInventory(){
+    window.location.href = contextPath + 'inventory';
 }
 
 //打印小票
@@ -548,7 +580,7 @@ function clean(){
     $('#subtotal').val("");
 
     $('#vipInfo').val("");
-    $('#inventoryQty').val("");
+    $('#integral').val("");
     $('#qty').val("");
     $('#amount').val("");
 

@@ -66,8 +66,8 @@
             </div>
             <div class="col-sm-3">
                 <div class="input-group" style="padding-top: 10px">
-                    <span class="input-group-addon">库存数量</span>
-                    <input type="text" readonly="readonly" id="inventoryQty" class="form-control" placeholder="0.00"
+                    <span class="input-group-addon">会员积分</span>
+                    <input type="text" readonly="readonly" id="integral" class="form-control" placeholder="0.00"
                            aria-describedby="basic-addon1">
                 </div>
             </div>
@@ -87,13 +87,8 @@
             </div>
         </div>
         <div class="btn-group" style="padding-top: 10px">
-            <button class="btn btn-danger" onclick="clean()">ESC撤单</button>
             <button class="btn btn-primary" onclick="showHistory()">历史查询</button>
-            <button class="btn btn-success" onclick="">库存查询</button>
-            <button class="btn btn-warning" onclick="">重打印小票</button>
-            <button class="btn btn-primary" onclick="">支付宝支付</button>
-            <button class="btn btn-success" onclick="">微信支付</button>
-            <button class="btn btn-warning" onclick="openCash()">现金支付</button>
+            <button class="btn btn-success" onclick="showInventory()">库存查询</button>
         </div>
     </div>
     <div class="col-sm-3">
@@ -133,46 +128,46 @@
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">1</button>
+                <button type="button" class="btn btn-danger" onclick="openCash()">收银</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">2</button>
+                <button type="button" class="btn btn-info">支付宝</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">3</button>
-            </div>
-        </div>
-        <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">4</button>
-            </div>
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">5</button>
-            </div>
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">6</button>
+                <button type="button" class="btn btn-primary">微信</button>
             </div>
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">7</button>
+                <button type="button" class="btn btn-warning">导购</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">8</button>
+                <button type="button" class="btn btn-primary">赠品</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">9</button>
+                <button type="button" class="btn btn-success">重打印</button>
             </div>
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">.</button>
+                <button type="button" class="btn btn-warning">预订</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">0</button>
+                <button type="button" class="btn btn-primary">挂单</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default">Cls</button>
+                <button type="button" class="btn btn-success">取单</button>
+            </div>
+        </div>
+        <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary">开钱箱</button>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-info">交接班</button>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" onclick="clean()" class="btn btn-danger">ESC撤单</button>
             </div>
         </div>
     </div>

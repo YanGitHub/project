@@ -67,10 +67,11 @@ public class PosController {
 
     @RequestMapping(value = "/scanBarcode",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> scanBarcode(String barcode)throws SQLException{
+    public Map<String,Object> scanBarcode(@RequestParam(value = "barcode",required = false)String barcode,
+                                          @RequestParam(value = "qty",required = false)String qty)throws SQLException{
         Map<String,Object> map = new HashMap<String, Object>();
         try {
-            map = posService.scanBarcode(barcode);
+            map = posService.scanBarcode(barcode,Double.parseDouble(qty));
         }catch (Exception e){
             e.printStackTrace();
             logger.error(e);

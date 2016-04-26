@@ -45,4 +45,17 @@ public class WarehouseService {
         }
         return map;
     }
+    //设置同一门店下的默认发货仓 只能设置一个
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
+    public void setDeliver(Warehouse warehouse)throws SQLException{
+        warehouseDao.updateSetDeliver(warehouse);
+        warehouseDao.setDeliver(warehouse);
+    }
+
+    //设置同一门店下的默认收货仓 只能设置一个
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
+    public void setReceive(Warehouse warehouse)throws SQLException{
+        warehouseDao.updateSetReceive(warehouse);
+        warehouseDao.setReceive(warehouse);
+    }
 }

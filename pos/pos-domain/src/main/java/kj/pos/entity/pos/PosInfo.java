@@ -16,6 +16,7 @@ public class PosInfo {
     //条码
     private String barcode;
     //skucode
+    private Long skuId;
     private String skuCode;
     private String skuName;
     //商品代码
@@ -159,5 +160,13 @@ public class PosInfo {
 
     public void setSkuName(String skuName) {
         this.skuName = skuName;
+    }
+
+    public Long getSkuId() {
+        return skuId;
+    }
+
+    public void setSkuId(Long skuId) {
+        this.skuId = skuId;
     }
 }

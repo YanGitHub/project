@@ -204,11 +204,31 @@
 
 	</update>
 
+    <update id="setDeliver">
+        UPDATE warehouse set is_default_deliver = 1 WHERE id = #{id}
+    </update>
+
+    <update id="updateSetDeliver">
+        UPDATE warehouse set is_default_deliver = 0 WHERE pcode = #{pcode}
+    </update>
+
+    <update id="setReceive">
+        UPDATE warehouse set is_default_receive = 1 WHERE id = #{id}
+    </update>
+
+    <update id="updateSetReceive">
+        UPDATE warehouse set is_default_receive = 0 WHERE pcode = #{pcode}
+    </update>
+
     <select id="getCode" resultType="java.lang.Integer">
         select count(*) from warehouse where code = #{code}
         <if test="id != null">
             and id &lt;&gt; #{id}
         </if>
+    </select>
+
+    <select id="getWarehouseByOrg" resultType="kj.pos.entity.info.Warehouse">
+        SELECT pcode,code,name from warehouse where pcode = #{pcode} AND is_default_deliver = 1
     </select>
 
 </mapper>

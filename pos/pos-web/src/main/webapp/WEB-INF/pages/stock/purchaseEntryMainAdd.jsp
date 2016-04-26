@@ -719,7 +719,7 @@ function disable(){
 function modify(){
     var status = $('#status').val();
     if(status != "未审核"){
-        alertLittle("友情提示:只有未审核的订单才可以修改");
+        alertLittle("只有未审核的订单才可以修改");
         return;
     }
     $('#billDate').removeAttr("disabled","disabled");

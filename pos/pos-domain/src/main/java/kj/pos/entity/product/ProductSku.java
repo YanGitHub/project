@@ -8,8 +8,8 @@ import java.io.Serializable;
 @Alias("ProductSku")
 public class ProductSku extends BaseEntity{
     //创建字段
-    private Long id;//
-    private Long pid;//商品信息表(product uuid)
+    private Long id;//skuId
+    private Long pid;//商品信息表(product id)
     private String productCode;//
     private String productName;
     private String code;//规格代码

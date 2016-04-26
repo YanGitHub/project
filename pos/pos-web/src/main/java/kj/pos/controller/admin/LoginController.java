@@ -1,8 +1,10 @@
 package kj.pos.controller.admin;
 
+import kj.pos.dao.mysql.info.WarehouseDao;
 import kj.pos.entity.admin.OrganizationInfo;
 import kj.pos.entity.admin.SysParameters;
 import kj.pos.entity.admin.UserInfo;
+import kj.pos.entity.info.Warehouse;
 import kj.pos.service.admin.OrganizationService;
 import kj.pos.service.admin.SysParametersService;
 import kj.pos.service.admin.UserInfoService;
