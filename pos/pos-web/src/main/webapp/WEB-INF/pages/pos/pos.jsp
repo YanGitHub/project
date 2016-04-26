@@ -128,46 +128,46 @@
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-danger" onclick="openCash()">收银</button>
+                <button type="button" class="btn btn-info" onclick="openCash()">收银</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-info">支付宝</button>
+                <button type="button" class="btn btn-success">支付宝</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary">微信</button>
-            </div>
-        </div>
-        <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-warning">导购</button>
-            </div>
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary">赠品</button>
-            </div>
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success">重打印</button>
+                <button type="button" class="btn btn-primary">微信支付</button>
             </div>
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-warning">预订</button>
+                <button type="button" class="btn btn-info">导购</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary">挂单</button>
+                <button type="button" class="btn btn-success" onclick="setIsGift()">赠品</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success">取单</button>
+                <button type="button" class="btn btn-primary">重打印</button>
             </div>
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary">开钱箱</button>
+                <button type="button" class="btn btn-info">预订</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-info">交接班</button>
+                <button type="button" class="btn btn-success" onclick="areCanceled()">挂单</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" onclick="clean()" class="btn btn-danger">ESC撤单</button>
+                <button type="button" class="btn btn-primary" onclick="showASingleList()">取单</button>
+            </div>
+        </div>
+        <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-info" onclick="openCashBox()">开钱箱</button>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-success">交接班</button>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" onclick="clean()" class="btn btn-primary">ESC撤单</button>
             </div>
         </div>
     </div>
@@ -259,6 +259,53 @@
 
 <div id="printTable" hidden="hidden">
     <table id="pTable"></table>
+</div>
+
+<!--取单列表-->
+<!--dialog-->
+<div class="modal fade" id="aSingleListDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    取单
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!---grid-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="aSingleGrid" class="easyui-datagrid" data-options="
+                               rownumbers: true,
+                               height:280,
+                               width:566,
+                               pagination:true,
+                               singleSelect:true,
+                               selectOnCheck:false"
+                               toolbar="#toolbar">
+                            <thead>
+                            <tr>
+                                <th data-options="field:'time',fitColumns:true,width:130">时间</th>
+                                <th data-options="field:'vipInfo',fitColumns:true,width:100">会员</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="confirmASingle()">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
 </div>
 
 <script type="text/javascript">

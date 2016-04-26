@@ -13,6 +13,7 @@ $(function () {
                 {field: 'productCode',hidden:true},
                 {field: 'code',hidden:true},//skuCode
                 {field: 'barcode', title: '条码', width: 150, fitColumns: true},
+                {field: 'isGift', title: '赠品', fitColumns: true,formatter:changeGift},
                 {field: 'productName', title: '品名', width: 150, fitColumns: true},
                 {field: 'skuName', title: '规格名称', width: 100, fitColumns: true},
                 {field: 'price', title: '单价', width: 70, align: 'right', fitColumns: true, formatter: twoDecimal},
@@ -73,7 +74,34 @@ $(function () {
         }
     });
 });
-
+//赠品 数字转字符串
+function changeGift(v,r,i){
+    if(v == 0){
+        return "✘";
+    }else if(v == 1){
+        return "✔";
+    }
+}
+//设置 是赠品
+function setIsGift(){
+    var item = $('#grid').datagrid('getSelected');
+    if(item == null){
+        alertLittle("请选择数据");
+        return;
+    }else{
+        var index = $('#grid').datagrid('getRowIndex',item);
+        $('#grid').datagrid('updateRow',{
+            index: index,
+            row: {
+                isGift:1,
+                discount:0,
+                relPrice:0,
+                amount:0
+            }
+        });
+        total();
+    }
+}
 function opration(v, r, i) {
     var btn = "<button type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"plus('" + i + "','" + 1 + "')\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span></button>";
     btn += "&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"minus('" + i + "','" + 1 + "')\"><span class=\"glyphicon glyphicon-minus\" aria-hidden=\"true\"></span></button>";
@@ -203,6 +231,7 @@ function addSku(data, barcode) {
     var relPrice = data.untPrice * cvipDiscount / 10;
     $('#grid').datagrid('appendRow', {
         id: data.id,
+        isGift:0,
         skuId: data.id,
         productCode: data.productCode,
         code: data.code,
@@ -299,8 +328,8 @@ function scanVipCode(){
             cvipDiscount = list[0].vipDiscount;
             //根据会员折扣重新计算价格
             resolveVipDiscount();
-        }else{
             $('#cvipcode').val("");
+        }else{
             alertLittle("没有此会员");
             return;
         }
@@ -405,6 +434,7 @@ function cash(){
         ob.saleDate = saleDate;
         ob.skuId = item[i].skuId;
         ob.barcode = item[i].barcode;
+        ob.isGift = item[i].isGift;
         ob.productCode = item[i].productCode;
         ob.productName = item[i].productName;
         ob.skuCode = item[i].code;
@@ -476,9 +506,9 @@ function printData(item,data){
     table += "<tr style='font-size: 16px'><td colspan='4' style='text-align: center'>POS*MART</td></tr>";
     table += "<tr><td colspan='4'>=====================</td></tr>";
 
-    table += "<tr style='font-size: 10px'><td colspan='2'>交易号</td><td colspan='2' style='text-align: right'>"+ listd[0].flowNo +"</td></tr>";
-    table += "<tr style='font-size: 10px'><td colspan='2'>收银员</td><td colspan='2' style='text-align: right'>"+ listd[0].createUser +"</td></tr>";
-    table += "<tr style='font-size: 10px'><td colspan='2'>交易日期</td><td colspan='2' style='text-align: right'>"+ listd[0].saleDate +"</td></tr>";
+    table += "<tr style='font-size: 10px'><td colspan='1'>交易号</td><td colspan='3' style='text-align: right'>"+ listd[0].flowNo +"</td></tr>";
+    table += "<tr style='font-size: 10px'><td colspan='1'>收银员</td><td colspan='3' style='text-align: right'>"+ listd[0].createUser +"</td></tr>";
+    table += "<tr style='font-size: 10px'><td colspan='1'>交易日期</td><td colspan='3' style='text-align: right'>"+ listd[0].saleDate +"</td></tr>";
 
     table += "<tr><td colspan='4'>=====================</td></tr>";
 
@@ -568,6 +598,69 @@ function escBtn(){
     location.reload(false);
 }
 
+//挂单
+function areCanceled(){
+    var items = $('#grid').datagrid('getRows');
+    var vipInfo = $('#vipInfo').val();
+    if(items.length == 0){
+        alertLittle("请先扫描商品");
+        return;
+    }
+    var time = getNowFormatDate();
+    var obg = {};
+    obg.items = items;
+    obg.vipInfo = vipInfo;
+    obg.time = time;
+    $.ajax({
+        type:'post',
+        url:contextPath + '/pos/areCanceled',
+        data:JSON.stringify(obg),
+        dataType:'json',
+        contentType: 'application/json',
+        success:function(data){
+            alert('提示',data.msg,2000);
+            clean();
+        }
+    });
+}
+//取单列表
+function showASingleList(){
+    var item = $('#grid').datagrid('getRows');
+    if(item.length > 0){
+        alertLittle("请先结算完成，或者撤单");
+        return;
+    }
+    $('#aSingleListDialog').modal('show');
+    setTimeout("$('#aSingleGrid').datagrid({url: contextPath + '/pos/aSingle'})", 500);
+}
+
+//取单 取出一张单据明细
+function confirmASingle(){
+    var item = $('#aSingleGrid').datagrid('getSelected');
+    if(item == null){
+        alertLittle("请选择数据");
+        return;
+    }
+    $.post(contextPath + '/pos/aSingleMx',{time:item.time},function(data){
+        $("#grid").datagrid('loadData', { total: data.total, rows:data.rows });
+        var vipInfo = data.vipInfo;
+        $("#vipInfo").val(vipInfo);
+        if(vipInfo != null && vipInfo != ""){
+            var vipInfoArray = vipInfo.split('/');
+            cvipDiscount = parseFloat(vipInfoArray[2]);
+        }
+        $("#aSingleListDialog").modal('hide');
+        //计算
+        total();
+    });
+}
+
+//开钱箱
+function openCashBox(){
+    var LODOP = getLodop();
+    LODOP.SEND_PRINT_RAWDATA(String.fromCharCode(27,112,1,128,128));
+}
+
 //清空数据
 function clean(){
     $('#grid').datagrid('loadData', {total: 0, rows: []});
@@ -591,6 +684,8 @@ function clean(){
     for(var k = 0;k < list.length;k++){
         $('#' + list[k].value).val("");
     }
+    //会员折扣
+    cvipDiscount = 10;
 }
 
 $(window).resize(function () {

@@ -11,7 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -196,5 +199,72 @@ public class PosController {
             logger.error(e);
         }
         return map;
+    }
+
+    @RequestMapping(value = "/areCanceled",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> areCanceled(@RequestBody Map<String,Object> map,HttpServletRequest request)throws SQLException{
+        Map<String,Object> returnMap = new HashMap<String, Object>();
+        try {
+            HttpSession session = request.getSession();
+            List<Map<String,Object>> order = (List<Map<String,Object>>)session.getAttribute("order");
+            if(order==null){
+                order = new ArrayList<Map<String, Object>>();
+            }
+            order.add(map);
+            session.setAttribute("order",order);
+            returnMap.put("status",Boolean.TRUE);
+            returnMap.put("msg","挂单成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            returnMap.put("status",Boolean.FALSE);
+            returnMap.put("msg","挂单失败");
+        }
+        return returnMap;
+    }
+
+    @RequestMapping(value = "/aSingle",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> aSingle(HttpServletRequest request)throws SQLException{
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
+        HttpSession session = request.getSession();
+        List<Map<String,Object>> order = (List<Map<String,Object>>)session.getAttribute("order");
+        for(int i = 0;i < order.size();i++){
+            String vipInfo = (String)order.get(i).get("vipInfo");
+            String time = (String)order.get(i).get("time");
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("vipInfo",vipInfo);
+            map.put("time",time);
+            list.add(map);
+        }
+        resultMap.put("rows",list);
+        resultMap.put("total",list.size());
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/aSingleMx",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> aSingleMx(@RequestParam(value = "time",required = false)String time,
+                                      HttpServletRequest request)throws SQLException{
+        Map<String,Object> resultMap = new HashMap<String, Object>();
+        HttpSession session = request.getSession();
+        List<Map<String,Object>> order = (List<Map<String,Object>>)session.getAttribute("order");
+        int delete = 0;
+        for(int i = 0;i < order.size();i++){
+            String timeSession = (String)order.get(i).get("time");
+            if(timeSession.equals(time)){
+                List<Map<String,Object>> list = (List<Map<String,Object>>)order.get(i).get("items");
+                String vipInfo = (String)order.get(i).get("vipInfo");
+                resultMap.put("rows",list);
+                resultMap.put("total",list.size());
+                resultMap.put("vipInfo",vipInfo);
+                delete = i;
+                break;
+            }
+        }
+        order.remove(delete);
+        return resultMap;
     }
 }

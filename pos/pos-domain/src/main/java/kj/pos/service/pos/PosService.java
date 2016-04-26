@@ -188,7 +188,7 @@ public class PosService {
             s.setDisAmount(p.getQty() * p.getPrice() - p.getAmount());
             s.setQty(p.getQty());
             s.setRealAmount(p.getAmount());
-            s.setIsGift(false);
+            s.setIsGift(p.getIsGift());
             lines.add(s);
         }
         return lines;

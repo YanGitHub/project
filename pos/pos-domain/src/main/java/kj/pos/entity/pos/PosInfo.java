@@ -35,6 +35,8 @@ public class PosInfo {
     //找零
     private Double change;
 
+    //赠品
+    private Boolean isGift;
     ///////////////////////支付方式
     private List<ShopPayment> paymentList;
 
@@ -168,5 +170,13 @@ public class PosInfo {
 
     public void setSkuId(Long skuId) {
         this.skuId = skuId;
+    }
+
+    public Boolean getIsGift() {
+        return isGift;
+    }
+
+    public void setIsGift(Boolean isGift) {
+        this.isGift = isGift;
     }
 }
