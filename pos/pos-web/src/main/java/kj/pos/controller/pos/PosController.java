@@ -231,16 +231,21 @@ public class PosController {
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
         HttpSession session = request.getSession();
         List<Map<String,Object>> order = (List<Map<String,Object>>)session.getAttribute("order");
-        for(int i = 0;i < order.size();i++){
-            String vipInfo = (String)order.get(i).get("vipInfo");
-            String time = (String)order.get(i).get("time");
-            Map<String,Object> map = new HashMap<String, Object>();
-            map.put("vipInfo",vipInfo);
-            map.put("time",time);
-            list.add(map);
+        if(order != null){
+            for(int i = 0;i < order.size();i++){
+                String vipInfo = (String)order.get(i).get("vipInfo");
+                String time = (String)order.get(i).get("time");
+                Map<String,Object> map = new HashMap<String, Object>();
+                map.put("vipInfo",vipInfo);
+                map.put("time",time);
+                list.add(map);
+            }
+            resultMap.put("rows",list);
+            resultMap.put("total",list.size());
+        }else{
+            resultMap.put("rows",null);
+            resultMap.put("total",0);
         }
-        resultMap.put("rows",list);
-        resultMap.put("total",list.size());
         return resultMap;
     }
 

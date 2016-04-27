@@ -189,6 +189,7 @@ public class PosService {
             s.setQty(p.getQty());
             s.setRealAmount(p.getAmount());
             s.setIsGift(p.getIsGift());
+            s.setEmployeeCode(p.getEmployeeCode());
             lines.add(s);
         }
         return lines;

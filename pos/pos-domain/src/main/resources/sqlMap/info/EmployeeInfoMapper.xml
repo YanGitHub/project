@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.info.EmployeeInfoDao">
+	<resultMap id="ResultMap" type="EmployeeInfo">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="orgCode" column="org_code"/>
+        <result property="orgName" column="org_name"/>
+		<result property="sex" column="sex"/>
+		<result property="isJob" column="is_job"/>
+		<result property="birthday" column="birthday"/>
+		<result property="identityCard" column="identity_card"/>
+		<result property="phone" column="phone"/>
+		<result property="mobile" column="mobile"/>
+		<result property="qq" column="qq"/>
+		<result property="email" column="email"/>
+		<result property="wangwang" column="wangwang"/>
+		<result property="weixin" column="weixin"/>
+		<result property="address" column="address"/>
+		<result property="note" column="note"/>
+	</resultMap>
+
+	<select id="getList" resultMap="ResultMap" parameterType="EmployeeInfo" >
+        select
+            ei.id,
+            ei.create_date,
+            ei.modify_date,
+            ei.code,
+            ei.name,
+            ei.org_code,
+            oi.name as org_name,
+            ei.sex,
+            ei.is_job,
+            ei.birthday,
+            ei.identity_card,
+            ei.phone,
+            ei.mobile,
+            ei.qq,
+            ei.email,
+            ei.wangwang,
+            ei.weixin,
+            ei.address,
+            ei.note
+        from employee_info ei
+        LEFT JOIN organization_info oi on oi.code = ei.org_code
+        where 1=1
+        <if test="id!=null">
+				and ei.id=#{id}
+		</if>
+		<if test="code!=null">
+				and ei.code=#{code}
+		</if>
+		<if test="name!=null">
+				and ei.name=#{name}
+		</if>
+		<if test="orgCode!=null">
+				and ei.org_code=#{orgCode}
+		</if>
+		<if test="identityCard!=null">
+				and ei.identity_card=#{identityCard}
+		</if>
+		<if test="phone!=null">
+				and ei.phone=#{phone}
+		</if>
+		<if test="mobile!=null">
+				and ei.mobile=#{mobile}
+		</if>
+		<if test="qq!=null">
+				and ei.qq=#{qq}
+		</if>
+		<if test="wangwang!=null">
+				and ei.wangwang=#{wangwang}
+		</if>
+		<if test="weixin!=null">
+				and ei.weixin=#{weixin}
+		</if>
+	</select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+            count(*)
+        from employee_info ei
+        LEFT JOIN organization_info oi on oi.code = ei.org_code
+        where 1=1
+        <if test="id!=null">
+            and ei.id=#{id}
+        </if>
+        <if test="code!=null">
+            and ei.code=#{code}
+        </if>
+        <if test="name!=null">
+            and ei.name=#{name}
+        </if>
+        <if test="orgCode!=null">
+            and ei.org_code=#{orgCode}
+        </if>
+        <if test="identityCard!=null">
+            and ei.identity_card=#{identityCard}
+        </if>
+        <if test="phone!=null">
+            and ei.phone=#{phone}
+        </if>
+        <if test="mobile!=null">
+            and ei.mobile=#{mobile}
+        </if>
+        <if test="qq!=null">
+            and ei.qq=#{qq}
+        </if>
+        <if test="wangwang!=null">
+            and ei.wangwang=#{wangwang}
+        </if>
+        <if test="weixin!=null">
+            and ei.weixin=#{weixin}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="EmployeeInfo">
+		insert into employee_info(
+			create_date,
+			code,
+			name,
+			org_code,
+			sex,
+			is_job,
+			birthday,
+			identity_card,
+			phone,
+			mobile,
+			qq,
+			email,
+			wangwang,
+			weixin,
+			address,
+			note
+		) values (
+			now(),
+			#{code},
+			#{name},
+			#{orgCode},
+			#{sex},
+			#{isJob},
+			#{birthday},
+			#{identityCard},
+			#{phone},
+			#{mobile},
+			#{qq},
+			#{email},
+			#{wangwang},
+			#{weixin},
+			#{address},
+			#{note}
+		)
+	</insert>
+
+	<update id="update" parameterType="EmployeeInfo">
+		update employee_info
+        <set>
+            modify_date=now(),
+            <if test="code!=null and code != ''">
+                code=#{code},
+            </if>
+            <if test="name!=null and name != ''">
+                name=#{name},
+            </if>
+            <if test="orgCode!=null and orgCode != ''">
+                org_code=#{orgCode},
+            </if>
+            <if test="sex!=null">
+                sex=#{sex},
+            </if>
+            <if test="isJob!=null">
+                is_job=#{isJob},
+            </if>
+            <if test="birthday!=null and birthday != ''">
+                birthday=#{birthday},
+            </if>
+            <if test="identityCard!=null and identityCard != ''">
+                identity_card=#{identityCard},
+            </if>
+            <if test="phone!=null and phone != ''">
+                phone=#{phone},
+            </if>
+            <if test="mobile!=null and mobile != ''">
+                mobile=#{mobile},
+            </if>
+            <if test="qq!=null and qq != ''">
+                qq=#{qq},
+            </if>
+            <if test="email!=null and email != ''">
+                email=#{email},
+            </if>
+            <if test="wangwang!=null and wangwang != ''">
+                wangwang=#{wangwang},
+            </if>
+            <if test="weixin!=null and weixin != ''">
+                weixin=#{weixin},
+            </if>
+            <if test="address!=null and address != ''">
+                address=#{address},
+            </if>
+            <if test="note!=null and note != ''">
+                note=#{note}
+            </if>
+        </set>
+
+	</update>
+</mapper>

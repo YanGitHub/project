@@ -56,6 +56,8 @@ public class CommonController {
     private BrandService brandService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private EmployeeInfoService employeeInfoService;
     /**
      * 获取省市区
      * @param region
@@ -237,6 +239,27 @@ public class CommonController {
         List<Category> list = new ArrayList<Category>();
         try {
             list = categoryService.getList(category);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+        }
+        return list;
+    }
+
+    /**
+     * 员工 信息 （在职）
+     * @param employeeInfo
+     * @return
+     * @throws SQLException
+     */
+    @RequestMapping(value = "/getEmployees",method = RequestMethod.POST)
+    @ResponseBody
+    public List<EmployeeInfo> getEmployees(EmployeeInfo employeeInfo)throws SQLException{
+        List<EmployeeInfo> list = new ArrayList<EmployeeInfo>();
+        try {
+            //在职 0 离职 1
+            employeeInfo.setIsJob(false);
+            list = employeeInfoService.getList(employeeInfo);
         }catch (Exception e){
             e.printStackTrace();
             logger.error(e);

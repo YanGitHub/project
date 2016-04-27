@@ -10,10 +10,12 @@ $(function () {
             [
                 {field: 'id', title: '', hidden: true},
                 {field: 'skuId', title: '', hidden: true},
+                {field: 'employeeCode', title: '', hidden: true},
                 {field: 'productCode',hidden:true},
                 {field: 'code',hidden:true},//skuCode
                 {field: 'barcode', title: '条码', width: 150, fitColumns: true},
                 {field: 'isGift', title: '赠品', fitColumns: true,formatter:changeGift},
+                {field: 'employeeName', title: '导购员', fitColumns: true},
                 {field: 'productName', title: '品名', width: 150, fitColumns: true},
                 {field: 'skuName', title: '规格名称', width: 100, fitColumns: true},
                 {field: 'price', title: '单价', width: 70, align: 'right', fitColumns: true, formatter: twoDecimal},
@@ -82,11 +84,64 @@ function changeGift(v,r,i){
         return "✔";
     }
 }
+//显示导购员列表
+function showEmployeeDialog(){
+    var item = $('#grid').datagrid('getRows');
+    if(item.length == 0){
+        alertLittle("请先扫描商品条码");
+        return;
+    }
+    $('#employeeDialog').modal('show');
+    setTimeout("$('#employeeGrid').datagrid({url: contextPath + '/info/employeeInfo/getList?status = ' + 0})", 500);
+}
+//确定导购员
+function confimEmployee(value){
+    //验证 是否已经扫描商品
+    var data = $('#grid').datagrid('getRows');
+    if(data.length == 0){
+        alertLittle("请先扫描商品条码");
+        return;
+    }
+    var item = $('#employeeGrid').datagrid('getSelected');
+    if(item == null){
+        alertLittle("请选择导购员");
+        return;
+    }else{
+        if(value){
+            for(var i = 0;i < data.length;i++){
+                $('#grid').datagrid('updateRow',{
+                    index: i,
+                    row: {
+                        employeeCode:item.code,
+                        employeeName:item.name
+                    }
+                });
+            }
+        }else{
+            var single = $('#grid').datagrid('getSelected');
+            if(single != null){
+                var index = $('#grid').datagrid('getRowIndex',single);
+                $('#grid').datagrid('updateRow',{
+                    index: index,
+                    row: {
+                        employeeCode:item.code,
+                        employeeName:item.name
+                    }
+                });
+            }else{
+                alertLittle("请选择已经扫描的商品");
+                return;
+            }
+        }
+    }
+    $('#employeeDialog').modal('hide');
+}
+
 //设置 是赠品
 function setIsGift(){
     var item = $('#grid').datagrid('getSelected');
     if(item == null){
-        alertLittle("请选择数据");
+        alertLittle("请先扫描商品条码");
         return;
     }else{
         var index = $('#grid').datagrid('getRowIndex',item);
@@ -433,6 +488,7 @@ function cash(){
         ob.flowNo = flowNo;
         ob.saleDate = saleDate;
         ob.skuId = item[i].skuId;
+        ob.employeeCode = item[i].employeeCode;
         ob.barcode = item[i].barcode;
         ob.isGift = item[i].isGift;
         ob.productCode = item[i].productCode;
@@ -457,6 +513,8 @@ function cash(){
         ob.paymentList = d;
         data[i] = ob;
     }
+    //关闭收银窗口
+    $('#cashDialog').modal('hide');
     //提交收银信息
     $.ajax({
         type: 'POST',
@@ -464,7 +522,6 @@ function cash(){
         contentType:"application/json",
         data: JSON.stringify(data),
         success: function(map){
-            $('#cashDialog').modal('hide');
             //打印小票
             print(data);
         },
@@ -472,7 +529,6 @@ function cash(){
 
         }
     });
-//console.log(JSON.stringify(data));
 }
 
 //历史查询
@@ -603,7 +659,7 @@ function areCanceled(){
     var items = $('#grid').datagrid('getRows');
     var vipInfo = $('#vipInfo').val();
     if(items.length == 0){
-        alertLittle("请先扫描商品");
+        alertLittle("请先扫描商品条码");
         return;
     }
     var time = getNowFormatDate();

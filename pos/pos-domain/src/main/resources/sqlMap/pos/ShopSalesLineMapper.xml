@@ -8,7 +8,6 @@
         <result property="skuName" column="sku_name"/>
         <result property="productCode" column="product_code"/>
         <result property="productName" column="product_name"/>
-		<result property="saleId" column="sale_id"/>
 		<result property="untPrice" column="unt_price"/>
 		<result property="realPrice" column="real_price"/>
 		<result property="saleDiscount" column="sale_discount"/>
@@ -25,7 +24,6 @@
             sku_id,
 			sku_code,
             product_code,
-			sale_id,
 			unt_price,
 			real_price,
 			sale_discount,
@@ -33,6 +31,7 @@
 			dis_amount,
 			real_amount,
 			is_gift,
+            employee_code,
 			note
 		) values
 		<foreach collection="list" item="item" separator=",">
@@ -41,7 +40,6 @@
             #{item.skuId},
             #{item.skuCode},
             #{item.productCode},
-            #{item.saleId},
             #{item.untPrice},
             #{item.realPrice},
             #{item.saleDiscount},
@@ -49,6 +47,7 @@
             #{item.disAmount},
             #{item.realAmount},
             #{item.isGift},
+            #{item.employeeCode},
             #{item.note}
             )
 		</foreach>

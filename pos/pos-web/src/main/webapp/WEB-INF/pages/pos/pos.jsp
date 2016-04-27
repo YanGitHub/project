@@ -134,18 +134,18 @@
                 <button type="button" class="btn btn-success">支付宝</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary">微信支付</button>
+                <button type="button" class="btn btn-warning">微信支付</button>
             </div>
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-info">导购</button>
+                <button type="button" class="btn btn-info" onclick="showEmployeeDialog()">导购</button>
             </div>
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-success" onclick="setIsGift()">赠品</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary">重打印</button>
+                <button type="button" class="btn btn-warning">重打印</button>
             </div>
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
@@ -156,7 +156,7 @@
                 <button type="button" class="btn btn-success" onclick="areCanceled()">挂单</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary" onclick="showASingleList()">取单</button>
+                <button type="button" class="btn btn-warning" onclick="showASingleList()">取单</button>
             </div>
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
@@ -167,7 +167,7 @@
                 <button type="button" class="btn btn-success">交接班</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" onclick="clean()" class="btn btn-primary">ESC撤单</button>
+                <button type="button" onclick="clean()" class="btn btn-warning">ESC撤单</button>
             </div>
         </div>
     </div>
@@ -300,6 +300,56 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="confirmASingle()">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
+</div>
+
+<!--导购员列表-->
+<div class="modal fade" id="employeeDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    导购员列表
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!---grid-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="employeeGrid" class="easyui-datagrid" data-options="
+                               rownumbers: true,
+                               height:280,
+                               width:566,
+                               pagination:true,
+                               singleSelect:true,
+                               selectOnCheck:false"
+                               toolbar="#toolbar">
+                            <thead>
+                            <tr>
+                                <th data-options="field:'code',fitColumns:true">导购员代码</th>
+                                <th data-options="field:'name',fitColumns:true">导购员名称</th>
+                                <th data-options="field:'sex',fitColumns:true">性别</th>
+                                <th data-options="field:'mobile',fitColumns:true">手机</th>
+                                <th data-options="field:'phone',fitColumns:true">电话</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="confimEmployee(true)">整单</button>
+                <button type="button" class="btn btn-info" onclick="confimEmployee(false)">单品</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>

@@ -37,6 +37,8 @@ public class PosInfo {
 
     //赠品
     private Boolean isGift;
+    //导购员代码
+    private String employeeCode;
     ///////////////////////支付方式
     private List<ShopPayment> paymentList;
 
@@ -178,5 +180,13 @@ public class PosInfo {
 
     public void setIsGift(Boolean isGift) {
         this.isGift = isGift;
+    }
+
+    public String getEmployeeCode() {
+        return employeeCode;
+    }
+
+    public void setEmployeeCode(String employeeCode) {
+        this.employeeCode = employeeCode;
     }
 }

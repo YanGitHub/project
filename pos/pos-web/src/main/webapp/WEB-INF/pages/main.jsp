@@ -61,6 +61,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="#" onclick="addTab('门店资料','${ctx}/organization')">门店资料</a></li>
                                 <li><a href="#" onclick="addTab('仓库信息','${ctx}/warehouse')">仓库信息</a></li>
+                                <li><a href="#" onclick="addTab('员工信息','${ctx}/info/employeeInfo')">员工信息</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#" onclick="addTab('会员信息','${ctx}/vipInfo')">会员信息</a></li>
                                 <li><a href="#" onclick="addTab('会员类型','${ctx}/vipType')">会员类型</a></li>

@@ -15,7 +15,6 @@ public class ShopSalesLine extends BaseEntity{
     private String skuName;
     private String productCode;//商品代码
     private String productName;
-	private Long saleId;//导购员(employee_info id)
 	private Double untPrice;//标准单价
 	private Double realPrice;//实售价
 	private Double saleDiscount;//销售折扣
@@ -23,6 +22,7 @@ public class ShopSalesLine extends BaseEntity{
 	private Double disAmount;//折扣金额
 	private Double realAmount;//实售金额
 	private Boolean isGift;//是否赠品 0 否 1是
+    private String employeeCode;//导购员代码
 	private String note;//备注
 	//创建getter和setter方法
 	public Long getId(){
@@ -55,14 +55,6 @@ public class ShopSalesLine extends BaseEntity{
 
 	public void setSkuCode(String skuCode){
 		this.skuCode = skuCode;
-	}
-
-	public Long getSaleId(){
-		return this.saleId;
-	}
-
-	public void setSaleId(Long saleId){
-		this.saleId = saleId;
 	}
 
 	public Double getUntPrice(){
@@ -151,5 +143,13 @@ public class ShopSalesLine extends BaseEntity{
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getEmployeeCode() {
+        return employeeCode;
+    }
+
+    public void setEmployeeCode(String employeeCode) {
+        this.employeeCode = employeeCode;
     }
 }
