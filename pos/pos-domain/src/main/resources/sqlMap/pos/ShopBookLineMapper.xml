@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.pos.ShopBookLineDao">
+    <resultMap id="ResultMap" type="ShopBookLine">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="skuCode" column="sku_code"/>
+        <result property="skuName" column="sku_name"/>
+        <result property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="untPrice" column="unt_price"/>
+        <result property="realPrice" column="real_price"/>
+        <result property="saleDiscount" column="sale_discount"/>
+        <result property="qty" column="qty"/>
+        <result property="disAmount" column="dis_amount"/>
+        <result property="realAmount" column="real_amount"/>
+        <result property="isGift" column="is_gift"/>
+        <result property="note" column="note"/>
+    </resultMap>
+
+    <insert id="create" parameterType="ShopBookLine">
+        insert into shop_book_line(
+        pid,
+        sku_id,
+        sku_code,
+        product_code,
+        unt_price,
+        real_price,
+        sale_discount,
+        qty,
+        dis_amount,
+        real_amount,
+        is_gift,
+        employee_code,
+        note
+        ) values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.pid},
+            #{item.skuId},
+            #{item.skuCode},
+            #{item.productCode},
+            #{item.untPrice},
+            #{item.realPrice},
+            #{item.saleDiscount},
+            #{item.qty},
+            #{item.disAmount},
+            #{item.realAmount},
+            #{item.isGift},
+            #{item.employeeCode},
+            #{item.note}
+            )
+        </foreach>
+    </insert>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        from shop_book_line s
+        LEFT JOIN product_sku ps on ps.code = s.sku_code and s.product_code = ps.product_code
+        LEFT JOIN product p on p.code = ps.product_code
+        WHERE TRUE
+        <if test="pid != null">
+            and s.pid = #{pid}
+        </if>
+    </select>
+
+    <select id="getList" resultMap="ResultMap">
+        SELECT
+        s.id,
+        s.sku_code,
+        ps.name as sku_name,
+        s.product_code,
+        p.name as product_name,
+        s.unt_price,real_price,
+        s.sale_discount,
+        s.qty,
+        s.dis_amount,
+        s.real_amount,
+        s.note
+        from shop_book_line s
+        LEFT JOIN product_sku ps on ps.code = s.sku_code and s.product_code = ps.product_code
+        LEFT JOIN product p on p.code = ps.product_code
+        WHERE TRUE
+        <if test="pid != null">
+            and s.pid = #{pid}
+        </if>
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+    </select>
+
+</mapper>

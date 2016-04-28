@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.pos.ShopBookDetailDao">
+    <resultMap id="ResultMap" type="ShopBookDetail">
+        <result property="id" column="id"/>
+        <result property="flowNo" column="flow_no"/>
+        <result property="saleDate" column="sale_date"/>
+        <result property="vipNo" column="vip_no"/>
+        <result property="cashId" column="cash_id"/>
+        <result property="isOnline" column="is_online"/>
+        <result property="isOnlineName" column="is_online_name"/>
+        <result property="saleType" column="sale_type"/>
+        <result property="saleTypeName" column="sale_type_name"/>
+        <result property="fundAmount" column="fund_amount"/>
+        <result property="note" column="note"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createDate" column="create_date"/>
+        <result property="modifyUser" column="modify_user"/>
+        <result property="modifyDate" column="modify_date"/>
+    </resultMap>
+
+    <insert id="create" parameterType="ShopBookDetail" keyProperty="id" useGeneratedKeys="true">
+		insert into shop_book_detail(
+			flow_no,
+			sale_date,
+			vip_no,
+			cash_id,
+			is_online,
+			sale_type,
+			fund_amount,
+			note,
+			create_user,
+			create_date,
+			modify_user,
+			modify_date
+		) values (
+			#{flowNo},
+			#{saleDate},
+			#{vipNo},
+			#{cashId},
+			#{isOnline},
+			#{saleType},
+			#{fundAmount},
+			#{note},
+			#{createUser},
+			now(),
+			#{modifyUser},
+			now()
+		)
+	</insert>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        from shop_book_detail
+        where true
+        <if test="flowNo != null and flowNo != ''">
+            and flow_no = #{flowNo}
+        </if>
+        <if test="saleType != null">
+            and sale_type = #{saleType}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[
+			  and DATE_FORMAT(sale_date, '%Y-%m-%d') >=  DATE_FORMAT(#{startDate}, '%Y-%m-%d')
+		    ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+			  and DATE_FORMAT(sale_date, '%Y-%m-%d') <=  DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+		    ]]>
+        </if>
+    </select>
+
+    <select id="getList" resultMap="ResultMap">
+        SELECT
+        id,
+        flow_no,
+        sale_date,
+        vip_no,
+        case is_online
+        when 0 then '否'
+        when 1 then '是'
+        end as is_online_name,
+        case sale_type
+        when 1 then '销售'
+        when 2 then '退货'
+        end as sale_type_name,
+        fund_amount,
+        note,
+        create_user,
+        create_date,
+        modify_date,
+        modify_user
+        from shop_book_detail
+        where true
+        <if test="flowNo != null and flowNo != ''">
+            and flow_no = #{flowNo}
+        </if>
+        <if test="saleType != null">
+            and sale_type = #{saleType}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[
+			  and DATE_FORMAT(sale_date, '%Y-%m-%d') >=  DATE_FORMAT(#{startDate}, '%Y-%m-%d')
+		    ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+			  and DATE_FORMAT(sale_date, '%Y-%m-%d') <=  DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+		    ]]>
+        </if>
+        order by sale_date desc
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+    </select>
+
+</mapper>

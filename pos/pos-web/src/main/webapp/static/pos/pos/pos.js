@@ -157,6 +157,22 @@ function setIsGift(){
         total();
     }
 }
+//显示重打印窗口
+function showRePrintDialog(){
+    $('#rePrintDialog').modal('show');
+    setTimeout("$('#rePrintGrid').datagrid({url: contextPath + 'pos/shopSalesDetail/getList'})", 500);
+}
+//确定重打印数据
+function confimRePrint(){
+    var item = $('#rePrintGrid').datagrid('getSelected');
+    if(item == null){
+        alertLittle("请选择要重新打印的数据");
+        return;
+    }else{
+        $('#rePrintDialog').modal('hide');
+        print(item.flowNo,"重打印",'pos/print/getList');
+    }
+}
 function opration(v, r, i) {
     var btn = "<button type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"plus('" + i + "','" + 1 + "')\"><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span></button>";
     btn += "&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-default btn-xs\" onclick=\"minus('" + i + "','" + 1 + "')\"><span class=\"glyphicon glyphicon-minus\" aria-hidden=\"true\"></span></button>";
@@ -305,12 +321,15 @@ function total() {
     var item = $('#grid').datagrid('getRows');
     var qty = 0;
     var amount = 0;
+    var untAmount = 0;
     for (var i = 0; i < item.length; i++) {
         qty += parseFloat(item[i].qty);
         amount += parseFloat(item[i].amount);
+        untAmount += ( parseFloat(item[i].qty) * parseFloat(item[i].price) );
     }
     $('#qty').val(twoDecimal(qty));
     $('#amount').val(twoDecimal(amount));
+    $('#favourablePrice').val( twoDecimal(untAmount - amount));
 }
 
 //改数量
@@ -480,7 +499,7 @@ function cash(){
     //收银时间
     var saleDate = getNowFormatDate();
     //生成小票号
-    var flowNo = saleDate.replace(/\:/g,"").replace(/\-/g,"").replace(/\s/g,"");
+    var flowNo = "SY" + saleDate.replace(/\:/g,"").replace(/\-/g,"").replace(/\s/g,"");
     //组织数据包
     var data  = new Array();
     for(var i = 0;i < item.length;i++){
@@ -523,7 +542,7 @@ function cash(){
         data: JSON.stringify(data),
         success: function(map){
             //打印小票
-            print(data);
+            print(data[0].flowNo,"收银",'pos/print/getList');
         },
         error: function(map){
 
@@ -542,10 +561,10 @@ function showInventory(){
 }
 
 //打印小票
-function print(item){
+function print(flowNo,type,url){
     if(print_receipts == "1"){
-        $.post(contextPath + 'pos/print/getList',{flowNo:item[0].flowNo},function(data){
-            printData(item,data);
+        $.post(contextPath + url,{flowNo:flowNo},function(data){
+            autoPrintData(data,type);
             clean();
         });
     }else{
@@ -553,58 +572,78 @@ function print(item){
     }
 
 }
-//组织小票打印内容
-function printData(item,data){
+//根据系统参数判断 是否打印小票
+function autoPrintData(data,type){
+    // type = 1 代表小票模板 2 代表标签模板
+    $.post(contextPath + 'printTemplate/getData', {type: 1}, function (msg) {
+        printF(msg.printTemplate.data,data,type);
+    });
+}
+//组织小票打印内容 并打印
+function printF(style,data,type){
     var listp = data.listP;
     var listd = data.listD;
     var listL = data.listL;
-    var table = "<table>";
-    table += "<tr style='font-size: 16px'><td colspan='4' style='text-align: center'>POS*MART</td></tr>";
-    table += "<tr><td colspan='4'>=====================</td></tr>";
+    style = style.replace(/LODOP.PRINT_INITA([\s\S]*?);/, '')
+        .replace(/\[类型\]/g, type)
+        .replace(/\[门店名称\]/g, "POS*MART")
+        .replace(/\[交易号\]/g, listd[0].flowNo)
+        .replace(/\[交易日期\]/g, listd[0].saleDate)
+        .replace(/\[收银员\]/g, listd[0].createUser)
+        .replace(/\[总计\]/g, getRealReceive(listL))
+        .replace(/\[件数\]/g, getRealQty(listL))
+        .replace(/\[实收金额\]/g, getRealPay(listp))
+        .replace(/\[找零金额\]/g, listd[0].fundAmount.toFixed(2))
+        .replace(/\[电话\]/g, "021-888888")
+        .replace(/\[地址\]/g, "中国上海");
 
-    table += "<tr style='font-size: 10px'><td colspan='1'>交易号</td><td colspan='3' style='text-align: right'>"+ listd[0].flowNo +"</td></tr>";
-    table += "<tr style='font-size: 10px'><td colspan='1'>收银员</td><td colspan='3' style='text-align: right'>"+ listd[0].createUser +"</td></tr>";
-    table += "<tr style='font-size: 10px'><td colspan='1'>交易日期</td><td colspan='3' style='text-align: right'>"+ listd[0].saleDate +"</td></tr>";
+    //商品明细
+    var trReg = /<tr id=order-item(( sort=location)|( sort=item))?>[\s\S]*?<\/tr>/gi;
+    var orderItems = '';
+    var trMatch;
+    if (trMatch = trReg.exec(style)) {
+        var trResult = trMatch[0];
+        var items = listL;
+        for (var j = 0; j < items.length; j++) {
+            var itemData = items[j];
+            var trResult = trMatch[0];
+            //截取商品名称
+            trResult = trResult.replace(/\[商品名称\]/g, itemData.productName);
+            trResult = trResult.replace(/\[品名\]/g, itemData.skuName);//规格名称
+            trResult = trResult.replace(/\[数量\]/g, itemData.qty.toFixed(2));
+            trResult = trResult.replace(/\[单价\]/g, itemData.realPrice.toFixed(2));//实际单价
+            trResult = trResult.replace(/\[金额\]/g, itemData.realAmount.toFixed(2));
 
-    table += "<tr><td colspan='4'>=====================</td></tr>";
-
-    table += "<tr style='font-size: 10px'><td>品名</td><td style='text-align: right'>单价</td><td style='text-align: right'>数量</td><td style='text-align: right'>金额</td></tr>";
-
-    for(var i = 0;i < listL.length;i++){
-        table += "<tr style='font-size: 10px'><td>" + listL[i].skuName + "</td>" +
-            "<td style='text-align: right'>" + listL[i].realPrice + "</td>" +
-            "<td style='text-align: right'>" + listL[i].qty + "</td>" +
-            "<td style='text-align: right'>" + listL[i].realAmount + "</td></tr>";
-        //商品名称
-        table += "<tr style='font-size: 10px'><td colspan='4'>" + listL[i].productName + "</td></tr>";
+            trResult = trResult.replace(/\[规格代码\]/g, itemData.skuCode);
+            trResult = trResult.replace(/\[折扣\]/g, itemData.saleDiscount);//销售折扣
+            trResult = trResult.replace(/\[标准单价\]/g, itemData.untPrice);
+            orderItems += trResult;
+        }
+        style = style.replace(trReg, orderItems);
     }
-    table += "<tr><td colspan='4'>=====================</td></tr>";
-    table += "<tr style='font-size: 10px'><td colspan='2'>支付方式</td><td colspan='2' style='text-align: right'>支付金额</td></tr>";
-    for(var z = 0;z < listp.length;z++){
-        table += "<tr style='font-size: 10px'><td colspan='2'>"+ listp[z].payName +"</td><td colspan='2' style='text-align: right'>"+ listp[z].amount.toFixed(2) +"</td></tr>";
+    //支付明细
+    var trReg2 = /<tr id=order-pay(( sort=location)|( sort=item2))?>[\s\S]*?<\/tr>/gi;
+    var orderItems2 = '';
+    var trMatch2 = null;
+    if (trMatch2 = trReg2.exec(style)) {
+        var trResult2 = trMatch2[0];
+        for (var j = 0; j < listp.length; j++) {
+            trResult2 = trResult2.replace("id=order-pay", "");
+            trResult2 = trResult2.replace(/\[支付方式\]/g, listp[j].payName);
+            trResult2 = trResult2.replace(/\[支付金额\]/g, listp[j].amount.toFixed(2));
+            orderItems2 += trResult2;
+        }
+        style = style.replace(trReg2, orderItems2);
     }
-
-    table += "<tr><td colspan='4'>=====================</td></tr>";
-
-    table += "<tr style='font-size: 14px'><td colspan='2'>总计</td><td colspan='2' style='text-align: right'>"+ getRealReceive(listL) +"</td></tr>";
-    table += "<tr style='font-size: 14px'><td colspan='2'>件数</td><td colspan='2' style='text-align: right'>"+ getRealQty(listL) +"</td></tr>";
-    table += "<tr style='font-size: 10px'><td colspan='2'>实收金额</td><td colspan='2' style='text-align: right'>"+ getRealPay(listp) +"</td></tr>";
-    table += "<tr style='font-size: 10px'><td colspan='2'>找零金额</td><td colspan='2' style='text-align: right'>"+ listd[0].fundAmount.toFixed(2) +"</td></tr>";
-
-    table += "<tr><td colspan='4'>=====================</td></tr>";
-    table += "<tr><td colspan='4' style='text-align: center;font-size: 16px'>欢迎再次光临</td></tr>";
-    table += "</table>";
-
-    $('#pTable').html(table);
-
+    style = style.replace(/[\r\n]/g, " ");
+    style = style.replace(/ADD_PRINT_HTML/g, "ADD_PRINT_HTM");
+    //打印
     var LODOP = getLodop();
-    LODOP.PRINT_INIT("POS小票打印");
-    LODOP.ADD_PRINT_BARCODE(5,5,45,45,'QRCode',listd[0].flowNo);
-    LODOP.ADD_PRINT_TABLE(0,2,$('#pTable').height(),530,table);
-    LODOP.SET_PRINT_PAGESIZE(3,530,20,"");
-//    LODOP.PREVIEW();
+    LODOP.PRINT_INIT("小票打印");
+    eval(style);
     LODOP.PRINT();
 }
+
 //实际支付总金额
 function getRealPay(listp){
     var amount = 0.0;
@@ -654,6 +693,74 @@ function escBtn(){
     location.reload(false);
 }
 
+//显示预定窗口
+function showBookDialog(){
+    var item = $('#grid').datagrid('getRows');
+    if(item.length == 0){
+
+    }else{
+        showBookPayDialog();
+    }
+}
+
+//显示 预订支付窗口
+function showBookPayDialog(){
+    $('#bookPayDialog').modal('show');
+}
+
+//确定预订
+function saveBook(){
+    var item = $('#grid').datagrid('getRows');
+    //收银时间
+    var saleDate = getNowFormatDate();
+    //生成小票号
+    var flowNo = 'YD'+ saleDate.replace(/\:/g,"").replace(/\-/g,"").replace(/\s/g,"");
+    //组织数据包
+    var data  = new Array();
+    for(var i = 0;i < item.length;i++){
+        var ob = new Object();
+        ob.flowNo = flowNo;
+        ob.saleDate = saleDate;
+        ob.skuId = item[i].skuId;
+        ob.employeeCode = item[i].employeeCode;
+        ob.barcode = item[i].barcode;
+        ob.isGift = item[i].isGift;
+        ob.productCode = item[i].productCode;
+        ob.productName = item[i].productName;
+        ob.skuCode = item[i].code;
+        ob.skuName = item[i].skuName;
+        ob.price = item[i].price;
+        ob.qty = item[i].qty;
+        ob.discount = item[i].discount;
+        ob.relPrice = item[i].relPrice;
+        ob.amount = item[i].amount;
+        ob.change = 0;
+        //会员
+        //------------------------
+        var d = new Array();
+        for(var k = 0;k < 1;k++){
+            var op = new Object();
+            op.code = "book_payments";
+            op.payAmount = $('#bookPrice').val().trim();
+            d[k] = op;
+        }
+        ob.paymentList = d;
+        data[i] = ob;
+    }
+    //关闭预订支付窗口
+    $('#bookPayDialog').modal('hide');
+    //提交收银信息
+    $.ajax({
+        type: 'POST',
+        url: contextPath + 'pos/saveBook',
+        contentType:"application/json",
+        data: JSON.stringify(data),
+        success: function(map){
+            //打印小票
+            print(data[0].flowNo,"预订","pos/print/getBookList");
+        }
+    });
+}
 //挂单
 function areCanceled(){
     var items = $('#grid').datagrid('getRows');
@@ -729,7 +836,7 @@ function clean(){
     $('#subtotal').val("");
 
     $('#vipInfo').val("");
-    $('#integral').val("");
+    $('#favourablePrice').val("");
     $('#qty').val("");
     $('#amount').val("");
 

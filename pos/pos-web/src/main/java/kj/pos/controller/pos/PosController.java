@@ -39,6 +39,12 @@ public class PosController {
     @Autowired
     private ShopSalesPayService shopSalesPayService;
 
+    @Autowired
+    private ShopBookDetailService shopBookDetailService;
+    @Autowired
+    private ShopBookLineService shopBookLineService;
+    @Autowired
+    private ShopBookPayService shopBookPayService;
     /**
      *
      * @return 收银主界面
@@ -93,6 +99,21 @@ public class PosController {
             logger.error(e);
             map.put("status",Boolean.FALSE);
             map.put("msg","收银失败");
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/saveBook",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> saveBook(@RequestBody List<PosInfo> posInfoList)throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        try {
+            map = posService.saveBook(posInfoList);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            map.put("status",Boolean.FALSE);
+            map.put("msg","预订失败");
         }
         return map;
     }
@@ -188,6 +209,31 @@ public class PosController {
             ShopSalesPay shopSalesPay = new ShopSalesPay();
             shopSalesPay.setPid(listD.get(0).getId());
             List<ShopSalesPay> listP = shopSalesPayService.getList(shopSalesPay);
+            map.put("listD",listD);
+            map.put("listL",listL);
+            map.put("listP",listP);
+        }catch (Exception e){
+            map.put("listD",null);
+            map.put("listL",null);
+            map.put("listP",null);
+            e.printStackTrace();
+            logger.error(e);
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/print/getBookList",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> getBookList(ShopBookDetail shopBookDetail)throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        try{
+            List<ShopBookDetail> listD = shopBookDetailService.getList(shopBookDetail);
+            ShopBookLine shopBookLine = new ShopBookLine();
+            shopBookLine.setPid(listD.get(0).getId());
+            List<ShopBookLine> listL = shopBookLineService.getList(shopBookLine);
+            ShopBookPay shopBookPay = new ShopBookPay();
+            shopBookPay.setPid(listD.get(0).getId());
+            List<ShopBookPay> listP = shopBookPayService.getList(shopBookPay);
             map.put("listD",listD);
             map.put("listL",listL);
             map.put("listP",listP);

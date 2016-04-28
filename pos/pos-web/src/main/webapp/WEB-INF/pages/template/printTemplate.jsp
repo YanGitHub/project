@@ -32,7 +32,8 @@
     <!--日期-->
     <script src="${ctx}/static/bootstrap-datetimepicker/js/moment-with-locales.js"></script>
     <script src="${ctx}/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-
+    <!--lodop 打印控件-->
+    <script language="javascript" src="${ctx}/static/pos/js/LodopFuncs.js"></script>
     <!--[if lt IE 9]>
     <script src="${ctx}/static/bootstrap-3.3.5-dist/js/html5shiv.min.js"></script>
     <script src="${ctx}/static/bootstrap-3.3.5-dist/js/respond.min.js"></script>
@@ -106,12 +107,11 @@
     </div>
     <div class="row" style="margin-top: 10px">
         <div class="col-sm-12">
-            <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=1000 height=390>
-                <param name="Caption" value="模板设计">
+            <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=982 height=500>
+                <param name="Caption" value="打印模板">
                 <param name="Border" value="1">
                 <param name="Color" value="#C0C0C0">
-                <embed id="LODOP_EM" TYPE="application/x-print-lodop" width=1000 height=390
-                       PLUGINSPAGE="install_lodop.exe">
+                <embed id="LODOP_EM" TYPE="application/x-print-lodop" width=982 height=400 PLUGINSPAGE="install_lodop.exe">
             </object>
         </div>
     </div>
@@ -156,7 +156,7 @@
     function displayDesign(data) {
         $('#printer').val(data.printer);
         $('#name').val(data.name);
-        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        var LODOP = getLodop($("#LODOP_OB")[0], $("#LODOP_EM")[0]);
         LODOP.PRINT_INITA(4, 10, 665, 600, "设计模式");
         eval(data.data);
         LODOP.SET_SHOW_MODE("DESIGN_IN_BROWSE", 1);
@@ -170,7 +170,7 @@
     }
     //保存模板
     function save() {
-        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        var LODOP = getLodop($("#LODOP_OB")[0], $("#LODOP_EM")[0]);
         var template = LODOP.GET_VALUE("ProgramCodes", 0);
         template.replace(/LODOP\.PRINT_INITA\(.*\);/, "");
         var data = $("#editForm").serializeObject();

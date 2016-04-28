@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.pos.ShopBookPayDao">
+    <resultMap id="ResultMap" type="ShopBookPay">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="flowNo" column="flow_no"/>
+        <result property="payId" column="pay_id"/>
+        <result property="payNo" column="pay_no"/>
+        <result property="payName" column="pay_name"/>
+        <result property="amount" column="amount"/>
+        <result property="note" column="note"/>
+    </resultMap>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+        count(*)
+        from shop_book_pay sbp
+        LEFT JOIN shop_payment sp on sp.code = sbp.pay_no
+        where 1=1
+        <if test="id!=null">
+            and sbp.id=#{id}
+        </if>
+        <if test="pid!=null">
+            and sbp.pid=#{pid}
+        </if>
+        <if test="flowNo!=null">
+            and sbp.flow_no=#{flowNo}
+        </if>
+    </select>
+
+    <select id="getList" resultMap="ResultMap" parameterType="ShopBookPay" >
+        select
+        sbp.id,
+        sbp.pid,
+        sbp.flow_no,
+        sbp.pay_id,
+        sbp.pay_no,
+        sp.name as pay_name,
+        sbp.amount,
+        sbp.note
+        from shop_book_pay sbp
+        LEFT JOIN shop_payment sp on sp.code = sbp.pay_no
+        where 1=1
+        <if test="id!=null">
+            and sbp.id=#{id}
+        </if>
+        <if test="pid!=null">
+            and sbp.pid=#{pid}
+        </if>
+        <if test="flowNo!=null">
+            and sbp.flow_no=#{flowNo}
+        </if>
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+    </select>
+
+    <insert id="create" parameterType="ShopBookPay">
+        insert into shop_book_pay(
+        pid,
+        flow_no,
+        pay_id,
+        pay_no,
+        amount,
+        note
+        ) values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.pid},
+            #{item.flowNo},
+            #{item.payId},
+            #{item.payNo},
+            #{item.amount},
+            #{item.note}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="ShopBookPay">
+        update shop_book_pay set
+        <if test="id!=null">
+            id=#{id},
+        </if>
+        <if test="pid!=null">
+            pid=#{pid},
+        </if>
+        <if test="flowNo!=null">
+            flow_no=#{flowNo},
+        </if>
+        <if test="payId!=null">
+            pay_id=#{payId},
+        </if>
+        <if test="payNo!=null">
+            pay_no=#{payNo},
+        </if>
+        <if test="amount!=null">
+            amount=#{amount},
+        </if>
+        <if test="note!=null">
+            note=#{note}
+        </if>
+    </update>
+</mapper>

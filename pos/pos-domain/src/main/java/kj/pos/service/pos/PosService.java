@@ -1,9 +1,7 @@
 package kj.pos.service.pos;
 
 import kj.pos.dao.mysql.info.WarehouseDao;
-import kj.pos.dao.mysql.pos.ShopSalesDetailDao;
-import kj.pos.dao.mysql.pos.ShopSalesLineDao;
-import kj.pos.dao.mysql.pos.ShopSalesPayDao;
+import kj.pos.dao.mysql.pos.*;
 import kj.pos.dao.mysql.product.ProductBarcodeDao;
 import kj.pos.dao.mysql.product.ProductSkuDao;
 import kj.pos.dao.mysql.stock.InventoryDao;
@@ -41,6 +39,12 @@ public class PosService {
     private ShopSalesLineDao shopSalesLineDao;
     @Autowired
     private ShopSalesPayDao shopSalesPayDao;
+    @Autowired
+    private ShopBookDetailDao shopBookDetailDao;
+    @Autowired
+    private ShopBookLineDao shopBookLineDao;
+    @Autowired
+    private ShopBookPayDao shopBookPayDao;
     @Autowired
     private InventoryDao inventoryDao;
     @Autowired
@@ -108,6 +112,12 @@ public class PosService {
         return map;
     }
 
+    /**
+     * 保存销售 订单
+     * @param posInfoList
+     * @return
+     * @throws SQLException
+     */
     @Transactional(value = "mysql",rollbackFor = Exception.class)
     public Map<String,Object> save(List<PosInfo> posInfoList)throws SQLException{
         Map<String,Object> map = new HashMap<String, Object>();
@@ -128,6 +138,35 @@ public class PosService {
         return map;
     }
 
+    /**
+     * 保存预订 订单
+     * @param posInfoList
+     * @return
+     * @throws SQLException
+     */
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
+    public Map<String,Object> saveBook(List<PosInfo> posInfoList)throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        //收银明细表
+        ShopBookDetail shopBookDetail = getShopBookDetail(posInfoList);
+        shopBookDetailDao.create(shopBookDetail);
+        Long id = shopBookDetail.getId();
+        //商品明细
+        List<ShopBookLine> shopBookLineList = getShopBookLineList(posInfoList,id);
+        shopBookLineDao.create(shopBookLineList);
+        //支付明细（订金）
+        List<ShopBookPay> shopBookPayList = getShopBookPayList(posInfoList, id, shopBookDetail.getFlowNo());
+        shopBookPayDao.create(shopBookPayList);
+        map.put("status",Boolean.TRUE);
+        map.put("msg","预订成功");
+        return map;
+    }
+
+    /**
+     * 扣减库存
+     * @param lineList
+     * @throws SQLException
+     */
     public void deductingStock(List<ShopSalesLine> lineList)throws SQLException{
         //根据当前登录人所属门查查默认发货仓
         Warehouse warehouse = new Warehouse();
@@ -168,6 +207,7 @@ public class PosService {
         return shopSalesDetail;
     }
 
+
     /**
      * 收银商品明细 list
      * @param posInfoList
@@ -207,6 +247,71 @@ public class PosService {
         List<ShopPayment> payments = list.get(0).getPaymentList();
         for(ShopPayment p: payments){
             ShopSalesPay s = new ShopSalesPay();
+            s.setPid(pid);
+            s.setFlowNo(flowNo);
+            s.setPayNo(p.getCode());
+            s.setAmount(p.getPayAmount());
+            payList.add(s);
+        }
+        return payList;
+    }
+
+    /**
+     * 织组收银商品明细 实体 预订
+     * @param posInfoList
+     * @return
+     */
+    public ShopBookDetail getShopBookDetail(List<PosInfo> posInfoList){
+        ShopBookDetail shopBookDetail = new ShopBookDetail();
+        shopBookDetail.setFlowNo(posInfoList.get(0).getFlowNo());
+        shopBookDetail.setSaleDate(posInfoList.get(0).getSaleDate());
+        shopBookDetail.setVipNo("");
+        shopBookDetail.setIsOnline(false);
+        shopBookDetail.setSaleType(1);
+        shopBookDetail.setFundAmount(posInfoList.get(0).getChange());
+        shopBookDetail.setCreateUser(WebContextUtil.getCurrentUser().getName());
+        shopBookDetail.setModifyUser(WebContextUtil.getCurrentUser().getName());
+        return shopBookDetail;
+    }
+    /**
+     * 收银商品明细 list 预订
+     * @param posInfoList
+     * @param pid
+     * @return
+     */
+    public List<ShopBookLine> getShopBookLineList(List<PosInfo> posInfoList,Long pid){
+        List<ShopBookLine> lines = new ArrayList<ShopBookLine>();
+        for(PosInfo p : posInfoList){
+            ShopBookLine s = new ShopBookLine();
+            s.setPid(pid);
+            s.setSkuId(p.getSkuId());
+            s.setSkuCode(p.getSkuCode());
+            s.setProductCode(p.getProductCode());
+            s.setUntPrice(p.getPrice());
+            s.setRealPrice(p.getRelPrice());
+            s.setSaleDiscount(p.getDiscount());
+            s.setDisAmount(p.getQty() * p.getPrice() - p.getAmount());
+            s.setQty(p.getQty());
+            s.setRealAmount(p.getAmount());
+            s.setIsGift(p.getIsGift());
+            s.setEmployeeCode(p.getEmployeeCode());
+            lines.add(s);
+        }
+        return lines;
+    }
+
+    /**
+     * 组织收银支付明细
+     * @param list
+     * @param pid
+     * @param flowNo
+     * @return
+     */
+    public List<ShopBookPay> getShopBookPayList(List<PosInfo> list,Long pid,String flowNo){
+        List<ShopBookPay> payList = new ArrayList<ShopBookPay>();
+        List<ShopPayment> payments = list.get(0).getPaymentList();
+        for(ShopPayment p: payments){
+            ShopBookPay s = new ShopBookPay();
             s.setPid(pid);
             s.setFlowNo(flowNo);
             s.setPayNo(p.getCode());

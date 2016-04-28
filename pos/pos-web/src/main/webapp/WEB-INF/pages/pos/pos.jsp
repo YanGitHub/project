@@ -66,8 +66,8 @@
             </div>
             <div class="col-sm-3">
                 <div class="input-group" style="padding-top: 10px">
-                    <span class="input-group-addon">会员积分</span>
-                    <input type="text" readonly="readonly" id="integral" class="form-control" placeholder="0.00"
+                    <span class="input-group-addon">优惠金额</span>
+                    <input type="text" readonly="readonly" id="favourablePrice" class="form-control" placeholder="0.00"
                            aria-describedby="basic-addon1">
                 </div>
             </div>
@@ -145,12 +145,12 @@
                 <button type="button" class="btn btn-success" onclick="setIsGift()">赠品</button>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-warning">重打印</button>
+                <button type="button" class="btn btn-warning" onclick="showRePrintDialog()">重打印</button>
             </div>
         </div>
         <div class="btn-group btn-group-justified" role="group" aria-label="..." style="padding-top: 10px">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-info">预订</button>
+                <button type="button" class="btn btn-info" onclick="showBookDialog()">预订</button>
             </div>
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-success" onclick="areCanceled()">挂单</button>
@@ -350,6 +350,88 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="confimEmployee(true)">整单</button>
                 <button type="button" class="btn btn-info" onclick="confimEmployee(false)">单品</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
+</div>
+
+<!--导购员列表-->
+<div class="modal fade" id="rePrintDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    重打印列表
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!---grid-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="rePrintGrid" class="easyui-datagrid" data-options="
+                               rownumbers: true,
+                               height:280,
+                               width:566,
+                               pagination:true,
+                               singleSelect:true,
+                               selectOnCheck:false"
+                               toolbar="#toolbar">
+                            <thead>
+                            <tr>
+                                <th data-options="field:'flowNo',fitColumns:true">小票号</th>
+                                <th data-options="field:'saleDate',fitColumns:true">销售日期</th>
+                                <th data-options="field:'vipNo',fitColumns:true">会员卡</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="confimRePrint()">打印</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
+</div>
+
+<!--收银对话框-->
+<div class="modal fade" id="bookPayDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    预订支付
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">预订金额</span>
+                            <input type="text" id="bookPrice" class="form-control"
+                                   style="color: orange;font-weight: 700" placeholder="0.00"
+                                   aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveBook()" data-dismiss="modal">预订</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
