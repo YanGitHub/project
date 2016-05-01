@@ -29,7 +29,7 @@
     <!--图片上传js-->
     <script type="text/javascript" src="${ctx}/static/bootstrap-fileInput/js/fileinput.min.js"></script>
     <script type="text/javascript" src="${ctx}/static/bootstrap-fileInput/js/fileinput_locale_zh.js"></script>
-
+    <script type="text/javascript" src="http://www.w3cschool.cc/try/jeasyui/datagrid-detailview.js"></script>
     <!--lodop 打印控件-->
     <script language="javascript" src="${ctx}/static/pos/js/LodopFuncs.js"></script>
     <!--[if lt IE 9]>
@@ -94,7 +94,7 @@
     <div class="col-sm-3">
         <div class="input-group">
             <span class="input-group-addon">条码</span>
-            <input type="text" id="barcode" class="form-control" placeholder="商品条码"
+            <input type="text" id="barcode" class="form-control" placeholder="商品条码" style="color: darkorange;font-weight: 700"
                    aria-describedby="basic-addon1">
         </div>
         <div class="input-group" style="padding-top: 10px">
@@ -432,6 +432,55 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="saveBook()" data-dismiss="modal">预订</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
+</div>
+
+<!--预订对话框-->
+<div class="modal fade" id="bookOrderDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">
+                    预订列表
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="bookOrderGrid" class="easyui-datagrid" data-options="
+                               rownumbers: true,
+                               height:280,
+                               width:566,
+                               pagination:true,
+                               singleSelect:true,
+                               view: detailview,
+                               detailFormatter:bookOrderDetail,
+                               onExpandRow:bookOrderExpandRow,
+                               selectOnCheck:false"
+                               toolbar="#toolbar">
+                            <thead>
+                            <tr>
+                                <th data-options="field:'flowNo',fitColumns:true">小票号</th>
+                                <th data-options="field:'saleDate',fitColumns:true">销售日期</th>
+                                <th data-options="field:'vipNo',fitColumns:true,width:100">会员卡</th>
+                                <th data-options="field:'note',fitColumns:true,width:140">备注</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="confimBookOrder()" data-dismiss="modal">确定</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>

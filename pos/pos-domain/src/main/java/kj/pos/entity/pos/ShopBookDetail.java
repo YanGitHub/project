@@ -24,6 +24,7 @@ public class ShopBookDetail extends BaseEntity {
     private String createDate;//创建日期
     private String modifyUser;//修改人
     private String modifyDate;//修改日期
+    private Boolean isDel;//是否删除 0 未删除 1删除
     //创建getter和setter方法
 
     private String startDate;
@@ -163,5 +164,13 @@ public class ShopBookDetail extends BaseEntity {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public Boolean getIsDel() {
+        return isDel;
+    }
+
+    public void setIsDel(Boolean isDel) {
+        this.isDel = isDel;
     }
 }

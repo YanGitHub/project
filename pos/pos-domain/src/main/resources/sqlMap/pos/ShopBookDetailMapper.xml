@@ -70,6 +70,9 @@
 			  and DATE_FORMAT(sale_date, '%Y-%m-%d') <=  DATE_FORMAT(#{endDate}, '%Y-%m-%d')
 		    ]]>
         </if>
+        <if test="isDel != null">
+            and is_del = #{isDel}
+        </if>
     </select>
 
     <select id="getList" resultMap="ResultMap">
@@ -109,6 +112,9 @@
             <![CDATA[
 			  and DATE_FORMAT(sale_date, '%Y-%m-%d') <=  DATE_FORMAT(#{endDate}, '%Y-%m-%d')
 		    ]]>
+        </if>
+        <if test="isDel != null">
+            and is_del = #{isDel}
         </if>
         order by sale_date desc
         <if test="pageUtil != null">

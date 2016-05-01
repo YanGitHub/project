@@ -139,6 +139,28 @@ public class PosController {
         return map;
     }
 
+    @RequestMapping(value = "/shopBookDetail/getList",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> shopSalesDetail(ShopBookDetail shopBookDetail,
+                                              @RequestParam(value = "page",defaultValue = "1")int page,
+                                              @RequestParam(value = "rows",defaultValue = "10")int rows)throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        try {
+            shopBookDetail.setIsDel(false);
+            int total = shopBookDetailService.getTotal(shopBookDetail);
+            PageUtil pageUtil = new PageUtil(page,rows,total);
+            shopBookDetail.setPageUtil(pageUtil);
+            List<ShopBookDetail> list = shopBookDetailService.getList(shopBookDetail);
+            map.put("total",total);
+            map.put("rows",list);
+        }catch (Exception e){
+            map.put("total",0);
+            map.put("rows",null);
+            e.printStackTrace();
+        }
+        return map;
+    }
+
     /**
      * 商品名细
      * @param shopSalesLine

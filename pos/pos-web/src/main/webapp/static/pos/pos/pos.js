@@ -697,7 +697,7 @@ function escBtn(){
 function showBookDialog(){
     var item = $('#grid').datagrid('getRows');
     if(item.length == 0){
-
+        showBookListDialog();
     }else{
         showBookPayDialog();
     }
@@ -706,6 +706,30 @@ function showBookDialog(){
 //显示 预订支付窗口
 function showBookPayDialog(){
     $('#bookPayDialog').modal('show');
+}
+
+//显示 已经预订的订单列表
+function showBookListDialog(){
+    $('#bookOrderDialog').modal('show');
+    setTimeout("$('#bookOrderGrid').datagrid({url: contextPath + '/pos/shopBookDetail/getList'})", 500);
+}
+
+//加载 预订 订单明细
+function bookOrderDetail(index,row){
+    return '<div id="ddv-' + index + '" style="padding:5px 0"></div>';
+}
+function bookOrderExpandRow(index,row){
+    $.post(contextPath + 'pos/print/getBookList',{flowNo:row.flowNo},function(data){
+        var listL = data.listL;
+        var table = "<table>";
+        table += "<tr><td style='color: #0000ff'>商品明细 (实际售价 x 数量 = 总价)</td></tr>"
+        for(var i = 0;i < listL.length;i++){
+            table += "<tr><td style='color: dodgerblue'>"+ listL[i].productName +"(" + listL[i].productCode +") " + listL[i].skuName + "(" + listL[i].skuCode + ") " + listL[i].realPrice + " x " + listL[i].qty + " = " + listL[i].realAmount + "</td></tr>"
+        }
+        table += "</table>";
+        $("#ddv-" + index).html(table);
+        $('#bookOrderGrid').datagrid('fixDetailRowHeight',index);
+    });
 }
 
 //确定预订
@@ -760,6 +784,11 @@ function saveBook(){
             print(data[0].flowNo,"预订","pos/print/getBookList");
         }
     });
+}
+//确定预定 订单
+function confimBookOrder(){
+    var item = $('#bookOrderGrid').datagrid('getRows');
+
 }
 //挂单
 function areCanceled(){
