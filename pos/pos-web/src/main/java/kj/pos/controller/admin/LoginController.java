@@ -60,6 +60,20 @@ public class LoginController {
         }
     }
 
+    @RequestMapping(value = "/mainLeft",method = RequestMethod.GET)
+    public ModelAndView mainLeft(){
+        UserInfo userInfo = WebContextUtil.getCurrentUser();
+        OrganizationInfo organizationInfo = WebContextUtil.getOrganizationInfo();
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("userInfo",userInfo);
+        map.put("organizationInfo",organizationInfo);
+        if(userInfo != null){
+            return new ModelAndView("main_left",map);
+        }else{
+            return new ModelAndView("index");
+        }
+    }
+
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> login(UserInfo userInfo,HttpServletRequest request)throws SQLException{
