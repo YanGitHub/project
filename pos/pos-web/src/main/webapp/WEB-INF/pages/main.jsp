@@ -104,6 +104,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">系统管理 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#" onclick="addTab('用户信息','${ctx}/userInfo')">用户信息</a></li>
+                                <li><a href="#" onclick="addTab('角色信息','${ctx}/admin/role')">角色信息</a></li>
                                 <li><a href="#" onclick="addTab('系统参数','${ctx}/sysParameters')">系统参数</a></li>
                             </ul>
                         </li>
