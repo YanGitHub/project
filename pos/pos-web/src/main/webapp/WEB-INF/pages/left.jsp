@@ -15,50 +15,15 @@
     <link href="${ctx}/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${ctx}/static/pos/css/style.css" media="screen" type="text/css"/>
 
-
     <script src="${ctx}/static/jquery/jquery-2.1.4.min.js"></script>
     <script src="${ctx}/static/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
-    <style>
-        .scrollbar
-        {
-            margin-left: 10px;
-            float: left;
-            height: 100%;
-            width: 13.47%;
-            background: #F5F5F5;
-            overflow-y: scroll;
-        }
-
-        /*
-            *  STYLE 4
-        */
-        #style-4::-webkit-scrollbar-track
-        {
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-            background-color: #F5F5F5;
-        }
-
-        #style-4::-webkit-scrollbar
-        {
-            width: 10px;
-            background-color: #F5F5F5;
-        }
-
-        #style-4::-webkit-scrollbar-thumb
-        {
-            background-color: #c4c8cb;
-            border: 1px solid orange;
-        }
-
-    </style>
 </head>
 
 <body>
 
 <!-- Contenedor -->
-<div style="height: 100%">
-    <div class="scrollbar" id="style-4">
-        <div class="force-overflow">
+<div class="row" style="margin-right: 0;height: 640px">
+    <div class="col-sm-2" style="padding-right: 0">
             <ul id="accordion" class="accordion">
                 <c:forEach items="${menu}" var="m">
                     <c:if test="${m.pid == 0}">
@@ -75,16 +40,6 @@
                     </c:if>
                 </c:forEach>
             </ul>
-        </div>
-    </div>
-
-<%--    <div id="left" style="float: left;width: 190px;height: 640px;background-color: floralwhite">
-
-    </div>--%>
-
-
-    <div id="main" style="float: left;width: 85%">
-        <iframe id="myiframe" width="100%" height="100%" frameborder="no" scrolling="auto" src=""></iframe>
     </div>
 </div>
 

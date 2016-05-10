@@ -3,6 +3,8 @@ package kj.pos.entity.admin;
 import kj.pos.entity.BaseEntity;
 import org.apache.ibatis.type.Alias;
 
+import java.util.List;
+
 @Alias("Role")
 public class Role extends BaseEntity{
 	//创建字段
@@ -13,6 +15,7 @@ public class Role extends BaseEntity{
 	private String name;//角色明称
 	private Boolean del;//是否被删除 0未删除 1删除
 	private String note;//备注
+    private List<RoleMenu> menu;//菜单 id
 	//创建getter和setter方法
 	public Long getId(){
 		return this.id;
@@ -70,4 +73,11 @@ public class Role extends BaseEntity{
 		this.note = note;
 	}
 
+    public List<RoleMenu> getMenu() {
+        return menu;
+    }
+
+    public void setMenu(List<RoleMenu> menu) {
+        this.menu = menu;
+    }
 }

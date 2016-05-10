@@ -105,6 +105,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="#" onclick="addTab('用户信息','${ctx}/userInfo')">用户信息</a></li>
                                 <li><a href="#" onclick="addTab('角色信息','${ctx}/admin/role')">角色信息</a></li>
+                                <li><a href="#" onclick="addTab('菜单维护','${ctx}/menu')">菜单维护</a></li>
                                 <li><a href="#" onclick="addTab('系统参数','${ctx}/sysParameters')">系统参数</a></li>
                             </ul>
                         </li>

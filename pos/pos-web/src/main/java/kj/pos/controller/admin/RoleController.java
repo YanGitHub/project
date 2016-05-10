@@ -2,6 +2,7 @@ package kj.pos.controller.admin;
 
 import kj.pos.entity.PageUtil;
 import kj.pos.entity.admin.Role;
+import kj.pos.service.admin.RoleMenuService;
 import kj.pos.service.admin.RoleService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,6 +29,8 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String role(){
@@ -50,6 +53,23 @@ public class RoleController {
         }catch (Exception e){
             map.put("total",0);
             map.put("rows",null);
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/addMenu",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> addMenu(@RequestParam(value = "id",required = false)Long id,
+                                      @RequestParam(value = "data",required = false)String data)throws SQLException {
+        Map<String,Object> map = new HashMap<String, Object>();
+        try {
+            roleMenuService.addMenu(id,data);
+            map.put("status",Boolean.TRUE);
+            map.put("msg","保存成功");
+        }catch (Exception e){
+            map.put("status",Boolean.TRUE);
+            map.put("msg","保存失败");
             e.printStackTrace();
         }
         return map;

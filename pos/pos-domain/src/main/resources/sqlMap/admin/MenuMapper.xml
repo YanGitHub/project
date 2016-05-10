@@ -64,6 +64,10 @@
         </if>
     </select>
 
+    <select id="getMaxNo" resultType="java.lang.Long">
+        select max(no) + 1 from menu
+    </select>
+
     <insert id="create" parameterType="Menu">
 		insert into menu(
 			create_date,
@@ -72,19 +76,15 @@
 			pid,
 			url,
 			del,
-			note,
-			no,
-			levels
+			no
 		) values (
 			now(),
 			#{code},
 			#{name},
 			#{pid},
 			#{url},
-			#{del},
-			#{note},
-			#{no},
-			#{levels}
+			0,
+			#{no}
 		)
 	</insert>
 

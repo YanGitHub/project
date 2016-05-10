@@ -122,7 +122,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="create()">保存</button>
+                <button type="button" class="btn btn-primary" onclick="addMenu()">保存</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
@@ -155,7 +155,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="create()">保存</button>
+                <button type="button" class="btn btn-primary" onclick="addMenu()">保存</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
@@ -196,7 +196,9 @@
 
     }
 
-    function modifyMenu(){
+    function modifyMenu(index){
+        var item = $('#grid').datagrid('getRows')[index];
+        $('#id').val(item.id);
         $('#treeModal').modal('show');
         $("#treeview").tree({
             rownumbers: true,
@@ -204,8 +206,35 @@
             textField: 'name',
             parentField: 'pid',
             checkbox: true,
-            url: '${ctx}/menu/getMenu'
+            url: '${ctx}/menu/getMenu',
+            onLoadSuccess:function(row,data){
+                var menuIdArray = dealParentNode(data,item.menu);
+                for (var i = 0; i < menuIdArray.length; i++) {
+                    var node = $('#treeview').tree('find', menuIdArray[i].menuId);
+                    if (node != null) {
+                        $('#treeview').tree('check', node.target);
+                    }
+                }
+            }
         });
+    }
+    function dealParentNode(data,menuIdArray){
+        var temp = new Array();
+        var num = 0;
+        for(var k = 0;k < data.length;k++){
+            if(data[k].children != undefined){
+                temp[num++]=data[k].id;
+            }
+        }
+        for(var i = menuIdArray.length - 1;i >= 0;i--){
+            for(var j = 0;j < temp.length;j++){
+                if(menuIdArray[i].menuId == temp[j]){
+                    menuIdArray.splice(i,1);
+                    break;
+                }
+            }
+        }
+        return menuIdArray;
     }
     //打开新增窗口
     function openDialog() {
@@ -214,6 +243,25 @@
         $('#name').val("");
         $('#note').val("");
         $('#myModal').modal('show');
+    }
+
+    //保存菜单
+    function addMenu(){
+        $('#treeModal').modal('hide');
+        var node1 = $('#treeview').tree('getChecked');
+        var node2 = $('#treeview').tree('getChecked', 'indeterminate');	// 获取不确定的节点
+        var data = "";
+        var id = $('#id').val();
+        for(var i = 0;i < node1.length;i++){
+            data += node1[i].id + ",";
+        }
+        for(var j = 0;j < node2.length;j++){
+            data += node2[j].id + ",";
+        }
+        $.post('${ctx}/admin/role/addMenu',{id:id,data:data},function(msg){
+            alert("提示",msg.msg,2000);
+            $('#grid').datagrid('reload');
+        });
     }
 
     //新增系统参数

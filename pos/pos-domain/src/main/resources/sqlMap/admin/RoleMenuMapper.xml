@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.admin.RoleMenuDao">
+	<resultMap id="ResultMap" type="RoleMenu">
+		<result property="id" column="id"/>
+		<result property="createDate" column="create_date"/>
+		<result property="modifyDate" column="modify_date"/>
+		<result property="roleId" column="role_id"/>
+		<result property="menuId" column="menu_id"/>
+	</resultMap>
+
+    <delete id="delete">
+        delete from role_menu where role_id = #{roleId}
+    </delete>
+
+    <select id="getList" resultMap="ResultMap" parameterType="RoleMenu" >
+		select 
+			id,
+			create_date,
+			modify_date,
+			role_id,
+			menu_id
+		from role_menu
+		where 1=1 
+		<if test="id!=null">
+				and id=#{id}
+		</if>
+		<if test="roleId!=null">
+				and role_id=#{roleId}
+		</if>
+		<if test="menuId!=null">
+				and menu_id=#{menuId}
+		</if>
+	</select>
+
+	<insert id="create" parameterType="RoleMenu">
+		insert into role_menu(
+			create_date,
+			role_id,
+			menu_id
+		) values
+		<foreach collection="menuIdArray" item="item" index="index" separator=",">
+            (
+            now(),
+            #{roleId},
+            #{item}
+            )
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="RoleMenu">
+		update role_menu set 
+		<if test="id!=null">
+			id=#{id},
+		</if>
+		<if test="createDate!=null">
+			create_date=#{createDate},
+		</if>
+		<if test="modifyDate!=null">
+			modify_date=#{modifyDate},
+		</if>
+		<if test="roleId!=null">
+			role_id=#{roleId},
+		</if>
+		<if test="menuId!=null">
+			menu_id=#{menuId}
+		</if>
+	</update>
+</mapper>

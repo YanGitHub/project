@@ -5,6 +5,7 @@ import kj.pos.entity.admin.OrganizationInfo;
 import kj.pos.entity.admin.SysParameters;
 import kj.pos.entity.admin.UserInfo;
 import kj.pos.entity.info.Warehouse;
+import kj.pos.service.admin.MenuService;
 import kj.pos.service.admin.OrganizationService;
 import kj.pos.service.admin.SysParametersService;
 import kj.pos.service.admin.UserInfoService;
@@ -40,6 +41,8 @@ public class LoginController {
     private SysParametersService sysParametersService;
     @Autowired
     private OrganizationService organizationService;
+    @Autowired
+    private MenuService menuService;
 
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String index(){
@@ -60,13 +63,21 @@ public class LoginController {
         }
     }
 
+    @RequestMapping(value = "/left",method = RequestMethod.GET)
+    public ModelAndView left()throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("menu",menuService.getMenu());
+        return new ModelAndView("left",map);
+    }
+
     @RequestMapping(value = "/mainLeft",method = RequestMethod.GET)
-    public ModelAndView mainLeft(){
+    public ModelAndView mainLeft()throws SQLException{
         UserInfo userInfo = WebContextUtil.getCurrentUser();
         OrganizationInfo organizationInfo = WebContextUtil.getOrganizationInfo();
         Map<String,Object> map = new HashMap<String, Object>();
         map.put("userInfo",userInfo);
         map.put("organizationInfo",organizationInfo);
+        map.put("menu",menuService.getMenu());
         if(userInfo != null){
             return new ModelAndView("main_left",map);
         }else{

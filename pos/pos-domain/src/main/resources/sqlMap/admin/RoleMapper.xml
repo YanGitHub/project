@@ -9,7 +9,32 @@
 		<result property="name" column="name"/>
 		<result property="del" column="del"/>
 		<result property="note" column="note"/>
+        <collection property="menu" select="getMenu" column="id"/>
 	</resultMap>
+
+    <resultMap id="ResultMenuMap" type="RoleMenu">
+        <result property="id" column="id"/>
+        <result property="createDate" column="create_date"/>
+        <result property="modifyDate" column="modify_date"/>
+        <result property="roleId" column="role_id"/>
+        <result property="menuId" column="menu_id"/>
+        <result property="parentId" column="pid"/>
+    </resultMap>
+
+    <select id="getMenu" resultMap="ResultMenuMap" parameterType="long">
+        SELECT
+            rm.id,
+            rm.create_date,
+            rm.modify_date,
+            rm.role_id,
+            rm.menu_id,
+            m.pid
+        FROM
+        role_menu rm
+        LEFT JOIN menu m on m.id = rm.menu_id
+        WHERE
+        rm.role_id = #{role_id}
+    </select>
 
 	<select id="getList" resultMap="ResultMap" parameterType="Role" >
 		select 

@@ -16,4 +16,7 @@ public interface MenuDao{
 	public void update(Menu menu);
 
     public List<Menu> getListByPid(@Param("pid") Long pid);
+
+    public Long getMaxNo();
+
 }

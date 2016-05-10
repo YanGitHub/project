@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +30,11 @@ public class MenuController {
     @Autowired
     private MenuService menuService;
 
+    @RequestMapping(value = "",method = RequestMethod.GET)
+    public String menu(){
+        return "admin/menu";
+    }
+
     @RequestMapping(value = "/getMenu",method = RequestMethod.POST)
     @ResponseBody
     public List<Menu> getMenu()throws SQLException{
@@ -41,4 +47,22 @@ public class MenuController {
         }
         return menu;
     }
+
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> add(@RequestBody Menu menu)throws SQLException{
+        Map<String,Object> map = new HashMap<String, Object>();
+        try {
+            menuService.add(menu);
+            map.put("status",Boolean.TRUE);
+            map.put("msg","添加成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+            map.put("status",Boolean.FALSE);
+            map.put("msg","添加失败");
+        }
+        return map;
+    }
+
 }

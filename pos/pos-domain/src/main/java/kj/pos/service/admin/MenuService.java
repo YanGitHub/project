@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,5 +28,10 @@ public class MenuService {
     public List<Menu> getMenu()throws SQLException{
         List<Menu> menuList = menuDao.getListByPid(null);
         return menuList;
+    }
+    @Transactional(value = "mysql",rollbackFor = Exception.class)
+    public void add(Menu menu)throws SQLException{
+        menu.setNo(menuDao.getMaxNo());
+        menuDao.create(menu);
     }
 }
