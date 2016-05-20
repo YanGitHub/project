@@ -31,6 +31,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: com.pentahohub.nexus:alipay-sdk-java:20150820220052" level="project" />
+    <orderEntry type="library" name="Maven: com.google.zxing:core:3.2.1" level="project" />
     <orderEntry type="module" module-name="pos-domain" />
     <orderEntry type="module" module-name="pos-core" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />

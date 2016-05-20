@@ -95,6 +95,10 @@
                                 <li><a href="#" onclick="addTab('采购入库类型','${ctx}/stock/purchaseEntryType')">采购入库类型</a></li>
                                 <li><a href="#" onclick="addTab('采购入库单','${ctx}/stock/purchaseEntryMain')">采购入库单</a></li>
                                 <li role="separator" class="divider"></li>
+                                <li><a href="#" onclick="addTab('采购退货类型','${ctx}/stock/purchaseReturnType')">采购退货类型</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#" onclick="addTab('采购出库类型','${ctx}/stock/purchaseOutboundType')">采购出库类型</a></li>
+                                <li role="separator" class="divider"></li>
                                 <li><a href="#" onclick="addTab('库存统计','${ctx}/inventory')">库存统计</a></li>
                                 <li><a href="#" onclick="addTab('历史查询','${ctx}/pos/shopSalesDetail')">历史查询</a></li>
                             </ul>

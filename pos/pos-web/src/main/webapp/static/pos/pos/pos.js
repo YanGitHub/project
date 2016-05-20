@@ -13,16 +13,16 @@ $(function () {
                 {field: 'employeeCode', title: '', hidden: true},
                 {field: 'productCode',hidden:true},
                 {field: 'code',hidden:true},//skuCode
-                {field: 'barcode', title: '条码', width: 150, fitColumns: true},
+                {field: 'barcode', title: '条码', width: 120, fitColumns: true},
                 {field: 'isGift', title: '赠品', fitColumns: true,formatter:changeGift},
                 {field: 'employeeName', title: '导购员', fitColumns: true},
-                {field: 'productName', title: '品名', width: 150, fitColumns: true},
+                {field: 'productName', title: '品名', width: 120, fitColumns: true},
                 {field: 'skuName', title: '规格名称', width: 100, fitColumns: true},
-                {field: 'price', title: '单价', width: 70, align: 'right', fitColumns: true, formatter: twoDecimal},
-                {field: 'discount', title: '折扣', width: 70, align: 'right', fitColumns: true, formatter: twoDecimal},
-                {field: 'qty', title: '数量', width: 70, align: 'right', fitColumns: true, formatter: twoDecimal},
-                {field: 'relPrice', title: '实售价', width: 70, align: 'right', fitColumns: true, formatter: twoDecimal},
-                {field: 'amount', title: '金额', width: 70, align: 'right', fitColumns: true, formatter: twoDecimal},
+                {field: 'price', title: '单价', width: 60, align: 'right', fitColumns: true, formatter: twoDecimal},
+                {field: 'discount', title: '折扣', width: 60, align: 'right', fitColumns: true, formatter: twoDecimal},
+                {field: 'qty', title: '数量', width: 60, align: 'right', fitColumns: true, formatter: twoDecimal},
+                {field: 'relPrice', title: '实售价', width: 60, align: 'right', fitColumns: true, formatter: twoDecimal},
+                {field: 'amount', title: '金额', width: 60, align: 'right', fitColumns: true, formatter: twoDecimal},
                 {field: 'op', title: '操作', width: 100, align: 'center', fitColumns: true, formatter: opration}
             ]
         ]
