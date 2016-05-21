@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.stock.PurchaseReturnDetailDao">
+    <resultMap id="ResultMap" type="PurchaseReturnDetail">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="productSkuId" column="product_sku_id"/>
+        <result property="productCode" column="product_code"/>
+        <result property="productName" column="product_name"/>
+        <result property="skuCode" column="sku_code"/>
+        <result property="skuName" column="sku_name"/>
+        <result property="untPrice" column="unt_price"/>
+        <result property="discount" column="discount"/>
+        <result property="cosPrice" column="cos_price"/>
+        <result property="qty" column="qty"/>
+        <result property="untAmount" column="unt_amount"/>
+        <result property="comAmount" column="com_amount"/>
+        <result property="note" column="note"/>
+    </resultMap>
+
+    <delete id="delete">
+        delete from purchase_return_detail where pid = #{pid}
+    </delete>
+
+    <select id="getList" resultMap="ResultMap" parameterType="PurchaseReturnDetail" >
+        select
+        prd.id,
+        prd.pid,
+        prd.product_sku_id,
+        p.name product_name,
+        p.code product_code,
+        prd.sku_code,
+        ps.name sku_name,
+        prd.unt_price,
+        prd.discount,
+        prd.cos_price,
+        prd.qty,
+        prd.unt_amount,
+        prd.com_amount,
+        prd.note
+        from purchase_return_detail prd
+        LEFT JOIN product_sku ps on ps.id = prd.product_sku_id
+        LEFT JOIN product p on p.id = ps.pid
+        where 1=1
+        <if test="id!=null">
+            and prd.id=#{id}
+        </if>
+        <if test="pid!=null">
+            and prd.pid=#{pid}
+        </if>
+        <if test="productSkuId!=null">
+            and prd.product_sku_id=#{productSkuId}
+        </if>
+        <if test="skuCode!=null">
+            and prd.sku_code=#{skuCode}
+        </if>
+    </select>
+    <insert id="create" parameterType="PurchaseReturnDetail">
+        insert into purchase_return_detail(
+        pid,
+        product_sku_id,
+        sku_code,
+        unt_price,
+        discount,
+        cos_price,
+        qty,
+        unt_amount,
+        com_amount,
+        note
+        ) values
+        <foreach collection="list" separator="," item="item">
+            (#{item.pid},
+            #{item.productSkuId},
+            #{item.skuCode},
+            #{item.untPrice},
+            #{item.discount},
+            #{item.cosPrice},
+            #{item.qty},
+            #{item.untAmount},
+            #{item.comAmount},
+            #{item.note})
+        </foreach>
+    </insert>
+
+</mapper>

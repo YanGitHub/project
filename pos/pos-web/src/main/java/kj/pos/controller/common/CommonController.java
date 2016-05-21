@@ -5,12 +5,14 @@ import kj.pos.entity.info.*;
 import kj.pos.entity.product.Brand;
 import kj.pos.entity.product.Category;
 import kj.pos.entity.stock.PurchaseEntryType;
+import kj.pos.entity.stock.PurchaseReturnType;
 import kj.pos.entity.stock.PurchaseType;
 import kj.pos.service.admin.OrganizationService;
 import kj.pos.service.info.*;
 import kj.pos.service.product.BrandService;
 import kj.pos.service.product.CategoryService;
 import kj.pos.service.stock.PurchaseEntryTypeService;
+import kj.pos.service.stock.PurchaseReturnTypeService;
 import kj.pos.service.stock.PurchaseTypeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,6 +60,9 @@ public class CommonController {
     private CategoryService categoryService;
     @Autowired
     private EmployeeInfoService employeeInfoService;
+    @Autowired
+    private PurchaseReturnTypeService purchaseReturnTypeService;
+
     /**
      * 获取省市区
      * @param region
@@ -162,6 +167,26 @@ public class CommonController {
         return list;
     }
 
+    @RequestMapping(value = "/getPurchaseReturnTypes",method = RequestMethod.POST)
+    @ResponseBody
+    public List<PurchaseReturnType> getPurchaseReturnTypes(PurchaseReturnType purchaseReturnType)throws SQLException{
+        List<PurchaseReturnType> list = new ArrayList<PurchaseReturnType>();
+        try {
+            purchaseReturnType.setDel(false);
+            list = purchaseReturnTypeService.getList(purchaseReturnType);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error(e);
+        }
+        return list;
+    }
+
+    /**
+     * 采购入库类型 下拉
+     * @param purchaseEntryType
+     * @return
+     * @throws SQLException
+     */
     @RequestMapping(value = "/getPurchaseEntryType",method = RequestMethod.POST)
     @ResponseBody
     public List<PurchaseEntryType> getPurchaseEntryType(PurchaseEntryType purchaseEntryType)throws SQLException{
@@ -195,6 +220,12 @@ public class CommonController {
         return list;
     }
 
+    /**
+     * 供应商下拉
+     * @param supplierInfo
+     * @return
+     * @throws SQLException
+     */
     @RequestMapping(value = "/getSupplierInfo",method = RequestMethod.POST)
     @ResponseBody
     public List<SupplierInfo> getSupplierInfo(SupplierInfo supplierInfo)throws SQLException{

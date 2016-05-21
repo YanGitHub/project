@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kj.pos.dao.mysql.stock.PurchaseReturnMainDao">
+    <resultMap id="ResultMap" type="PurchaseReturnMain">
+        <result property="id" column="id"/>
+        <result property="billNo" column="bill_no"/>
+        <result property="billDate" column="bill_date"/>
+        <result property="purchaseReturnTypeCode" column="purchase_return_type_code"/>
+        <result property="purchaseReturnTypeName" column="purchase_return_type_name"/>
+        <result property="orgCode" column="org_code"/>
+        <result property="orgName" column="org_name"/>
+        <result property="warehouseCode" column="warehouse_code"/>
+        <result property="warehouseName" column="warehouse_name"/>
+        <result property="supplierInfoCode" column="supplier_info_code"/>
+        <result property="supplierInfoName" column="supplier_info_name"/>
+        <result property="status" column="status"/>
+        <result property="statusStr" column="status_str"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createDate" column="create_date"/>
+        <result property="modifyUser" column="modify_user"/>
+        <result property="modifyDate" column="modify_date"/>
+        <result property="auditUser" column="audit_user"/>
+        <result property="auditDate" column="audit_date"/>
+        <result property="cancelUser" column="cancel_user"/>
+        <result property="cancelDate" column="cancel_date"/>
+        <result property="note" column="note"/>
+    </resultMap>
+
+    <select id="getList" resultMap="ResultMap" parameterType="PurchaseReturnMain" >
+        select
+        prm.id,
+        prm.bill_no,
+        prm.bill_date,
+        prm.purchase_return_type_code,
+        prt.name as purchase_return_type_name,
+        prm.org_code,
+        oi.name as org_name,
+        prm.warehouse_code,
+        wh.name as warehouse_name,
+        prm.supplier_info_code,
+        si.name as supplier_info_name,
+        CASE prm.status
+        WHEN 1 THEN '未审核'
+        WHEN 2 THEN '已审核'
+        WHEN 3 THEN '已终止'
+        END as status_str,
+        prm.status,
+        prm.create_user,
+        prm.create_date,
+        prm.modify_user,
+        prm.modify_date,
+        prm.audit_user,
+        prm.audit_date,
+        prm.cancel_user,
+        prm.cancel_date,
+        prm.note
+        from purchase_return_main prm
+        LEFT JOIN purchase_return_type prt on prt.code = prm.purchase_return_type_code
+        LEFT JOIN organization_info oi on oi.code = prm.org_code
+        LEFT JOIN warehouse wh on wh.code = prm.warehouse_code
+        LEFT JOIN supplier_info si on si.code = prm.supplier_info_code
+        where 1=1
+        <if test="id!=null">
+            and prm.id=#{id}
+        </if>
+        <if test="billNo!=null and billNo != ''">
+            and prm.bill_no=#{billNo}
+        </if>
+        <if test="billDate!=null and billDate != ''">
+            and prm.bill_date=#{billDate}
+        </if>
+        <if test="purchaseReturnTypeCode!=null and purchaseReturnTypeCode != ''">
+            and prm.purchase_return_type_code=#{purchaseReturnTypeCode}
+        </if>
+        <if test="orgCode!=null and orgCode != ''">
+            and prm.org_code=#{orgCode}
+        </if>
+        <if test="warehouseCode!=null and warehouseCode != ''">
+            and prm.warehouse_code=#{warehouseCode}
+        </if>
+        <if test="supplierInfoCode!=null and supplierInfoCode != ''">
+            and prm.supplier_info_code=#{supplierInfoCode}
+        </if>
+        <if test="status!=null">
+            and prm.status=#{status}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(prm.bill_date, '%Y-%m-%d') >= DATE_FORMAT(#{beginDate}, '%Y-%m-%d')
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(prm.bill_date, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            ]]>
+        </if>
+        order by prm.bill_date desc
+        <if test="pageUtil != null">
+            limit #{pageUtil.startRow},#{pageUtil.endRow}
+        </if>
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select
+        count(*)
+        from purchase_return_main prm
+        LEFT JOIN purchase_return_type prt on prt.code = prm.purchase_return_type_code
+        LEFT JOIN organization_info oi on oi.code = prm.org_code
+        LEFT JOIN warehouse wh on wh.code = prm.warehouse_code
+        LEFT JOIN supplier_info si on si.code = prm.supplier_info_code
+        where 1=1
+        <if test="id!=null">
+            and prm.id=#{id}
+        </if>
+        <if test="billNo!=null and billNo != ''">
+            and prm.bill_no=#{billNo}
+        </if>
+        <if test="billDate!=null and billDate != ''">
+            and prm.bill_date=#{billDate}
+        </if>
+        <if test="purchaseReturnTypeCode!=null and purchaseReturnTypeCode != ''">
+            and prm.purchase_return_type_code=#{purchaseReturnTypeCode}
+        </if>
+        <if test="orgCode!=null and orgCode != ''">
+            and prm.org_code=#{orgCode}
+        </if>
+        <if test="warehouseCode!=null and warehouseCode != ''">
+            and prm.warehouse_code=#{warehouseCode}
+        </if>
+        <if test="supplierInfoCode!=null and supplierInfoCode != ''">
+            and prm.supplier_info_code=#{supplierInfoCode}
+        </if>
+        <if test="status!=null">
+            and prm.status=#{status}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(prm.bill_date, '%Y-%m-%d') >= DATE_FORMAT(#{beginDate}, '%Y-%m-%d')
+            ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[
+                and DATE_FORMAT(prm.bill_date, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+            ]]>
+        </if>
+    </select>
+
+    <insert id="create" parameterType="PurchaseReturnMain" keyProperty="id" useGeneratedKeys="true">
+		insert into purchase_return_main(
+			bill_no,
+			bill_date,
+			purchase_return_type_code,
+			org_code,
+			warehouse_code,
+			supplier_info_code,
+			status,
+			create_user,
+			create_date,
+			modify_user,
+			modify_date,
+			note
+		) values (
+			generate_number('CGTH'),
+			#{billDate},
+			#{purchaseReturnTypeCode},
+			#{orgCode},
+			#{warehouseCode},
+			#{supplierInfoCode},
+			1,
+			#{createUser},
+			now(),
+			#{modifyUser},
+			now(),
+			#{note}
+		)
+	</insert>
+
+    <update id="update" parameterType="PurchaseReturnMain">
+        update purchase_return_main
+        <set>
+            <if test="purchaseReturnTypeCode!=null">
+                purchase_return_type_code=#{purchaseReturnTypeCode},
+            </if>
+            <if test="orgCode!=null">
+                org_code=#{orgCode},
+            </if>
+            <if test="warehouseCode!=null">
+                warehouse_code=#{warehouseCode},
+            </if>
+            <if test="supplierInfoCode!=null">
+                supplier_info_code=#{supplierInfoCode},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="modifyUser!=null">
+                modify_user=#{modifyUser},
+            </if>
+            <if test="modifyDate!=null">
+                modify_date=now(),
+            </if>
+            <if test="auditUser!=null">
+                audit_user=#{auditUser},
+            </if>
+            <if test="auditDate!=null">
+                audit_date=#{auditDate},
+            </if>
+            <if test="cancelUser!=null">
+                cancel_user=#{cancelUser},
+            </if>
+            <if test="cancelDate!=null">
+                cancel_date=#{cancelDate},
+            </if>
+            <if test="note!=null">
+                note=#{note}
+            </if>
+        </set>
+        where 1=1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+    </update>
+    <update id="audit">
+        update purchase_return_main set status =2,audit_user = #{auditUser},audit_date = now()
+        where id = #{id}
+    </update>
+
+    <update id="cancel">
+        update purchase_return_main set status =3,cancel_user = #{cancelUser},cancel_date = now()
+        where id = #{id}
+    </update>
+</mapper>
