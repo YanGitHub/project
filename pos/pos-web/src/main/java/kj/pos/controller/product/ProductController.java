@@ -65,10 +65,16 @@ public class ProductController {
                                       @RequestParam(value = "rows",defaultValue = "10")int rows)throws SQLException{
         Map<String,Object> map = new HashMap<String, Object>();
         try {
+            long l1 = new Date().getTime();
             int total = productService.getTotal(productInfo);
+            long l2 = new Date().getTime();
+            System.out.println("--------------------->total time use: " + (l2-l1));
             PageUtil pageUtil = new PageUtil(page,rows,total);
             productInfo.setPageUtil(pageUtil);
+            l1 = new Date().getTime();
             List<ProductInfo> list = productService.getList(productInfo);
+            l2 = new Date().getTime();
+            System.out.println("--------------------->list time use: " + (l2-l1));
             map.put("total",total);
             map.put("rows",list);
         }catch (Exception e){

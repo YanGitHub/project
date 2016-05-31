@@ -86,4 +86,6 @@
     </bean>
     <tx:annotation-driven transaction-manager="mysqlTxManager" />
 
+    <import resource="classpath:applicationContext-ehcache.xml"/>
+
 </beans>

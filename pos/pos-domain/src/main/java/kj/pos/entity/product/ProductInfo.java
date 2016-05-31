@@ -3,13 +3,14 @@ package kj.pos.entity.product;
 import kj.pos.entity.BaseEntity;
 import org.apache.ibatis.type.Alias;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Yan on 15-9-16.
  */
 @Alias("ProductInfo")
-public class ProductInfo extends BaseEntity {
+public class ProductInfo extends BaseEntity implements Serializable {
     //id
     private Long id;
     //创建日期

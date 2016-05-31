@@ -63,7 +63,7 @@
                 <c:forEach items="${menu}" var="m">
                     <c:if test="${m.pid == 0}">
                         <li>
-                            <div class="link"><i class="fa fa-paint-brush"></i>${m.name}<i class="fa fa-chevron-down"></i></div>
+                            <div class="link"><i class="fa ${m.icon}"></i>${m.name}<i class="fa fa-chevron-down"></i></div>
                             <ul class="submenu">
                                 <c:forEach items="${menu}" var="d">
                                     <c:if test="${d.pid == m.id}">
@@ -84,7 +84,7 @@
 
 
     <div id="main" style="float: left;width: 85%">
-        <iframe id="myiframe" width="100%" height="100%" frameborder="no" scrolling="auto" src=""></iframe>
+        <iframe id="myiframe" width="100%" height="100%" frameborder="no" scrolling="auto" src="${ctx}/background"></iframe>
     </div>
 </div>
 

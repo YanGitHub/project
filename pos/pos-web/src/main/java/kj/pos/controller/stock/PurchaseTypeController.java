@@ -36,15 +36,16 @@ public class PurchaseTypeController {
 
     @RequestMapping(value = "/getList",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> getList(PurchaseType purchaseType,
+    public List<PurchaseType> getList(PurchaseType purchaseType,
                                       @RequestParam(value = "page",defaultValue = "1")int page,
                                       @RequestParam(value = "rows",defaultValue = "10")int rows)throws SQLException {
         Map<String,Object> map = new HashMap<String, Object>();
+        List<PurchaseType> list = null;
         try {
             int total = purchaseTypeService.getTotal(purchaseType);
             PageUtil pageUtil = new PageUtil(page,rows,total);
             purchaseType.setPageUtil(pageUtil);
-            List<PurchaseType> list = purchaseTypeService.getList(purchaseType);
+            list = purchaseTypeService.getList(purchaseType);
             map.put("total",total);
             map.put("rows",list);
         }catch (Exception e){
@@ -52,7 +53,7 @@ public class PurchaseTypeController {
             map.put("rows",null);
             e.printStackTrace();
         }
-        return map;
+        return list;
     }
 
 }

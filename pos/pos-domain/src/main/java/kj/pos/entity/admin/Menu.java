@@ -6,6 +6,7 @@ import org.apache.ibatis.type.Alias;
 public class Menu extends BaseEntity{
 	//创建字段
 	private Long id;//
+    private String icon;//bootstrap 图标 class
 	private String createDate;//创建日期
 	private String modifyDate;//修改日期
 	private String code;//菜单代码
@@ -105,4 +106,11 @@ public class Menu extends BaseEntity{
 		this.levels = levels;
 	}
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 }

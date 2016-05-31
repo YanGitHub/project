@@ -1,5 +1,6 @@
 package kj.pos.service.product;
 
+import com.googlecode.ehcache.annotations.Cacheable;
 import kj.pos.dao.mysql.product.ProductDao;
 import kj.pos.entity.product.ProductInfo;
 import kj.pos.entity.product.ProductSku;
@@ -51,10 +52,23 @@ public class ProductService {
         return map;
     }
 
+    /**
+     * 加入ehcache
+     * @param productInfo
+     * @return Integer
+     * @throws SQLException
+     */
+    @Cacheable(cacheName="userCache")
     public Integer getTotal(ProductInfo productInfo)throws SQLException{
         return productDao.getTotal(productInfo);
     }
-
+    /**
+     * 加入ehcache
+     * @param productInfo
+     * @return List<ProductInfo>
+     * @throws SQLException
+     */
+    @Cacheable(cacheName="userCache")
     public List<ProductInfo> getList(ProductInfo productInfo)throws SQLException{
         return productDao.getList(productInfo);
     }

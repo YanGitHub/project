@@ -18,6 +18,8 @@
     <link href="${ctx}/static/bootstrap-datetimepicker/css/base.css" rel="stylesheet">
     <link href="${ctx}/static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="${ctx}/static/bootstrap-datetimepicker/css/default.css">
+    <!--bootstrap table-->
+    <link href="${ctx}/static/bootstrap-table/css/bootstrap-table.css" rel="stylesheet">
 
     <script src="${ctx}/static/jquery/jquery-2.1.4.min.js"></script>
     <script src="${ctx}/static/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
@@ -32,7 +34,9 @@
     <!--日期-->
     <script src="${ctx}/static/bootstrap-datetimepicker/js/moment-with-locales.js"></script>
     <script src="${ctx}/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-
+    <!--bootstrap table-->
+    <script src="${ctx}/static/bootstrap-table/js/bootstrap-table.js"></script>
+    <script src="${ctx}/static/bootstrap-table/js/bootstrap-table-zh-CN.js"></script>
     <!--[if lt IE 9]>
     <script src="${ctx}/static/bootstrap-3.3.5-dist/js/html5shiv.min.js"></script>
     <script src="${ctx}/static/bootstrap-3.3.5-dist/js/respond.min.js"></script>
@@ -65,31 +69,27 @@
 
 <div class="row" style="padding-top: 15px">
     <div class="col-sm-12">
-        <table id="grid"></table>
+        <%--<table id="grid"></table>--%>
+        <table id="gird" data-toggle="table">
+            <thead>
+            <tr>
+                <th data-field="id" hidden="hidden"></th>
+                <th data-field="code">代码</th>
+                <th data-field="name">名称</th>
+                <th data-field="createDate">创建日期</th>
+                <th data-field="modifyDate">修改日期</th>
+                <th data-field="note">备注</th>
+            </tr>
+            </thead>
+        </table>
     </div>
 </div>
 
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#grid").datagrid({
-            url:'${ctx}/stock/purchaseType/getList',
-            title: '采购类型',
-            singleSelect: true,
-            selectOnCheck: false,
-            rownumbers: true,
-            height:430,
-            pagination: true,
-            columns: [
-                [
-                    { field: 'id', hidden: true },
-                    { field: 'code', title: '代码', fitColumns:true },
-                    { field: 'name', title: '名称', fitColumns:true},
-                    { field: 'createDate', title: '创建日期',fitColumns:true },
-                    { field: 'modifyDate', title: '修改日期', fitColumns:true},
-                    { field: 'note', title: '备注',fitColumns:true }
-                ]
-            ]
+        $("#grid").bootstrapTable({
+            url:'${ctx}/stock/purchaseType/getList'
         });
     });
 
