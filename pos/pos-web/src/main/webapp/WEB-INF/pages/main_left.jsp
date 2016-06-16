@@ -19,9 +19,12 @@
     <script src="${ctx}/static/jquery/jquery-2.1.4.min.js"></script>
     <script src="${ctx}/static/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     <style>
+        body {
+            padding-top: 50px;
+        }
         .scrollbar
         {
-            margin-left: 10px;
+            margin-left: 5px;
             float: left;
             height: 100%;
             width: 13.47%;
@@ -46,14 +49,38 @@
 
         #style-4::-webkit-scrollbar-thumb
         {
-            background-color: #c4c8cb;
-            border: 1px solid orange;
+            background-color: #F8F8F8;
+            border: 1px solid rgb(204, 204, 204);
         }
 
     </style>
 </head>
 
 <body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">欢迎使用POS收银系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
 
 <!-- Contenedor -->
 <div style="height: 100%">
@@ -83,7 +110,7 @@
     </div>--%>
 
 
-    <div id="main" style="float: left;width: 85%">
+    <div id="main" style="float: left;width: 85.8%">
         <iframe id="myiframe" width="100%" height="100%" frameborder="no" scrolling="auto" src="${ctx}/background"></iframe>
     </div>
 </div>

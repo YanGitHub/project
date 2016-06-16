@@ -161,7 +161,7 @@
 </style>
 <body>
 
-<canvas id="scratch" style="width: 1000px; height: 550px;"></canvas>
+<canvas id="scratch" style="width: 1000px; height: 530px;"></canvas>
 <script type="text/javascript">
 
 VerletJS.prototype.spider = function (origin) {
